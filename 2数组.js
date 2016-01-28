@@ -77,14 +77,26 @@ console.log(nnum.join());
 //forEach遍历循环，可以传入一个函数，对数组中的每个元素使用该函数
 var nuum=[1,2,3];
 function square(num){console.log(num,num*num);};
-nuum.forEach(square);
+nuum.forEach(square);//返回一个值
+//map方法生成一个新数组
+function curve(grade){return grade+=5;};
+var newnuum=nuum.map(curve);//返回新数组
+console.log(newnuum.join());
+var words=["i","love","you"];
+function first(word){return word[0];};
+var newwords=words.map(first);//返回新数组
+console.log(newwords.join("");//join("")目的是将逗号去掉
+
 
 
 
 //every遍历循环，接收一个返回值为bool值得函数，对数组中每个元素使用该函数,如果对于所有元素该方法返回为true，则返回为true
 function isEven(num){return num%2==0;};
-var even=nuum.every(isEven);
+var even=nuum.every(isEven);//返回bool值
 if(even){console.log("全是偶数");}else{console.log("不全是偶数");};
+//filter方法生成新数组，包含every为true的元素
+var neweven=nuum.filter(isEven);
+console.log(neweven.join());//返回新数组
 
 
 
