@@ -73,11 +73,12 @@ function compare(num1,num2){return num1-num2;};
 nnum.sort(compare);
 console.log(nnum.join());
 
+//forEach、map、every、filter、some循环遍历中传入的函数，该函数的传入参数依次是item,index,array.
 
 //forEach遍历循环，可以传入一个函数，对数组中的每个元素使用该函数
 var nuum=[1,2,3];
 function square(num){console.log(num,num*num);};
-nuum.forEach(square);//返回一个值
+nuum.forEach(square);//无返回值，只是对数组中的每一个元素执行相同的此操作
 //map方法生成一个新数组
 function curve(grade){return grade+=5;};
 var newnuum=nuum.map(curve);//返回新数组
@@ -86,7 +87,6 @@ var words=["i","love","you"];
 function first(word){return word[0];};
 var newwords=words.map(first);//返回新数组
 console.log(newwords.join(""));//join("")目的是将逗号去掉，如果不传入任何值，则默认以逗号分隔。
-
 
 
 
@@ -106,6 +106,8 @@ if(someEven){console.log("存在偶数");}else{console.log("全部不为偶数")
 
 
 
+
+//reduce循环遍历传入的为4个参数prev(这个是第一项的值，以后为累加各项)、cur(当前值)、index（项的索引）、array(数组对象)
 //reduce遍历循环，接收一个函数，返回一个值。该方法会从一个累加值开始，不断对累加值和数组中的后续元素调用该函数，直到数组中的最后一个元素，最后返回得到的累加值
 function add(total,currentValue){return total+currentValue;};
 var sum=nuum.reduce(add);
