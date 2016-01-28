@@ -112,3 +112,19 @@ var sum=nuum.reduce(add);
 console.log(sum);
 //注释一：redece方法可以将字符串拼接起来（前提是数组里面的是字符串类型的）
 //注释二：redeceRight方法可以从右至左拼接字符串
+
+
+
+//二维数组
+var grades=[[1,2,3],[4,5],[6,7,8,9,10]];
+var total=0;
+var average=0.0;
+for(i=0;i<grades.length;i++){
+	for(j=0;j<grades[i].length;j++){
+       total+=grades[i][j];
+	}
+    average=total/grades[i].length;
+	console.log("average"+(i+1)+":"+average);
+    total=0;
+	average=0.0;//归位
+};
