@@ -85,7 +85,7 @@ console.log(newnuum.join());
 var words=["i","love","you"];
 function first(word){return word[0];};
 var newwords=words.map(first);//返回新数组
-console.log(newwords.join("");//join("")目的是将逗号去掉
+console.log(newwords.join(""));//join("")目的是将逗号去掉
 
 
 
