@@ -32,6 +32,14 @@ console.log(arr4.join());
 //可变数组用push()添加至开头
 arr4.unshift("unshift进来的");
 console.log(arr4.join());
+//删除数组末尾
+arr4.pop();
+console.log(arr4.join());
+//删除数组开头第一个
+arr4.shift();
+console.log(arr4.join());
+
+
 
 
 
