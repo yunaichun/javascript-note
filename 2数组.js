@@ -72,3 +72,31 @@ var nnum=[3,1,2,100,4,200];
 function compare(num1,num2){return num1-num2;};
 nnum.sort(compare);
 console.log(nnum.join());
+
+
+//forEach遍历循环，可以传入一个函数，对数组中的每个元素使用该函数
+var nuum=[1,2,3];
+function square(num){console.log(num,num*num);};
+nuum.forEach(square);
+
+
+
+//every遍历循环，接收一个返回值为bool值得函数，对数组中每个元素使用该函数,如果对于所有元素该方法返回为true，则返回为true
+function isEven(num){return num%2==0;};
+var even=nuum.every(isEven);
+if(even){console.log("全是偶数");}else{console.log("不全是偶数");};
+
+
+
+//some遍历循环，接收一个返回值为bool值得函数，对数组中每个元素使用该函数,如果存在一个为true，则返回就为true
+var someEven=nuum.some(isEven);
+if(someEven){console.log("存在偶数");}else{console.log("全部不为偶数")};
+
+
+
+//reduce遍历循环，接收一个函数，返回一个值。该方法会从一个累加值开始，不断对累加值和数组中的后续元素调用该函数，直到数组中的最后一个元素，最后返回得到的累加值
+function add(total,currentValue){return total+currentValue;};
+var sum=nuum.reduce(add);
+console.log(sum);
+//注释一：redece方法可以将字符串拼接起来（前提是数组里面的是字符串类型的）
+//注释二：redeceRight方法可以从右至左拼接字符串
