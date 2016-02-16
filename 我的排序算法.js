@@ -71,6 +71,7 @@ arr4.push(19);
 arr4.push(18);
 arr4.push(17);
 arr4.push(16);
+arr4.push(21);
 arr4.push(15);
 console.log(arr4);
 //希尔排序
