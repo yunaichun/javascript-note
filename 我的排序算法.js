@@ -44,15 +44,15 @@ console.log(arr2);
 
 
 var arr3=new Array();
-arr3.push(9);
-arr3.push(10);
 arr3.push(12);
 arr3.push(11);
+arr3.push(10);
+arr3.push(9);
 console.log(arr3);
 var start=new Date().getTime();
 //插入排序(两两对比排序)
 for(var i=0;i<arr3.length-1;i++){
-	for(var j=i;j<arr3.length;j++){
+	for(var j=0;j<arr3.length-i;j++){
 		if(arr3[j+1]<arr3[j]){
 			swap(arr3,j,j+1);//最大的被放在最后了
 		}
