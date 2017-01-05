@@ -9,6 +9,9 @@
 function SuperType(name){
 	this.name=name;
 	this.colors=["red","blue","green"];
+	this.sayColors=function(){
+		console.log(this.colors);
+	}
 }
 
 //（祖先）构造函数的原型
@@ -34,9 +37,12 @@ SubType.prototype.sayAge=function(){
 
 var instance1=new SubType("aa",100);
 instance1.colors.push("black");
-console.log(instance1.colors);
-instance1.sayName();
+instance1.sayColors();
 instance1.sayAge();
+//将SubType.prototype=new SuperType();去掉之后，将不再有sayName方法，其他的方法都具有(因为没有继承原型上的方法)
+//将SuperType.call(this,name);去掉之后所有方法还存在，就是原型的sayName方法继承不了this.name属性值
+instance1.sayName();
+
 
 var instance2=new SubType("bb",99);
 console.log(instance2.colors);
