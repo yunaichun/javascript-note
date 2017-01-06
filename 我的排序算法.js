@@ -51,7 +51,7 @@ arr3.push(10);
 arr3.push(9);
 console.log(arr3);
 var start=new Date().getTime();
-//插入排序(两两对比排序)
+//插入排序
 for(var i=1;i<arr3.length-1;i++){
 	var min=arr3[i];
 	var k=i;
@@ -60,6 +60,14 @@ for(var i=1;i<arr3.length-1;i++){
 		--k;
 	}
 	arr3[k]=min;
+}
+//插入排序:法二
+for(var i=1;i<arr3.length-1;i++){
+	var min=arr3[i];
+	for(var j=i;arr3[j]>min;j--){
+		arr[j]=arr[j-1];
+	}
+	arr[j]=min;
 }
 var stop=new Date().getTime();
 console.log("插入排序耗时"+(start-stop))
