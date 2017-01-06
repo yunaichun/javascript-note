@@ -32,11 +32,12 @@ arr2.push(7);
 console.log(arr2);
 //选择排序
 for(var i=0;i<arr2.length-1;i++){
+	var min=i;
 	for(var j=i+1;j<arr2.length;j++){
-		var min=arr2[i];
-		if(arr2[j]<min){
-			swap(arr2,i,j);
+		if(arr2[j]<arr[min]){
+			   min=j;                                                                               
 		}
+		swap(arr2,i,min);
 	}
 }
 console.log(arr2);
