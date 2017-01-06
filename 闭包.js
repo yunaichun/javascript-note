@@ -10,6 +10,7 @@ function count(){
 }
 
 var results=count();
+console.log(results);
 var f1=results[0];
 var f2=results[1];
 var f3=results[2];
