@@ -99,24 +99,23 @@ for(var k=0;k<g.length;k++){
 console.log(arr4);
 
 
+//快速排序
+function qSort(list) {
+	if (list.length == 0) {
+		return [];
+	}
+	var lesser = [];
+	var greater = [];
+	var pivot = list[0];
+	for (var i = 1; i < list.length; i++) {
+		if (list[i] < pivot) {
+			lesser.push(list[i]);
+		} else {
+			greater.push(list[i]);
+		}
+	}
+	return qSort(lesser).concat(pivot, qSort(greater));
+}
+var arr5=[6,5,2,3,1,4,7];
+console.log(qSort(arr5));
 
-// var arr5=new Array();
-// for(var i=0;i<3;i++){
-// 	arr5[i]=Math.floor(Math.random()*10+1);
-// }
-// console.log(arr5);
-// //快速排序
-// var s=[];
-// var b=[];
-// for(var i=0;i<arr5.length-1;i++){
-// 	var jz=arr5[i];
-// 	for(var j=1;j<arr5.length;j++){
-// 		if(arr5[j]<=jz){
-// 			s.push(arr5[j]);
-// 		}else{
-// 			b.push(arr5[j]);
-// 		}
-// 	}
-// 	arr5=s.concat(jz,b);
-// }
-// console.log(arr5);
