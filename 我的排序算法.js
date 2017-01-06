@@ -52,7 +52,7 @@ arr3.push(9);
 console.log(arr3);
 var start=new Date().getTime();
 //插入排序
-for(var i=1;i<arr3.length-1;i++){
+for(var i=1;i<arr3.length;i++){
 	var min=arr3[i];
 	var k=i;
 	while(k>0&&arr3[k-1]>=min){
@@ -62,12 +62,12 @@ for(var i=1;i<arr3.length-1;i++){
 	arr3[k]=min;
 }
 //插入排序:法二
-for(var i=1;i<arr3.length-1;i++){
+for(var i=1;i<arr3.length;i++){
 	var min=arr3[i];
-	for(var j=i;arr3[j]>min;j--){
-		arr[j]=arr[j-1];
+	for(var j=i;arr3[j-1]>min&&j>=0;j--){
+		arr3[j]=arr3[j-1];
 	}
-	arr[j]=min;
+	arr3[j]=min;
 }
 var stop=new Date().getTime();
 console.log("插入排序耗时"+(start-stop))
@@ -88,12 +88,12 @@ console.log(arr4);
 //希尔排序
 var g=[5,3,1];
 for(var k=0;k<g.length;k++){
-	for(var i=k;i<arr4.length-g[i]-1;i++){
-        for(var j=i;j<arr4.length;j+=g[i]){
-			if(arr4[j+g[i]]<arr4[j]){
-				swap(arr4,j,j+g[i]);
-			}
+	for(var i=g[k];i<arr3.length;i++){
+		var min=arr3[i];
+		for(var j=i;arr3[j-g[k]]>min&&j>=g[k];j=j-g[k]){
+			arr3[j]=arr3[j-g[k]];
 		}
+		arr3[j]=min;
 	}
 }
 console.log(arr4);
