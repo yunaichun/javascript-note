@@ -52,12 +52,14 @@ arr3.push(9);
 console.log(arr3);
 var start=new Date().getTime();
 //插入排序(两两对比排序)
-for(var i=0;i<arr3.length-1;i++){
-	for(var j=0;j<arr3.length-i;j++){
-		if(arr3[j+1]<arr3[j]){
-			swap(arr3,j,j+1);//最大的被放在最后了
-		}
+for(var i=1;i<arr3.length-1;i++){
+	var min=arr3[i];
+	var k=i;
+	while(k>0&&arr3[k-1]>=min){
+		arr3[k]=arr3[k-1];
+		--k;
 	}
+	arr3[k]=min;
 }
 var stop=new Date().getTime();
 console.log("插入排序耗时"+(start-stop))
