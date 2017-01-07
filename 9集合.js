@@ -13,7 +13,7 @@ function Set(){
 
 //向集合添加元素
 Set.prototype.add=function(data){
-	if(this.dataStore.indexOf(data)<0){
+	if(this.dataStore.indexOf(data)<0){ 
 		this.dataStore.push(data);
 		return true;
 	}else{
