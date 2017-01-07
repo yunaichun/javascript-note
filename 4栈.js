@@ -16,7 +16,7 @@ Stack.prototype.push=function(element){
 
 //去除栈顶元素（先空位置top-1,再返回栈顶元素）
 Stack.prototype.pop=function(){
- return this.dataStore[--this.top];//--在前指的是先执行this.top=this.top-1操作，后执行返回
+   return this.dataStore[--this.top];//--在前指的是先执行this.top=this.top-1操作，后执行返回
 }
 
 //返回栈顶元素，与pop的区别是不删除

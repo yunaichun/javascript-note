@@ -10,27 +10,27 @@ function Queue(){
 }
 
 //向队尾添加元素
-function enqueue(element){
+Queue.prototype.enqueue=function(element){
 	this.dataStore.push(element);
 }
 
 //向队首去除元素
-function dequeue(){
+Queue.prototype.dequeue=function(){
 	this.dataStore.shift();
 }
 
 //读取队尾元素
-function back(){
+Queue.prototype.back=function(){
 	return this.dataStore[this.dataStore.length-1];
 }
 
 //读取队首元素
-function front(){
+Queue.prototype.front=function(){
 	return this.dataStore[0];
 }
 
 //显示队列内元素
-function toSting(){
+Queue.prototype.toSting=function(){
 	var reStr="";
 	for(var i=0;i<this.dataStore.length;i++){
 		reStr+=this.dataStroe[i]+"\n";
@@ -39,7 +39,7 @@ function toSting(){
 }
 
 //判断队列是否为空
-function empty(){
+Queue.prototype.empty=function(){
 	if(this.dataStore.length>0){
 		return false;
 	}else{
