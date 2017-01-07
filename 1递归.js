@@ -4,7 +4,7 @@ function fal(num){
 		return num;
 	} else {
 		// statement
-		return num*fal(num-1);
+		return num*arguments.callee(num-1);
 	}
 }
 console.log(fal(5));
