@@ -23,37 +23,26 @@ function BST(){
 
 //向二叉树中添加节点和数据
 BST.prototype.insert=function(data){
-	var n =new Node(data,null,null);//添加一个节点，此节点的数据是data,左右节点均为空
-	if(this.root==null){
-		this.root=n;
-	}else{
-		var current=this.root;//设当前节点为根节点
-	    var parent;
-	    while(true){
-		  parent=current;
-		  //如果插入数据小于当前节点的数据
-		  if(data<current.data){
-			  current=current.left;//将当前节点设置为原节点的左子节点；
-			  //如果当前节点不为空
-			  if(current==null){
-				  parent.left=n;//插入数据
-			      break;//跳出循环
-			  }
-		  }else{//如果插入数据大于当前节点的数据
-			  current=current.right;//将当前节点设置为原节点的右子节点
-			  //如果当前节点不为空
-			  if(current==null){
-				  parent.right=n;//插入数据
-				  break;//跳出循环
-			  }
-		  }
-	    }
+	var newNode =new Node(data,null,null);//每次插入默认左、右子节点都为空
+	var current=this.root;//默认从根节点开始插入
+	if(current==null){//第一次插入数据
+		current.data=newNode;
+	}else{//第二次及以上插入数据、
+		while(current!=null){
+			if(data<current.data){//数据在左边
+				current=current.left;
+			}else{//数据在右边
+				current=current.right;
+			}
+		}
+		current.data=newNode;
 	}
 }
 
 //查找给定值
 BST.prototype.find=function(data){
-	var current=this.root;
+	var current=this.root;//默认从根节点开始循环
+	//如果节点还没有insert任何数据，则直接返回null
 	while(current!=null){
 		if(current.data==data){
 			return current;//返回节点
