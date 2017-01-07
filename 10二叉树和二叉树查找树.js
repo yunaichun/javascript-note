@@ -5,7 +5,7 @@ function Node(data,left,right){
 	this.right=right;//指向右子节点的连接。每次创建默认都为null。初始值也为null
 	//显此节点的数据
 	this.show=function(){
-		return this.data
+		return this.data;
 	};
 }
 
@@ -56,29 +56,30 @@ BST.prototype.find=function(data){
 }
 
 //中序排序（先访问左节点，再根节点，最后右子节点）
+//inOrder(nums.root);调用的时候从根节点开始，传入根节点
 BST.prototype.inOrder=function(node){
 	if(!(node==null)){
-		inOrder(node.left);
-		console.log(node.show()+" ");
-		inOrder(node.right);
+		inOrder(node.left);//左
+		console.log(node.show()+" ");//根
+		inOrder(node.right);//右
 	}
 }
 
 //先序排序（先访问根节点，再访问左子节点，最后访问右子点）
 BST.prototype.preOrder=function(node){
 	if(!(node=null)){
-		console.log(node.show()+" ");
-		preOrder(node.left);
-		preOrder(node.right);
+		console.log(node.show()+" ");//根
+		preOrder(node.left);//左
+		preOrder(node.right);//右
 	}
 }
 
 //后序排序（从叶子节点开始，访问左子节点，右子节点，最后访问根节点）
 BST.prototype.postOrder=function(node){
 	if(!(node==null)){
-		postOrder(node.left);
-		postOrder(node.right);
-		console.log(node.show()+" ");
+		postOrder(node.left);//左
+		postOrder(node.right);//右
+		console.log(node.show()+" ");//根
 	}
 }
 
@@ -99,12 +100,6 @@ BST.prototype.getMax=function(){
 	}
 	return current.data;
 }
-
-
-
-
-
-
 
 var sz=new BST();
 sz.insert("11");
