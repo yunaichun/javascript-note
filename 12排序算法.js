@@ -22,27 +22,26 @@ function CArray(numElements){
 
 
 //加入随机数据
-function setData(){
+CArray.prototype.setData=function(){
 	for(var i=0;i<this.numElements;i++){
 		this.dataStore[i]=Math.floor(Math.random()*(this.numElements+1));
 	}
 }
 
 //清空数组
-function clear(){
+CArray.prototype.clear=function(){
 	for(var i=0;i<this.dataStore.length;i++){
 		this.dataStore[i]=0;
 	}
 }
 
 //向数组中添加数据
-function insert(element){
+CArray.prototype.insert=function(element){
 	this.dataStore[this.pos++]=element;
 }
 
-
 //打印数组
-function toString(){
+CArray.prototype.toString=function(){
 	var str="";
 	for(var i=0;i<this.dataStore.length;i++){
 		//if(i!=10){
@@ -57,9 +56,8 @@ function toString(){
 	return str;
 }
 
-
 //交换数组两个位置的值
-function swap(arr,i,j){
+CArray.prototype.swap=function(arr,i,j){
 	var temp=arr[i];
 	arr[i]=arr[j];
 	arr[j]=temp;
@@ -70,10 +68,6 @@ var myNums=new CArray(numElements);
 console.log("初始默认的数组是：\n"+myNums.toString());
 myNums.setData();
 console.log("使用方法改变默认数组生成的随机数组是：\n"+myNums.toString());
-
-
-
-
 
 
 
@@ -90,9 +84,6 @@ function bubbleSort(){
 //myNums.bubbleSort();
 //console.log("冒泡排序:\n"+myNums.toString());
 
-
-
-
 //选择排序
 function selectionSort(){
    for(var i=0;i<this.dataStore.length-1;i++){
@@ -107,10 +98,6 @@ function selectionSort(){
 //myNums.selectionSort();
 //console.log("选择排序：\n"+myNums.toString());
 
-
-
-
-
 //插入排序
 function insertionSort(){
     for(var i=0;i<this.dataStore.length-1;i++){
@@ -123,10 +110,6 @@ function insertionSort(){
 }
 //myNums.insertionSort();
 //console.log("插入排序：\n"+myNums.toString());
-
-
-
-
 
 //希尔排序
 var g=[5,3,1];
@@ -144,11 +127,6 @@ function shellSort(){
 }
 //myNums.shellSort();
 //console.log("希尔排序：\n"+myNums.toString());
-
-
-
-
-
 
 //快速排序
 function qSort(arr){
