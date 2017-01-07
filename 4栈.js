@@ -10,27 +10,27 @@ function Stack(){
 }
 
 //栈中添加元素(将元素保存在top位置，同时将top+1,让其指向数组中下一个空位置,以便下一次插入)
-function push(element){
+Stack.prototype.push=function(element){
 	this.dataStore[this.top++]=element;//++在前指的是先执行赋值，后进行this.top=this.top+1
 }
 
 //去除栈顶元素（先空位置top-1,再返回栈顶元素）
-function pop(){
+Stack.prototype.pop=function(){
  return this.dataStore[--this.top];//--在前指的是先执行this.top=this.top-1操作，后执行返回
 }
 
 //返回栈顶元素，与pop的区别是不删除
-function peek(){
+Stack.prototype.peek=function(){
 	return this.dataStore[this.top-1];
 }
 
 //返回栈的长度
-function length(){
+Stack.prototype.length=function(){
 	return this.top;
 }
 
 //清空栈中数据
-function clear(){
+Stack.prototype.clear=function(){
 	this.dataStore=[];
 	this.top=0;
 }
