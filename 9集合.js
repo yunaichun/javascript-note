@@ -11,9 +11,8 @@ function Set(){
 	this.contains=contains;
 }
 
-
 //向集合添加元素
-function add(data){
+Set.prototype.add=function(data){
 	if(this.dataStore.indexOf(data)<0){
 		this.dataStore.push(data);
 		return true;
@@ -23,7 +22,7 @@ function add(data){
 }
 
 //移除集合中元素
-function remove(data){
+Set.prototype.remove=function(data){
 	if(this.dataStore.indexOf(data)>-1){
 		this.dataStore.splice(this.dataStore.indexOf(data),1)
 		return true;
@@ -32,17 +31,13 @@ function remove(data){
 	}
 }
 
-
 //显示集合
-function show(){
+Set.prototype.show=function(){
 	return this.dataStore;
 }
 
-
-
-
 //检查一个成员是否属于该集合
-function contains(data){
+Set.prototype.contains=function(data){
 	if(this.dataStore.indexOf(data)>-1){
 		return true;
 	}else{
@@ -50,9 +45,13 @@ function contains(data){
 	}
 }
 
+//返回集合的大小
+Set.prototype.size=function(){
+	return this.dataStore.length;
+}
 
 //求两个集合的并集(传入的是另一个集合)
-function union(set){
+Set.prototype.union=function(set){
     var tempSet=new Set();//将交集存入一个新集合保存
 	for(var i=0;i<this.dataStore.length;++i){
 		tempSet.add(this.dataStore[i]);//先将已知集合存入临时集合
@@ -62,12 +61,11 @@ function union(set){
 			tempSet.dataStore.push(set.dataStore[i]);
 		}
 	}
-
 	return tempSet;
 }
 
 //求两个集合的交集
-function intersect(set){
+Set.prototype.intersect=function(set){
 	var tempSet=new Set();
 	for(var i=0;i<this.dataStore.length;++i){
 		if(set.contains(this.dataStore[i])){
@@ -77,9 +75,8 @@ function intersect(set){
 	return tempSet;
 }
 
-
 //判断一个集合（this）是否是另一个集合的子集(set)
-function subset(set){
+Set.prototype.subset=function(set){
 	if(this.size()>set.size()){
 		return false;
 	}else{
@@ -92,15 +89,8 @@ function subset(set){
 	return true;
 }
 
-
-//返回集合的大小
-function size(){
-	return this.dataStore.length;
-}
-
-
 //属于一个集合，但不属于另一个集合（补集）
-function difference(set){
+Set.prototype.difference=function(set){
 	var tempSet=new Set();
 	for(var i=0;i<this.dataStore.length;++i){
 		if(!set.contains(this.dataStore[i])){
@@ -109,10 +99,6 @@ function difference(set){
 	}
 	return tempSet;
 }
-
-
-
-
 
 var sz=new Set();
 sz.add("11");
@@ -129,20 +115,14 @@ sz2.add("22");
 sz2.add("55");
 console.log("sz2集合:"+sz2.show());
 
-
-
 var tempSet=new Set();
 tempSet=sz.union(sz2);
 console.log("sz集合与sz2集合的并集是："+tempSet.show());
 
-
 var tempSet2=new Set();
 tempSet2=sz.intersect(sz2);
 console.log("sz集合与sz2集合的交集是："+tempSet2.show());
-
-
 console.log("sz集合是sz2集合的子集是："+sz.subset(sz2));
-
 
 var tempSet3=new Set();
 tempSet3=sz.difference(sz2);
