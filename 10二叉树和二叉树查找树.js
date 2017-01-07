@@ -1,19 +1,17 @@
 //定义节点
 function Node(data,left,right){
 	this.data=data;
-	this.left=left;
-	this.right=right;
-	this.show=show;//显此节点的数据
-}
-
-//显示此节点的数据
-function show(){
-	return this.data;
+	this.left=left;//指向左子节点的连接。每次创建默认都为null。初始值也为null
+	this.right=right;//指向右子节点的连接。每次创建默认都为null。初始值也为null
+	//显此节点的数据
+	this.show=function(){
+		return this.data
+	};
 }
 
 //定义二叉树
 function BST(){
-	this.root=null;//默认根节点为空
+	this.root=new Node(null,null,null);//默认根节点为空
 	this.insert=insert;//向二叉树中添加节点和数据
 	this.inOrder=inOrder;//中序排序
 	this.preOrder=preOrder;//先序排序
@@ -24,7 +22,7 @@ function BST(){
 }
 
 //向二叉树中添加节点和数据
-function insert(data){
+BST.prototype.insert=function(data){
 	var n =new Node(data,null,null);//添加一个节点，此节点的数据是data,左右节点均为空
 	if(this.root==null){
 		this.root=n;
@@ -53,56 +51,8 @@ function insert(data){
 	}
 }
 
-
-//中序排序（先访问左节点，再根节点，最后右子节点）
-function inOrder(node){
-	if(!(node==null)){
-		inOrder(node.left);
-		console.log(node.show()+" ");
-		inOrder(node.right);
-	}
-}
-
-//先序排序（先访问根节点，再访问左子节点，最后访问右子点）
-function preOrder(node){
-	if(!(node=null)){
-		console.log(node.show()+" ");
-		preOrder(node.left);
-		preOrder(node.right);
-	}
-}
-
-//后序排序（从叶子节点开始，访问左子节点，右子节点，最后访问根节点）
-function postOrder(node){
-	if(!(node==null)){
-		postOrder(node.left);
-		postOrder(node.right);
-		console.log(node.show()+" ");
-	}
-}
-
-
-
-//查找最小值
-function getMin(){
-	var current=this.root;
-	while(!(current.left==null)){
-		current=cerrent.left;
-	}
-	return current.data;
-}
-
-//查找最大值
-function getMax(){
-	var current=this.root;
-	while(!(current.right==null)){
-		current=current.right;
-	}
-	return current.data;
-}
-
 //查找给定值
-function find(data){
+BST.prototype.find=function(data){
 	var current=this.root;
 	while(current!=null){
 		if(current.data==data){
@@ -115,6 +65,53 @@ function find(data){
 	}
 	return null;
 }
+
+//中序排序（先访问左节点，再根节点，最后右子节点）
+BST.prototype.inOrder=function(node){
+	if(!(node==null)){
+		inOrder(node.left);
+		console.log(node.show()+" ");
+		inOrder(node.right);
+	}
+}
+
+//先序排序（先访问根节点，再访问左子节点，最后访问右子点）
+BST.prototype.preOrder=function(node){
+	if(!(node=null)){
+		console.log(node.show()+" ");
+		preOrder(node.left);
+		preOrder(node.right);
+	}
+}
+
+//后序排序（从叶子节点开始，访问左子节点，右子节点，最后访问根节点）
+BST.prototype.postOrder=function(node){
+	if(!(node==null)){
+		postOrder(node.left);
+		postOrder(node.right);
+		console.log(node.show()+" ");
+	}
+}
+
+//查找最小值
+BST.prototype.getMin=function(){
+	var current=this.root;
+	while(!(current.left==null)){
+		current=cerrent.left;
+	}
+	return current.data;
+}
+
+//查找最大值
+BST.prototype.getMax=function(){
+	var current=this.root;
+	while(!(current.right==null)){
+		current=current.right;
+	}
+	return current.data;
+}
+
+
 
 
 
