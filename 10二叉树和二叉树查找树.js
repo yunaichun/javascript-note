@@ -58,7 +58,7 @@ BST.prototype.find=function(data){
 //中序排序（先访问左节点，再根节点，最后右子节点）
 //inOrder(nums.root);调用的时候从根节点开始，传入根节点
 BST.prototype.inOrder=function(node){
-	if(!(node==null)){
+	if(!(node.data==null)){
 		inOrder(node.left);//左
 		console.log(node.show()+" ");//根
 		inOrder(node.right);//右
@@ -67,7 +67,7 @@ BST.prototype.inOrder=function(node){
 
 //先序排序（先访问根节点，再访问左子节点，最后访问右子点）
 BST.prototype.preOrder=function(node){
-	if(!(node=null)){
+	if(!(node.data=null)){
 		console.log(node.show()+" ");//根
 		preOrder(node.left);//左
 		preOrder(node.right);//右
@@ -76,7 +76,7 @@ BST.prototype.preOrder=function(node){
 
 //后序排序（从叶子节点开始，访问左子节点，右子节点，最后访问根节点）
 BST.prototype.postOrder=function(node){
-	if(!(node==null)){
+	if(!(node.data==null)){
 		postOrder(node.left);//左
 		postOrder(node.right);//右
 		console.log(node.show()+" ");//根
