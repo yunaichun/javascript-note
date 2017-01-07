@@ -10,29 +10,29 @@ function Dictionary(){
 }
 
 //向字典类中添加键值对
-function add(key,value){
+Dictionary.prototype.add=function(key,value){
 	this.datastore[key]=value;
 }
 
 //查找某个键对应的值
-function find(key){
+Dictionary.prototype.find=function(key){
 	return this.datastore[key];
 }
 
 //删除某个键值对
-function remove(key){
+Dictionary.prototype.remove=function(key){
 	delete this.datastore[key]
 }
 
 //打印类中所有键值对（循环遍历）:同时增加依据键的字母顺序的排列
-function showAll(){
+Dictionary.prototype.showAll=function(){
 	for(key in Object.keys(this.datastore)){
 		console.log(key+":"+this.datastore[key]);
 	}
 }
 
 //计数（公有多少个键值对）
-function count(){
+Dictionary.prototype.count=function(){
 	var n=0;
 	for(key in Object.keys(this.datastore)){
 		++n;
@@ -41,7 +41,7 @@ function count(){
 }
 
 //清空（清空键值对）
-function clear(){
+Dictionary.prototype.clear=function(){
 	for(key in Object.keys(this.datastore)){
 		delete this.datastore[key];
 	}
