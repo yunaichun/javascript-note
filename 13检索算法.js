@@ -15,7 +15,8 @@ function seqSearch(arr,data){
 	}
 	//return false;
 	return -1;
-}
+}  
+
 
 /*
 if(seqSearch(nums,10)){

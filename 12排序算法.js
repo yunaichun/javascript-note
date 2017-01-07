@@ -63,6 +63,7 @@ CArray.prototype.swap=function(arr,i,j){
 	arr[j]=temp;
 }
 
+
 var numElements=100;
 var myNums=new CArray(numElements);
 console.log("初始默认的数组是：\n"+myNums.toString());
