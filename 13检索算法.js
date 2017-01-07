@@ -5,7 +5,6 @@ for(var i=0;i<10;i++){
 }
 console.log("原始数组：\n"+nums)
 
-
 //顺序查找
 function seqSearch(arr,data){
 	for(var i=0;i<arr.length;++i){
@@ -33,9 +32,6 @@ if(position>-1){
 	console.log("10没有出现在这个数组中");
 }
 
-
-
-
 //查找最小值
 function findMin(arr){
     var min=arr[0];
@@ -58,11 +54,6 @@ function findMax(arr){
 }
 console.log("数组中最大值是："+findMax(nums));
 console.log("数组中最小值是："+findMin(nums));
-
-
-
-
-
 
 //交换数组两个位置
 function swap(arr,i,j){
@@ -92,8 +83,6 @@ for(var i=1;i<=3;i++){
 seq1Search(numbers,4);
 console.log(numbers);
 
-
-
 //自组织查询2
 function seq2Search(arr,data){
 	for(var i=0;i<arr.length;i++){
@@ -111,9 +100,6 @@ var nums2=[3,2,1,6,5,4,7,8];
 console.log("自组织2查询前数组为："+nums2);
 seq2Search(nums2,1);
 console.log("自组织查询数组结果："+nums2);
-
-
-
 
 //二分查找算法
 function binSearch(arr,data){
@@ -152,7 +138,6 @@ console.log("排序好之后的数组："+nums3);
 var pos=binSearch(nums3,5);
 console.log("5在数组中的位置"+pos);
 
-
 //计算重复次数
 function count(arr,data){
 	var count=0;
@@ -176,12 +161,5 @@ function count(arr,data){
 	}
 	return count;
 }
-
 var total=count(nums3,5);
 console.log("查询的5在数组中出现的次数："+total);
-
-
-
-//读取txt文档
-//var words=read("./readme.txt").split(" ");
-//console.log(words);`
