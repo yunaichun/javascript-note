@@ -1,12 +1,6 @@
 //像Array类形式存在键：值对。Javascript中一切皆对象，数组也是对象
 function Dictionary(){
      this.datastore=new Array();//定义字典类
-	 this.add=add;//向字典中添加键值对
-	 this.find=find;//寻找键对应的值
-	 this.remove=remove;//删除键值对
-	 this.showAll=showAll;//显示所有
-	 this.count=count;//共有多少键
-	 this.clear=clear;//清空字典
 }
 
 //向字典类中添加键值对

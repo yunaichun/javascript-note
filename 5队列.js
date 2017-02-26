@@ -1,12 +1,6 @@
 //定义队列类，从构造函数搞起
 function Queue(){
 	this.dataStore=[];
-	this.enqueue=enqueue;//向队尾添加元素
-	this.dequeue=dequeue;//向队首删除元素
-	this.front=front;//读取队首元素
-	this.back=back;//读取队尾原
-	this.toString=toString;//显示队列内所有元素
-	this.empty=empty;//判断队列是否为空
 }
 
 //向队尾添加元素

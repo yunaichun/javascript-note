@@ -1,17 +1,13 @@
 function CArray(numElements) {
     this.dataStore = [];
     this.pos = 0;//数组初始下标
-    this.insert = insert;//push方式插入
-    this.toString = toString;
-    this.clear = clear;
-    this.swap = swap;
-
     this.numElements = numElements;//最大多大值
-    this.setData = setData;//自动生成numElement个数据，范围是0-numElement
+    this.setData = setData;
     for (var i = 0; i < numElements; ++i) {//初始默认值
         this.dataStore[i] = i;
     }
 }
+//自动生成numElement个数据，范围是0-numElement
 CArray.prototype.setData=function() {
     for (var i = 0; i < this.numElements; ++i) {
         this.dataStore[i] = Math.floor(Math.random() * (this.numElements + 1));

@@ -48,21 +48,3 @@ var instance2=new SubType("bb",99);
 console.log(instance2.colors);
 instance2.sayName();
 instance2.sayAge();
-
-
-
-
-
-
-
-
-//对象是Object: 法1、var person=new Object();person.say=function(){}; 法2、var person={
-//                   name : "ncyu",age:"25",say:function(){}
-//              }
-//列表：第一步：function list(){
-//  this.name="";
-//  this.age="";//拥有自己的属性
-//  this.say=say;//在外面写自己的方法:function say(){}
-//}
-//第二步：var newlist=new list();
-

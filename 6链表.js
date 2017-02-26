@@ -7,12 +7,6 @@ function Node(data,next){
 //定义链表操作的方法
 function Llist(){
 	this.head=new Node("head",null);//保存链表的头节点（可用this.head.data取得此节点数据，this.head.next取得下一个节点的链接
-	this.find=find;//找到要插入哪个？节点的后面
-	this.insert=insert;
-
-	this.findPrevious=findPrevious;//找到要删除哪个？节点的前一个节点
-	this.remove=remove;
-	this.display=display;
 }
 //在已知节点currentData后插入data
 Llist.prototype.insert=function(data,currentNode){

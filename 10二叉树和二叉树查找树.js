@@ -12,13 +12,6 @@ function Node(data,left,right){
 //定义二叉树
 function BST(){
 	this.root=new Node(null,null,null);//默认根节点为空
-	this.insert=insert;//向二叉树中添加节点和数据
-	this.inOrder=inOrder;//中序排序
-	this.preOrder=preOrder;//先序排序
-	this.postOrder=postOrder;//后序排序
-	this.getMin=getMin;//查找最小值
-	this.getMax=getMax;//查找最大值
-	this.find=find;//查找给定值
 }
 
 //向二叉树中添加节点和数据

@@ -1,8 +1,5 @@
 function HashTable(){
 	this.table=new Array(37);//存储散列
-	this.simpleHash=simpleHash;//定义散列
-	this.showDistro=showDistro;//显示散列表的数据
-	this.put=put;//将数据存入散列表
 }
 
 //定义散列值：ASCII码值得和除以数组的长度

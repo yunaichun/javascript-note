@@ -2,11 +2,6 @@
 function Stack(){
 	this.dataStore=[];//存储栈数据
 	this.top=0;//记录栈顶位置
-	this.push=push;//向栈中压入一个新元素
-	this.pop=pop;//返回栈顶元素，同时将栈顶位置减少1
-	this.peek=peek;//返回数组的第top-1个位置的元素，即栈顶元素
-	this.clear=clear;//将top=0,轻松清空栈内元素
-	this.length=length;//返回栈顶位置top},看存储多少元素
 }
 
 //栈中添加元素(将元素保存在top位置，同时将top+1,让其指向数组中下一个空位置,以便下一次插入)

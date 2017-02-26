@@ -1,14 +1,5 @@
 function Set(){
 	this.dataStore=[];
-	this.add=add;//向集合添加
-	this.remove=remove;//向集合移除
-	this.size=size;//返回集合长度
-	this.union=union;//求两个集合的并集
-	this.intersect=intersect;//求两个集合的交集
-	this.subset=subset;//判断一个集合是否是另一个集合的子集
-	this.difference=difference;//属于一个集合，不属于另一个集合（补集）
-	this.show=show;//显示集合
-	this.contains=contains;
 }
 
 //向集合添加元素

@@ -3,11 +3,6 @@ function CArray(numElements){
 	this.dataStore=[];//value
 	this.pos=0;//key
 	this.numElements=numElements;//随机数的最大值,也是数组的长度
-	this.insert=insert;//插入数据
-	this.toString=toString;//打印数据
-	this.clear=clear;//清空数据
-	this.setData=setData;//加入随机数据
-	this.swap=swap;//交换数据
 	for(var i=0;i<numElements;i++){
 		this.dataStore[i]=i;//默认是一组连续的数字
 	}
