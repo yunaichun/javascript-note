@@ -31,6 +31,36 @@ function dynFib(n){
 console.log("动态规划查找到key是10时候的斐波那契数列value是："+dynFib(10));
 
 
+//二元一次方程的动态规划：二维数组
+function f(m,n){
+    var rowarr=[];
+    for(var i=1;i<=m;i++){
+        var colarr=[];
+        for(var j=1;j<=n;j++){
+            colarr[j]=0;
+        }
+        rowarr[i]=colarr;
+    }
+    if(m==1||n==1){
+        return 1;
+    }else{
+        for(var i=1;i<=m;i++){
+            rowarr[i][1]=1;
+        }
+        for(var j=1;j<=n;j++){
+            rowarr[1][j]=1;
+        }
+        for(var i=2;i<=m;i++){
+            for(var j=2;j<=n;j++){
+                rowarr[i][j]=rowarr[i-1][j]+rowarr[i][j-1];
+            }
+        }
+        return rowarr[m][n];
+    }
+}
+
+
+
 
 
 
