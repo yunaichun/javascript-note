@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script>
+        $(function () {
+            var Countries = function () { }
+
+            Countries.prototype = {
+                _items: [],
+                _getData: function (success) {
+                    var items = [
+                       { id: 0, name: '中国' },
+                       { id: 1, name: '日本' },
+                       { id: 2, name: '美国' }
+                    ];
+                    //合并对象
+                    $.extend(this._items, items);
+                    //回调，将items传递
+                    success(items);
+                },
+                //Events
+                on_selected: $.Callbacks(),//add方法添加函数名称，fire方法触发添加的函数（同时传递参数）
+                on_inserted: $.Callbacks(),
+
+                //Methods
+                //初始化方法：渲染数据
+                select: function () {
+                    var self = this;
+                    this._getData(function (items) {
+                        //触发on_selected添加的函数，同时传递参数
+                        self.on_selected.fire({
+                            sender: self,
+                            items: items//items是一个对象
+                        });
+                    });
+                },
+                //添加click事件
+                insert: function (item) {
+                    var self = this;
+                    this._items.push(item);
+                    //触发on_inserted添加的函数，同时传递参数
+                    self.on_inserted.fire({ sender: self, item: item });
+                }
+            }
+
+            //=======================================================================
+            // 以下为界面代码，当要调整界面，改这里就行啦~~~
+            var countries = new Countries();
+            countries.on_selected.add(function (args) {
+                //传递是一个对象{ sender: self, item: item }
+                $(args.items).each(function () {
+                    $('#countries').append($('<option>').attr('value', this.id).text(this.name));
+                });
+            });
+
+            countries.on_inserted.add(function (args) {
+                //传递是一个对象{ sender: self, item: item }
+                $('#countries').append($('<option selected="selected">').attr('value', args.item.id).text(args.item.name));
+            });
+
+            var id = 10;
+            //click事件
+            $('#btnAdd').click(function () {
+                //插入事件
+                countries.insert({ id: ++id, name: $('#countryName').val() });
+            });
+
+            //初始化渲染数据
+            countries.select();
+            //=======================================================================
+        });
+
+    </script>
+</head>
+<body>
+    <select id="countries"></select>
+    <div>
+        <input id="countryName" /><button id="btnAdd">添加</button>
+    </div>
+</body>
+</html>
