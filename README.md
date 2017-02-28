@@ -1,9 +1,9 @@
 # 简介
 
 最初学习Javascipt语言，先后看了《JavaScript+DOM编程艺术》、《JavaScript高级程序设计》、《数据结构与算法JavaScript描述》这三本书籍。<br>
-仓库分为五个部分。
+
 ## 仓库分为五个部分
-- 数据结构与算法JS实现： 来自《JavaScript+DOM编程艺术》
+- 数据结构与算法JS实现： 来自《数据结构与算法JavaScript描述》
 - JS基础：平时的积累
 - 原型继承： 来自《JavaScript高级程序设计》
 - 闭包：来自《JavaScript高级程序设计》+ [廖雪峰官网](http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/00143449934543461c9d5dfeeb848f5b72bd012e1113d15000)+上网搜集
