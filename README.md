@@ -1,6 +1,15 @@
 # 简介
-最初学习Javascipt语言，先后看了《JavaScript+DOM编程艺术》、《JavaScript高级程序设计》、《数据结构与算法JavaScript描述》这三本书籍。
-其中大部分是利用Javascript这门语言实现一些基本的数据结构和算法。还有少部分是理解Javascript闭包、原型继承和异步编程的内容。
-最新的ES6语法会在后续的学习进行补充。
+
+最初学习Javascipt语言，先后看了《JavaScript+DOM编程艺术》、《JavaScript高级程序设计》、《数据结构与算法JavaScript描述》这三本书籍。<br>
+仓库分为五个部分。
+## 仓库分为五个部分
+- 数据结构与算法JS实现： 来自《JavaScript+DOM编程艺术》
+- JS基础：平时的积累
+- 原型继承： 来自《JavaScript高级程序设计》
+- 闭包：来自《JavaScript高级程序设计》+ [廖雪峰官网](http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/00143449934543461c9d5dfeeb848f5b72bd012e1113d15000)+上网搜集
+- 异步模式：来自阮一峰书籍[《ECMAScript 6简介》](http://es6.ruanyifeng.com/#docs/intro)+[jQuery中文文档-promise](http://www.css88.com/jqapi-1.9/promise/)+[jQuery中文文档-deferred](http://www.css88.com/jqapi-1.9/promise/)<br>
+
+未完待续……
+
 
 
