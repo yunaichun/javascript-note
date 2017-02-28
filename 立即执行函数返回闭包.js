@@ -8,7 +8,7 @@ var func=(function(){
 		console.log(a);//可以访问到内部变量a，由于闭包所以a的值一直存储在内存中
 	};
 })();
-console.log(a);//2（外部变量无法访问外部内部变量，所以一直是a）
+console.log(a);//2（外部变量无法访问匿名函数内部变量，所以a的值一直是全局定义的值2）
 func();//4
 console.log(a);//2
 func();//5
