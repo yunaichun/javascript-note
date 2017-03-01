@@ -47,17 +47,21 @@ result(); // 1002
 /*注意一：
          return function(){}其实是返回给全局了，this的作用域已经是window了
 */
-var name = "The Window";   
+//return的是function
+var name = "window作用域";   
 var object = {   
-　　name : "My Object",   
+　　name : "对象作用域",   
 　　getNameFunc : function(){   
-　　　　return function(){   
+　　　　return function(){ 
+            console.log(this);//window
+            console.log(this===window);//true(非浏览器指向global)
 　　　　　　return this.name;   
 　　　  };   
 　　}   
 };   
-console.log(object.getNameFunc(); //function(){   return this.name;   }
-console.log(object.getNameFunc()());  //The Window【this.name的this指代作用域在全局】
+console.log(typeof object.getNameFunc()); //function
+console.log(object.getNameFunc() instanceof Object); //true
+console.log(object.getNameFunc()()); //"window作用域"
 
 
 
@@ -115,34 +119,48 @@ console.log(f33());//9
 
 
 /*注意三：
-        普通函数return一个对象，利用工厂模式(不用new)创建对象，可以被window调用
+        普通函数return：objece，其中object中有function，则值会一直保存在这个对象中
 */
 /* 
-当构造函数里调用return时：
-A.return的是五种简单数据类型：String，Number，Boolean，Null，Undefined。
-这种情况下，忽视return值，依然返回this对象。
-B.return的是Object
-这种情况下，不再返回this对象，而是返回return语句的返回值。
-普通函数调用return：
-A.是基本类型返回的就是基本类型
-B.是对象就返回这个对象。这个对象可以用window调用，也可以不写window
-*/
-function create_counter(initial){
-	var x=initial||0;
-	return {
-		inc:function(){
-			x+=1;
-            return x;
-		}
-	};
-}
 
+构造函数中有return时this的指向：
+1、return的是五种简单数据类型：String，Number，Boolean，Null，Undefined。
+这种情况下，忽视return值，依然返回this对象。
+2、return的是Object：这种情况下，不再返回this对象，而是返回return语句的返回值。
+
+普通函数中有return时this的指向：
+1、return的是基本类型或者表达式：就是这个值
+2、return的是function：就是闭包，变成全局，this的作用域已经是window
+3、return的是Object：Object中如有function，也是闭包，
+this的作用域是返回的这个Object，只不过变量的值一直保存在Object中，而不是window中。
+
+综上可知：闭包不是在构造函数中返回，而是在普通函数和对象字面量中返回function或者带function的Object
+*/
+//return的是Object
+function create_counter(initial){
+    var x=initial||0;
+    console.log("闭包之外x变量的值"+x);//只有在初引用的时候才在
+    return {
+        //此函数可以访问create_counter内部变量inintial（形参），将这个函数返回的话，creater_counter外部就可以访问create_counter内部的变量inintial了。
+        //由于initial变为全局变量了，所以保存状态，所以每次传递值(实参)进去都会保存下来。
+        inc:function(){
+        	console.log("x变量的值一直保存在这个对象中"+x);//这个值一直保存在这个对象作用域中不被销毁
+        	console.log(this);//Object{}
+            console.log(this instanceof Object);//true
+            x+=1;
+            return x;
+        }
+    };
+}
 var c1=create_counter();
-// 为什么普通函数可以直接调用普通函数return对象的方法？
-// 原因是return这个对象导致全局可以访问到c1.inc()相当于window.c1.inc()
+console.log(typeof c1);//object
+console.log(c1 instanceof Object);//true
+
 console.log(c1.inc());//1
 console.log(c1.inc());//2
 console.log(c1.inc());//3
+console.log(x);//由于x变量的值是在return的全局Object中，但不是在window直接作用域中，所以访问不到
+
 var c2=create_counter(10);
 console.log(c2.inc());//11
 console.log(c2.inc());//12
