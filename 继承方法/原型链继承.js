@@ -8,7 +8,7 @@ B.由A知原型对象A.p指向原型对象B.p，而由一知原型对象A.p指�
   所以原型对象B.p包含一个指向构造函数A的指针
 
 这样就会构成原型与实例的链条:
-A.p-->B.p(A.p=b)-->A-->new A()[实例继承了B.p][起始地方]-->A.p
+A.p=b-->B.p-->A-->new A()[先搜索实例对象属性和方法]-->A.p[再搜索原型对象的方法]-->B.p[最后搜索继承的方法和属性]
 */
 function SuperType(){
 	this.property="被继承者";
@@ -45,7 +45,7 @@ console.log(instance.getSuperValue());//"被继承者"
 */
 console.log(instance);
 /* 
-原型链：A.p-->B.p(A.p=b)-->A-->new A()[实例继承了B.p][起始地方]-->A.p
+原型链：A.p=b-->B.p-->A-->new A()[先搜索实例对象属性和方法]-->A.p[再搜索原型对象的方法]-->B.p[最后搜索继承的方法和属性]
 搜索三阶段：
 SubType[                             //实例对象
             subproperty:"继承者",    //实例对象自身属性
