@@ -7,7 +7,8 @@
 - JS基础：平时的积累
 - 继承方法： 来自《JavaScript高级程序设计》
 - 闭包：来自《JavaScript高级程序设计》+ [廖雪峰官网](http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/00143449934543461c9d5dfeeb848f5b72bd012e1113d15000)+上网搜集
-- 异步模式：来自阮一峰书籍[《ECMAScript 6简介》](http://es6.ruanyifeng.com/#docs/intro)+[jQuery中文文档-promise](http://www.css88.com/jqapi-1.9/promise/)+[jQuery中文文档-deferred](http://www.css88.com/jqapi-1.9/promise/)<br>
+- 异步方法：来自阮一峰书籍[《ECMAScript 6简介》](http://es6.ruanyifeng.com/#docs/intro)+[jQuery中文文档-promise](http://www.css88.com/jqapi-1.9/promise/)+[jQuery中文文档-deferred](http://www.css88.com/jqapi-1.9/promise/)<br>
+- ES6：主要是ES6常用新特性总结。来自阮一峰书籍[《ECMAScript 6简介》](http://es6.ruanyifeng.com/#docs/intro)
 
 未完待续……
 
