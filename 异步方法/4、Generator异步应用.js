@@ -344,95 +344,95 @@ function add(a,b,c){
 console.log(currying(add,4)(1,2,3));//7
 
 /*4.4、Thunkify 模块  */
-/*生产环境的转换器，建议使用 Thunkify 模块。
+/* 
+生产环境的转换器，建议使用 Thunkify 模块。
 首先是安装。
 $ npm install thunkify
-使用方式如下。*/
+使用方式如下。
+*/
 var thunkify = require('thunkify');
 var fs = require('fs');
-
 var read = thunkify(fs.readFile);
 read('package.json')(function(err, str){
   // ...
 });
-Thunkify 的源码与上一节那个简单的转换器非常像。
-
+// Thunkify 的源码与上一节那个简单的转换器非常像。
 function thunkify(fn) {
   return function() {
     var args = new Array(arguments.length);
     var ctx = this;
-
     for (var i = 0; i < args.length; ++i) {
       args[i] = arguments[i];
     }
-
     return function (done) {
       var called;
-
       args.push(function () {
         if (called) return;
         called = true;
         done.apply(null, arguments);
       });
-
       try {
         fn.apply(ctx, args);
       } catch (err) {
         done(err);
       }
-    }
-  }
+    };
+  };
 };
-它的源码主要多了一个检查机制，变量called确保回调函数只运行一次。这样的设计与下文的 Generator 函数相关。请看下面的例子。
-
+/* 
+它的源码主要多了一个检查机制，变量called确保回调函数只运行一次。
+这样的设计与下文的 Generator 函数相关。请看下面的例子。
+*/
 function f(a, b, callback){
   var sum = a + b;
   callback(sum);
   callback(sum);
 }
-
 var ft = thunkify(f);
 var print = console.log.bind(console);
-ft(1, 2)(print);
-// 3
-上面代码中，由于thunkify只允许回调函数执行一次，所以只输出一行结果。
+ft(1, 2)(print);// 3
+// 上面代码中，由于thunkify只允许回调函数执行一次，所以只输出一行结果。
 
-Generator 函数的流程管理
-你可能会问， Thunk 函数有什么用？回答是以前确实没什么用，但是 ES6 有了 Generator 函数，Thunk 函数现在可以用于 Generator 函数的自动流程管理。
 
+
+/*4.5、Generator 函数的流程管理  */
+/* 
+你可能会问， Thunk 函数有什么用？回答是以前确实没什么用，
+但是 ES6 有了 Generator 函数，
+Thunk 函数现在可以用于 Generator 函数的自动流程管理。
 Generator 函数可以自动执行。
-
+*/
 function* gen() {
   // ...
 }
-
 var g = gen();
 var res = g.next();
-
 while(!res.done){
   console.log(res.value);
   res = g.next();
 }
-上面代码中，Generator 函数gen会自动执行完所有步骤。
-
-但是，这不适合异步操作。如果必须保证前一步执行完，才能执行后一步，上面的自动执行就不可行。这时，Thunk 函数就能派上用处。以读取文件为例。下面的 Generator 函数封装了两个异步操作。
-
+/* 
+上面代码中，Generator 函数gen会自动执行完所有步骤。但是，这不适合异步操作。
+如果必须保证前一步执行完，才能执行后一步，上面的自动执行就不可行。
+这时，Thunk 函数就能派上用处。以读取文件为例。
+下面的 Generator 函数封装了两个异步操作。
+*/
 var fs = require('fs');
 var thunkify = require('thunkify');
 var readFileThunk = thunkify(fs.readFile);
-
 var gen = function* (){
   var r1 = yield readFileThunk('/etc/fstab');
   console.log(r1.toString());
   var r2 = yield readFileThunk('/etc/shells');
   console.log(r2.toString());
 };
-上面代码中，yield命令用于将程序的执行权移出 Generator 函数，那么就需要一种方法，将执行权再交还给 Generator 函数。
-
-这种方法就是 Thunk 函数，因为它可以在回调函数里，将执行权交还给 Generator 函数。为了便于理解，我们先看如何手动执行上面这个 Generator 函数。
-
+/* 
+上面代码中，yield命令用于将程序的执行权移出 Generator 函数，
+那么就需要一种方法，将执行权再交还给 Generator 函数。
+这种方法就是 Thunk 函数，因为它可以在回调函数里，将执行权交还给 Generator 函数
+。为了便于理解，我们先看如何手动执行上面这个 Generator 函数。
+*/
 var g = gen();
-
 var r1 = g.next();
 r1.value(function (err, data) {
   if (err) throw err;
@@ -442,42 +442,165 @@ r1.value(function (err, data) {
     g.next(data);
   });
 });
-上面代码中，变量g是 Generator 函数的内部指针，表示目前执行到哪一步。next方法负责将指针移动到下一步，并返回该步的信息（value属性和done属性）。
+/* 
+上面代码中，变量g是 Generator 函数的内部指针，表示目前执行到哪一步。
+next方法负责将指针移动到下一步，并返回该步的信息（value属性和done属性）。
+仔细查看上面的代码，可以发现 Generator 函数的执行过程，
+其实是将同一个回调函数，反复传入next方法的value属性。
+这使得我们可以用递归来自动完成这个过程。
+*/
 
-仔细查看上面的代码，可以发现 Generator 函数的执行过程，其实是将同一个回调函数，反复传入next方法的value属性。这使得我们可以用递归来自动完成这个过程。
-
-Thunk 函数的自动流程管理
-Thunk 函数真正的威力，在于可以自动执行 Generator 函数。下面就是一个基于 Thunk 函数的 Generator 执行器。
-
+/*4.6、Thunk 函数的自动流程管理  */
+/* 
+Thunk 函数真正的威力，在于可以自动执行 Generator 函数。
+下面就是一个基于 Thunk 函数的 Generator 执行器。
+*/
 function run(fn) {
   var gen = fn();
-
   function next(err, data) {
-    var result = gen.next(data);
+    var result = gen.next(data);//.next(data)参数data是将上一步yield执行的值赋值为data
     if (result.done) return;
-    result.value(next);
+    result.value(next);//将next函数传入Thunk函数
   }
-
   next();
 }
-
 function* g() {
   // ...
 }
-
 run(g);
-上面代码的run函数，就是一个 Generator 函数的自动执行器。内部的next函数就是 Thunk 的回调函数。next函数先将指针移到 Generator 函数的下一步（gen.next方法），然后判断 Generator 函数是否结束（result.done属性），如果没结束，就将next函数再传入 Thunk 函数（result.value属性），否则就直接退出。
+/* 
+上面代码的run函数，就是一个 Generator 函数的自动执行器。
+内部的next函数就是 Thunk 的回调函数。
+next函数先将指针移到 Generator 函数的下一步（gen.next方法），
+然后判断 Generator 函数是否结束（result.done属性），
+如果没结束，就将next函数再传入 Thunk 函数（result.value属性），否则就直接退出。
 
-有了这个执行器，执行 Generator 函数方便多了。不管内部有多少个异步操作，直接把 Generator 函数传入run函数即可。当然，前提是每一个异步操作，都要是 Thunk 函数，也就是说，跟在yield命令后面的必须是 Thunk 函数。
-
+有了这个执行器，执行 Generator 函数方便多了。
+不管内部有多少个异步操作，直接把 Generator 函数传入run函数即可。
+当然，前提是每一个异步操作，都要是 Thunk 函数，
+也就是说，跟在yield命令后面的必须是 Thunk 函数。
+*/
 var g = function* (){
   var f1 = yield readFile('fileA');
   var f2 = yield readFile('fileB');
   // ...
   var fn = yield readFile('fileN');
 };
-
 run(g);
-上面代码中，函数g封装了n个异步的读取文件操作，只要执行run函数，这些操作就会自动完成。这样一来，异步操作不仅可以写得像同步操作，而且一行代码就可以执行。
+/* 
+面代码中，函数g封装了n个异步的读取文件操作，
+只要执行run函数，这些操作就会自动完成。
+这样一来，异步操作不仅可以写得像同步操作，而且一行代码就可以执行。
 
-Thunk 函数并不是 Generator 函数自动执行的唯一方案。因为自动执行的关键是，必须有一种机制，自动控制 Generator 函数的流程，接收和交还程序的执行权。回调函数可以做到这一点，Promise 对象也可以做到这一点。
+Thunk 函数并不是 Generator 函数自动执行的唯一方案。
+因为自动执行的关键是，必须有一种机制，
+自动控制 Generator 函数的流程，接收和交还程序的执行权。
+回调函数可以做到这一点，Promise 对象也可以做到这一点。
+*/
+
+
+
+
+
+/**
+ * 五、co 模块的源码
+ */
+/* 
+co 就是上面那个自动执行器的扩展，它的源码只有几十行，非常简单。
+首先，co 函数接受 Generator 函数作为参数，返回一个 Promise 对象。
+*/
+/*5.1、co源码*/
+function co(gen) {
+  var ctx = this;
+  return new Promise(function(resolve, reject) {
+  });
+}
+/* 
+在返回的 Promise 对象里面，co 先检查参数gen是否为 Generator 函数。
+如果是，就执行该函数，得到一个内部指针对象；
+如果不是就返回，并将 Promise 对象的状态改为resolved。
+*/
+function co(gen) {
+  var ctx = this;
+  return new Promise(function(resolve, reject) {
+    if (typeof gen === 'function') gen = gen.call(ctx);
+    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+  });
+}
+/* 
+接着，co 将 Generator 函数的内部指针对象的next方法，包装成onFulfilled函数。
+这主要是为了能够捕捉抛出的错误。
+*/
+function co(gen) {
+  var ctx = this;
+  return new Promise(function(resolve, reject) {
+    if (typeof gen === 'function') gen = gen.call(ctx);
+    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+    onFulfilled();
+    function onFulfilled(res) {
+      var ret;
+      try {
+        ret = gen.next(res);
+      } catch (e) {
+        return reject(e);
+      }
+      next(ret);
+    }
+  });
+}
+/*最后，就是关键的next函数，它会反复调用自身。*/
+function next(ret) {
+  if (ret.done) return resolve(ret.value);
+  var value = toPromise.call(ctx, ret.value);
+  if (value && isPromise(value)) return value.then(onFulfilled, onRejected);
+  return onRejected(
+    new TypeError(
+      'You may only yield a function, promise, generator, array, or object, '
+      + 'but the following object was passed: "'
+      + String(ret.value)
+      + '"'
+    )
+  );
+}
+/* 
+上面代码中，next函数的内部代码，一共只有四行命令。
+第一行，检查当前是否为 Generator 函数的最后一步，如果是就返回。
+第二行，确保每一步的返回值，是 Promise 对象。
+第三行，使用then方法，为返回值加上回调函数，然后通过onFulfilled函数再次调用next函数。
+第四行，在参数不符合要求的情况下（参数非 Thunk 函数和 Promise 对象），
+        将 Promise 对象的状态改为rejected，从而终止执行。
+*/
+
+/*5.2、处理并发的异步操作*/
+/* 
+co 支持并发的异步操作，即允许某些操作同时进行，等到它们全部完成，才进行下一步。
+这时，要把并发的操作都放在数组或对象里面，跟在yield语句后面。
+*/
+// 数组的写法
+co(function* () {
+  var res = yield [
+    Promise.resolve(1),
+    Promise.resolve(2)
+  ];
+  console.log(res);
+})
+.catch(onerror);
+// 对象的写法
+co(function* () {
+  var res = yield {
+    1: Promise.resolve(1),
+    2: Promise.resolve(2),
+  };
+  console.log(res);
+})
+.catch(onerror);
+// 下面是另一个例子。
+co(function* () {
+  var values = [n1, n2, n3];
+  yield values.map(somethingAsync);
+});
+function* somethingAsync(x) {
+  // do something async
+  return y
+}
+// 上面的代码允许并发三个somethingAsync异步操作，等到它们全部完成，才会进行下一步。
