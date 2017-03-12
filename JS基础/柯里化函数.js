@@ -63,12 +63,12 @@ console.log(currying(add,1,2,3));//6
 
 
 
-// ES5版本：参数有回调函数
+// ES5版本：参数有回调函数【相当于add(1,2,3)=currying(add)(1)(2)(3)】
 var Thunk = function(fn){
   return function (){
     var args = Array.prototype.slice.call(arguments);
     return function (callback){
-      args.push(callback);
+      args.push(callback);//相当于把参数传给callback了
       return fn.apply(this, args);
     };
   };
@@ -81,16 +81,19 @@ var Thunk = function(fn) {
     };
   };
 };
-// 使用上面的转换器，生成fs.readFile的 Thunk 函数。
+/*// 使用上面的转换器，生成fs.readFile的 Thunk 函数。
 var readFileThunk = Thunk(fs.readFile);
-readFileThunk(fileA)(callback);
+readFileThunk(fileA)(callback);*/
 // 下面是另一个完整的例子。
 function f(a, cb) {
   cb(a);
 }
+/* 
 let ft = Thunk(f);
 let log = console.log.bind(console);//bind绑定到console对象
 ft(1)(log); // 1
+*/
+Thunk(f)(1)(console.log.bind(console));
 
 
 
