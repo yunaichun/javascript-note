@@ -1,8 +1,8 @@
 # 简介
 
-初学Javascipt语言，看了《JavaScript+DOM编程艺术》、《JavaScript高级程序设计》、《数据结构与算法JavaScript描述》这三本书籍。<br>
+初学Javascipt语言，学习了《JavaScript+DOM编程艺术》、《JavaScript高级程序设计》、《数据结构与算法JavaScript描述》这三本书籍。<br>
 之后学习了[《ECMAScript 6简介》](http://es6.ruanyifeng.com/#docs/intro)、《高性能Javascript》、《Javascript语言精髓》、《Javascript设计模式》、《深入浅出NodeJs》等。<br>
-此仓库代码有些例子很low-_-，主要是希望记录下自己学习的点滴。期待一起进步，共同交流哈~
+有些例子很low-_-，主要是希望记录下自己学习的点滴。期待一起进步，共同交流哈~
 
 
 ## 仓库分为五个部分
