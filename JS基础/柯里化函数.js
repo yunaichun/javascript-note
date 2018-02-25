@@ -105,3 +105,36 @@ function make_pow(n){
 }
 var pow2=make_pow(2);
 console.log(pow2(5));//console.log(make_pow(2)(3))
+
+
+
+
+
+
+
+/**
+ * 柯里化函数不指定参数长度的情况
+ * ----------------利用递归的方法
+ */
+function curry(fn) {
+    var out = Array.prototype.slice.call(arguments, 1);
+    // 当curry函数传给add函数的所有参数都已经打包好后，开始执行add函数
+    if (out.length >= 10) { 
+    	return fn.apply(this, out);
+    } else {
+    	return function () {
+            var inner = Array.prototype.slice.call(arguments);
+            // 递归调用，将curry函数后续参数打包拼接回传给curry函数
+            return curry.apply(this, [fn].concat(out).concat(inner));
+        }
+    }
+}
+
+function add() {
+    var args = Array.prototype.slice.call(arguments);
+    return args.reduce(function (previousValue, currentValue) {
+        return previousValue + currentValue;
+    });
+};
+
+console.log(curry(add, 4, 5)(1)(2)(3)(6, 7, 8)(9)(0)); //45
