@@ -397,20 +397,20 @@ function Person12(name,age,job){
 	return o;
 }
 var person12= new Person12("zhangsan",29,"Software");
+console.log(person12 instanceof Person12); // false
+console.log(person12.constructor == Object); // true [实例/原型对象 -> 构造函数]
+console.log(person12.__proto__ == Object.prototype); // true [实例 -> 原型对象]
 person12.sayName();//"zhangsan"
 
 
 
 /*八、稳妥的构造函数模式
-     特点：和寄生构造函数模式一样，只不过不用new（和工厂模式一样的，区别在于函数首字母大写）
+     特点：不用new、不用this
 */
 function Person13(name,age,job){
 	var o=new Object();
-	o.name=name;
-	o.age=age;
-	o.job=job;
 	o.sayName=function(){
-		console.log(this.name);
+		console.log(name);
 	};
 	return o;
 }
