@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>JavaScript Patterns</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<div id="results"></div>
+<script>
+/*    
+    很多人可能也比较迷糊中介者和外观模式的区别，他们都是对现有各模块进行抽象，但有一些微妙的区别。
+
+    中介者所做的是在模块之间进行通信，是多向的，但外观模式只是为某一个模块或系统定义简单的接口而不添加额外的功能。
+
+    系统中的其它模块和外观模式这个概念没有直接联系，可以认为是单向性。
+*/
+</script>
+    <script>
+        /**
+         * [Player 订阅者]
+         * @param {[type]} name [description]
+         */
+        function Player(name) {
+            this.points = 0;
+            this.name = name;
+        }
+        Player.prototype.play = function () {
+            this.points += 1;
+            mediator.played();
+        };
+        /**
+         * [scoreboard 订阅者行为]
+         * @type {Object}
+         */
+        var scoreboard = {
+
+            // 显示内容的容器
+            element: document.getElementById('results'),
+
+            // 更新分数显示
+            update: function (score) {
+                var i, msg = '';
+                for (i in score) {
+                    if (score.hasOwnProperty(i)) {
+                        msg += '<p><strong>' + i + '<\/strong>: ';
+                        msg += score[i];
+                        msg += '<\/p>';
+                    }
+                }
+                this.element.innerHTML = msg;
+            }
+        };
+
+        /**
+         * [mediator 中介者]
+         * @type {Object}
+         */
+        var mediator = {
+
+            // 所有的player
+            players: {},
+
+            // 初始化
+            setup: function () {
+                var players = this.players;
+                players.home = new Player('Home');
+                players.guest = new Player('Guest');
+            },
+
+            // play以后，更新分数
+            played: function () {
+                var players = this.players,
+                    score = {
+                        Home: players.home.points,
+                        Guest: players.guest.points
+                    };
+
+                scoreboard.update(score);
+            },
+
+            // 处理用户按键交互
+            keypress: function (e) {
+                e = e || window.event; // IE
+                if (e.which === 49) { // 数字键 "1"
+                    mediator.players.home.play();
+                    return;
+                }
+                if (e.which === 48) { // 数字键 "0"
+                    mediator.players.guest.play();
+                    return;
+                }
+            }
+        };
+
+        // go!
+        mediator.setup();
+        window.onkeypress = mediator.keypress;
+
+        // 30秒以后结束
+        setTimeout(function () {
+            window.onkeypress = null;
+            console.log('Game over!');
+        }, 30000);
+    </script>
+</body>
+</html>

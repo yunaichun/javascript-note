@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+
+<body>
+    <script>
+     /* 中介者模式定义
+        基本的套路就是：提供一个中介对象Mediator，这个中介对象就是其他所有对象之间的联系纽带，
+        其他所有对象相互之间没有没有任何的依赖关系，事件的订阅及发布统一让Mediator去操作。
+        其他所有的对象需要做的就是提供给Mediator需要发布的事件，以及订阅Mediator上能提供的事件。
+
+
+        举个例子:
+        淘宝商铺：卖家A在淘宝上开了一个Gopro相机店,b, c, d最近都有意愿去买Gopro,但是觉得价格稍贵，
+        因此暂时不打算入手，想等价格稍微便宜一点后再入手，所以这3个人通过淘宝先关注卖家A的相机店。
+        等到卖家A的Gopro相机打折后，淘宝会向这3个人推送打折消息。
+
+
+        其中这3个买家之间是没有任何依赖关系的，并不知道对方。当一个买家不打算买这家店的相机，
+        取消关注后，对其他2个买家没有任何影响，唯一不同的是，卖家A的Gopro相机打折后，淘宝只会通知仍然关注卖家A的2个买家
+
+
+        在这个例子当中:
+        淘宝: Mediator
+        卖家A: 发布者
+        买家B/C/D: 订阅者
+        发布者通过Mediator去发布消息，Mediator再去通知其他的订阅者 
+     */
+    </script>
+    <script>
+    	/*  中介者模式简单实现
+            subscribers: { type: [ fn…… ] } 
+        */
+		function Mediator() {
+            this.subscribers = {};
+	    }
+	    //发布消息：循环执行type属性数组中存入的回调函数
+        Mediator.prototype.pubNotice = function(type, obj) {
+            this.subscribers[type] = this.subscribers[type] || []
+            this.subscribers[type].forEach(sub => {
+                sub(obj)
+            })
+        };
+        //订阅消息：传入指定回调函数至指定type对应的数组中
+        Mediator.prototype.subNotice = function(type, target, fn) {
+            this.subscribers[type] = this.subscribers[type] || []
+            this.subscribers[type].push(fn)
+        };
+	    
+	    var sub1 = {
+	        sayHi: function(data) {
+		        console.log(`sub1 get the data ${data}`)
+	        }
+	    };
+
+	    var sub2 = {
+	        sayHi: function(data) {
+	            console.log(`sub2 get the data ${data}`)
+	        } 
+	    };
+
+	    var mediator = new Mediator();
+
+	    mediator.subNotice('sayHi', sub1, sub1.sayHi);
+	    mediator.subNotice('sayHi', sub2, sub2.sayHi);
+
+	    mediator.pubNotice('sayHi', '你好');
+    </script>
+    <script>
+        /*  中介者模式和观察者模式区别
+          从Observer和Mediator实现的套路上来看，二者都有相似之处，就是订阅者订阅发布者发布的消息,
+          但是Observer是订阅者和发布者直接产生依赖关系,当依赖关系变多起来就不好处理了。
+
+
+          而Mediator是在订阅者和发布者中间加了一个中介者，由这个中介者去管理不同对象之间的订阅发布关系，
+          这样的好处就是订阅者和发布者不产生直接的依赖关系,统一交给中介者去维护。
+       */
+    </script>
+</body>
+
+</html>

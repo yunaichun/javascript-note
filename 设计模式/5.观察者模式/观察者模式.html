@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+
+<body>
+    <button id="addNewObserver">Add New Observer checkbox</button>
+    <input id="mainCheckbox" type="checkbox" />
+    <div id="observersContainer"></div>
+    <script>
+    	/* 
+    	具体应用场景是，当subject的某个动作需要引发一系列不同对象的动作（比如你是一个班长要去通知班里的某些人），
+    	与其一个一个的手动调用触发的方法（私下里一个一个通知），不如维护一个列表（建一个群），
+    	这个列表存有你想要调用的对象方法（想要通知的人）；之后每次做的触发的时候只要轮询这个列表就好了（群发），
+    	而不用关心这个列表里有谁，只用关心想让谁加入让谁退出
+    	*/
+	    /**
+	     * 被观察者：维护一组观察者， 提供用于增加和移除观察者的方法。
+	     * 观察者：提供一个更新接口，用于当被观察者状态变化时，得到通知。
+	     * 具体的被观察者：状态变化时广播通知给观察者，保持具体的观察者的信息。
+	     * 具体的观察者：保持一个指向具体被观察者的引用，实现一个更新接口，用于观察，以便保证自身状态总是和被观察者状态一致的。
+	     */
+	    //首先，让我们对被观察者可能有的一组依赖其的观察者进行建模
+	    function ObserverList() {
+	    	//定义观察者列表
+	        this.observerList = [];
+	    }
+
+	    //添加观察者至观察者列表
+	    ObserverList.prototype.Add = function(obj) {
+	        return this.observerList.push(obj);
+	    };
+
+	    //清空观察者列表
+	    ObserverList.prototype.Empty = function() {
+	        this.observerList = [];
+	    };
+
+	    //返回观察者列表长度
+	    ObserverList.prototype.Count = function() {
+	        return this.observerList.length;
+	    };
+
+	    //获取观察者列表中指定index的观察者
+	    ObserverList.prototype.Get = function(index) {
+	        if (index > -1 && index < this.observerList.length) {
+	            return this.observerList[index];
+	        }
+	    };
+
+	    //插入指定观察者至观察者列表[貌似只能移除最后一个和第一个]---返回初始index或者最后index
+	    ObserverList.prototype.Insert = function(obj, index) {
+	        var pointer = -1;
+
+	        if (index === 0) {
+	            this.observerList.unshift(obj);
+	            pointer = index;
+	        } else if (index === this.observerList.length) {
+	            this.observerList.push(obj);
+	            pointer = index;
+	        }
+
+	        return pointer;
+	    };
+
+	    //返回指定观察者的index[传入初始查找index，在此index之后位置的不存在的话则返回-1]
+	    ObserverList.prototype.IndexOf = function(obj, startIndex) {
+	        var i = startIndex,
+	            pointer = -1;
+
+	        while (i < this.observerList.length) {
+	            if (this.observerList[i] === obj) {
+	                pointer = i;
+	            }
+	            i++;
+	        }
+
+	        return pointer;
+	    };
+
+	    //移除观察者列表中指定index的观察者[貌似只能移除最后一个和第一个]
+	    ObserverList.prototype.RemoveAt = function(index) {
+	        if (index === 0) {
+	            this.observerList.shift();
+	        } else if (index === this.observerList.length - 1) {
+	            this.observerList.pop();
+	        }
+	    };
+	    // Extend an object with an extension
+	    function extend(extension, obj) {
+	        for (var key in extension) {
+	            obj[key] = extension[key];
+	        }
+	    }
+    </script>
+    <script>
+    	//subject只用关心两件事：1.维护这个列表，2.发布事件
+    	//接着，我们对被观察者以及其增加，删除，通知在观察者列表中的观察者的能力进行建模：
+	    function Subject() {
+	    	//定义目标对象，目标对象是观察者的实例
+	        this.observers = new ObserverList();
+	    }
+
+	    //目标对象可以调用观察者对象的新增观察者方法
+	    Subject.prototype.AddObserver = function(observer) {
+	        this.observers.Add(observer);
+	    };
+
+	    //目标对象可以调用观察者对象的移除观察者方法[只能移除最后一个或者第一个]
+	    Subject.prototype.RemoveObserver = function(observer) {
+	        this.observers.RemoveAt(this.observers.IndexOf(observer, 0));
+	    };
+
+	    //目标对象可以调用观察者对象获取指定index的方法，然后调用此观察者的update方法
+	    Subject.prototype.Notify = function(context) {
+	        var observerCount = this.observers.Count();
+	        console.log(observerCount);
+	        for (var i = 0; i < observerCount; i++) {
+	            // 在这里假设的是列表里的每个对象都有update方法，但个人觉得这个列表里也可以是不同对象的不同方法，
+	            // 只要能接受当前上下文作为参数, 可以这样执行：
+	            this.observers.Get(i).Update(context);
+	        }
+	    };
+    </script>
+    <script>
+    	// 接着定义建立新的观察者的一个框架。这里的update 函数之后会被具体的行为覆盖
+		function Observer(){
+			this.Update = function(){
+				// ...
+			};
+		}
+    </script>
+	<script>
+		/**
+		 * 一个按钮，这个按钮用于增加新的充当观察者的选择框到页面上
+         * 一个控制用的选择框 , 充当一个被观察者，通知其它选择框是否应该被选中
+         * 一个容器，用于放置新的选择框
+		 */
+		var addBtn = document.getElementById("addNewObserver"),
+		    controlCheckbox = document.getElementById("mainCheckbox"),//目标
+		    container = document.getElementById("observersContainer");//观察者的包围框
+
+
+		//第一步：具体的被观察者---Subject 类扩展controlCheckbox 类
+		extend(new Subject(), controlCheckbox);
+		//点击checkbox 将会触发对观察者的通知
+		controlCheckbox["onclick"] = function(){
+			// [点击事件 -> 目标对象通知观察者 -> 观察者调用update方法]
+			controlCheckbox.Notify(controlCheckbox.checked)//将自身的checked的状态传递给观察者
+		};
+
+		//第二步：具体的观察者
+		addBtn["onclick"] = function() {
+		    //建立一个新的用于增加的checkbox
+		    var check = document.createElement("input");
+		    check.type = "checkbox";
+
+		    // 使用Observer 类扩展checkbox[具体的观察者具有，update方法(update仅限于自身)]
+		    extend(new Observer(), check);
+		    // 使用定制的Update函数重载
+		    check.Update = function(value) {
+		        this.checked = value;
+		    };
+
+
+		    // 目标对象将此观察者添加至观察者列表
+		    controlCheckbox.AddObserver(check);
+
+
+		    // 将元素添加到容器的最后
+		    container.appendChild(check);
+		}
+    </script>
+    <script>
+    	/* 划重点：观察者模式和发布/订阅模式的不同
+    	1、观察者模式要求想要接受相关通知的观察者必须到发起这个事件的被观察者上注册这个事件。
+    	2、发布/订阅模式使用一个主题/事件频道，这个频道处于想要获取通知的订阅者和发起事件的发布者之间。
+    	   这个事件系统允许代码定义应用相关的事件，这个事件可以传递特殊的参数，参数中包含有订阅者所需要的值。
+    	   这种想法是为了避免订阅者和发布者之间的依赖性。
+    	   这种和观察者模式之间的不同，使订阅者可以实现一个合适的事件处理函数，用于注册和接受由发布者广播的相关通知。
+    	*/
+    
+
+		/* 优势
+		观察者和发布/订阅模式鼓励人们认真考虑应用不同部分之间的关系，同时帮助我们找出这样的层，该层中包含有直接的关系，
+		这些关系可以通过一些列的观察者和被观察者来替换掉。这中方式可以有效地将一个应用程序切割成小块，
+		这些小块耦合度低，从而改善代码的管理，以及用于潜在的代码复用。
+
+		使用观察者模式更深层次的动机是，当我们需要维护相关对象的一致性的时候，我们可以避免对象之间的紧密耦合。
+		例如，一个对象可以通知另外一个对象，而不需要知道这个对象的信息。
+
+		两种模式下，观察者和被观察者之间都可以存在动态关系。
+		这提供很好的灵活性，而当我们的应用中不同的部分之间紧密耦合的时候，是很难实现这种灵活性的。
+
+		尽管这些模式并不是万能的灵丹妙药，这些模式仍然是作为最好的设计松耦合系统的工具之一，
+		因此在任何的JavaScript 开发者的工具箱里面，都应该有这样一个重要的工具。
+		*/
+
+		/*缺点[-----1、因为订阅者从发布者中解耦了，所以发布者不会感知订阅者的错误输出-----2、订阅者对彼此之间存在没有感知，对切换发布者的代价无从得知-----]
+		事实上，这些模式的一些问题实际上正是来自于它们所带来的一些好处。
+		在发布/订阅模式中，将发布者共订阅者上解耦，将会在一些情况下，导致很难确保我们应用中的特定部分按照我们预期的那样正常工作。
+
+		例如，发布者可以假设有一个或者多个订阅者正在监听它们。
+		比如我们基于这样的假设，在某些应用处理过程中来记录或者输出错误日志。
+		如果订阅者执行日志功能崩溃了（或者因为某些原因不能正常工作），因为系统本身的解耦本质，发布者没有办法感知到这些事情。
+
+		另外一个这种模式的缺点是，订阅者对彼此之间存在没有感知，对切换发布者的代价无从得知。
+		因为订阅者和发布者之间的动态关系，更新依赖也很能去追踪。
+		*/
+    </script>
+    <script>
+    	/* 发布/订阅模式 */
+    	var pubsub = {};
+		(function (q) {
+
+		    var topics = {}, // 回调函数存放的数组：topics = { topic: [{ token: token, func: func }] }
+		        subUid = -1;
+		    // 发布方法
+		    q.publish = function (topic, args) {
+		        //订阅的事件中不存在发布的事件的话，直接返回false
+		        if (!topics[topic]) {
+		            return false;
+		        }
+		        setTimeout(function () {
+		            var subscribers = topics[topic],
+		                len = subscribers ? subscribers.length : 0;
+		            //执行此topic数组中所有的函数func
+		            while (len--) {
+		                subscribers[len].func(topic, args);
+		            }
+		        }, 0);
+
+		        return true;
+
+		    };
+		    //订阅方法
+		    q.subscribe = function (topic, func) {
+		        //初始化订阅对象
+		        if (!topics[topic]) {
+		            topics[topic] = [];
+		        }
+		        //订阅对象topic：自增的token + 传入的函数【是一个数组对象】
+		        var token = (++subUid).toString();
+		        topics[topic].push({
+		            token: token,
+		            func: func
+		        });
+		        return token;
+		    };
+		    //退订方法
+		    q.unsubscribe = function (token) {
+		        for (var m in topics) {
+		            if (topics[m]) {
+		                for (var i = 0, j = topics[m].length; i < j; i++) {
+		                    if (topics[m][i].token === token) {
+		                        topics[m].splice(i, 1);
+		                        return token;
+		                    }
+		                }
+		            }
+		        }
+		        return false;
+		    };
+		} (pubsub));
+
+		//来，订阅一个
+		//将订阅赋值给一个变量，以便退订
+		var testSubscription = pubsub.subscribe('example1', function (topics, data) {
+		    console.log(topics + ": " + data);
+		});
+		pubsub.subscribe('example1', function (topics, data) {
+		    console.log(topics + "这是第二个回调函数: " + data);
+		});
+
+		//发布通知
+		pubsub.publish('example1', 'hello world!');
+		pubsub.publish('example1', ['test', 'a', 'b', 'c']);
+		pubsub.publish('example1', [{ 'color': 'blue' }, { 'text': 'hello'}]);
+
+
+		//退订
+		setTimeout(function () {
+		    pubsub.unsubscribe(testSubscription);
+		}, 0);
+		//再发布一次，验证一下是否还能够输出信息
+		pubsub.publish('example1', 'hello again! (this will fail)');
+    </script>
+    <script>
+       /*	
+        让我们假设这样一个场景: 有一个Manager一声令下，需要让工人A和工人B开工，代码可以是这样的
+    	Manager.start = function () {
+		    A.work();
+		    B.work();
+		}
+
+		其实还可以这么写，新增一个中介模块，这个模块有存储了Manager的常用命令比如start，stop，resume，
+		每一个命令其实维护的也是一个列表，比如start的列表下存储了所有员工的start方法：
+		Mediator["start"] = [
+		    {
+		        name: 'A',
+		        callback: 'work'
+		    },
+		    {
+		        name: 'B',
+		        callback: 'workAgain'
+		    },
+		]
+
+		所以Manager的方法可以重写为
+		Manager.start = function () {
+		    Mediator.publish('start')   // publish 为触发命令函数，以此来触发start命令下维护的所有回调函数
+		}
+
+		代码细节就不展示了，主要体现这么一个机制，而如果某个员工要提交自己的work方法供老板调用的话，只要注册一下就好了 
+		Mediator.subscribe('C', function callback() {});
+		*/
+	
+	
+		/* 
+		中介者模式优点：
+		1.低耦合！如果不是经理要让员工开始工作，是董事长怎么办，或者是部门主管怎么办，难道都要这么写
+		XXX.start = function () {
+		    A.work()
+		    B.work();
+		}
+		都要把A.work什么抄一遍？当然不是，只要给中介模块发出命令就好了，
+
+		2.模块之间不需要进行通信，只要负责广播和监听事件就好了
+
+		3.在模块化的javascript中，中介模块能提高可维护性：是否启动某个模块，有没有权限启动某个模块，异步加载某些模块，模块之间的依赖关系，某些模块启动失败了怎么办。这些边界条件都可以交给它来判断，而其他模块只关心实现自己逻辑就好了
+
+		最后打个比方，中介模块真的就像房屋中介一样！如果你是房东，你只需要下令一声“我要找人租房”，他们就自然会生成那个列表，你不用直接和房客打交道。
+		*/
+    </script>
+</body>
+
+</html>
