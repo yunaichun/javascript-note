@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manifest</title>
+  <!-- 引用manifest文件 -->
+  <link rel="manifest" href="./manifest.json"> 
+</head>
+<body>
+  <h1>Manifest Page</h1>
+  <script>
+  /*  浏览器“添加到主屏幕”的提示是需要满足下面条件才会显示的：
+    1、需要manifest文件
+    2、manifest中需要定义start_url
+    3、需要包含144x144的png图标文件
+    4、网站是通过Https访问的
+    5、并且网站中运行ServiceWorker
+    6、用户需要至少浏览过网站两次，并且两次的间隔大于5分钟
+    7、如果修改了 manifest 的配置，已添加到主屏幕的名称并不会改变，只有当用户重新添加到桌面时，更改后的配置才会生效。但是在未来版本的 Chrome 浏览器将支持自动更新
+
+    关于上面提到的第4点，我们可以建立一个https网站或者可以直接用github的pages服务来实现。
+    关于第6点，是为了防止每次打开网址都有这个提示，对用户造成较差的体验。
+  */
+  // 注册
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js')
+        .then(function(registration) {})
+        .catch(function(err) {})
+    })
+  }
+  // 添加到主屏幕触发的事件
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.userChoice.then(function (result){
+        if (result.outcome === 'dismissed'){
+            // 发送数据进行分析
+        } else {
+            // 发送数据进行分析
+        }
+    })
+  });
+  </script>
+</body>
+</html>
