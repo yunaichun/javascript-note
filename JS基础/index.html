@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"  />
+    <title>Web Worker Test</title>
+  </head>
+  <body>
+
+  <div id="result"></div>
+
+  <script language="javascript">
+    // 主线程实例Worker
+    var worker = new Worker('fibonacci.js');
+    // 接收子线程消息
+    worker.onmessage = function(event) {
+      document.getElementById('result').textContent = event.data;
+      console.log('主线程接收到子线程的消息：' + event.data + '\n');
+    };
+    // 错误捕获
+    worker.onerror = function(error) {
+      console.error('Worker error: ' + error.message + '\n');
+      throw error;
+    };
+    // 主线程向子线程发送消息
+    worker.postMessage(10);
+
+  </script>
+  </body>
+</html>
