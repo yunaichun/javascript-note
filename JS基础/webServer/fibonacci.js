@@ -34,3 +34,24 @@ function dycFib(n) {
     }
     return arr[n - 1];
 }
+
+/*  ES6实现斐波那契数列：generator函数 + 变量结构赋值
+    function* dycFib() {
+      let prev = 1
+      let curr = 1
+      while (true) {
+        // 每次遍历返回的是yield后面的值：即prev的值
+        yield prev;
+        [prev, curr] = [curr, prev + curr];
+      }
+    }
+
+    // let generator = fibo();
+    // for (var i = 0; i < 10; i++) {
+    //   console.log(generator.next().value) //=> 1 1 2 3 5 8 13 21 34 55}
+    // }
+
+    // 只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值
+    // Generator 函数原生具有 Iterator 接口。解构赋值会依次从这个接口获取值。
+    let [a, b, c] = fibo();
+*/
