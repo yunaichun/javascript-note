@@ -25,13 +25,17 @@
   // 注册
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js')
-        .then(function(registration) {})
-        .catch(function(err) {})
+      navigator.serviceWorker.register('sw.js').then(function(registration) {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function(err) {
+         console.log('ServiceWorker registration failed: ', err);
+      })
     })
   }
   // 添加到主屏幕触发的事件
   window.addEventListener('beforeinstallprompt', function(e) {
+    alert(1);
+    console.log('Add to homescreen: ', e);
     e.userChoice.then(function (result){
         if (result.outcome === 'dismissed'){
             // 发送数据进行分析
