@@ -10,7 +10,7 @@ Function.prototype.fakeBind = function (context) {
     let self = this;
     // 获取fakeBind函数从第二个参数到最后一个参数
     let args = Array.prototype.slice.call(arguments, 1)
-    let result = function () {
+    let resultFuc = function () {
     	// 这个时候的arguments是指bind返回的函数传入的参数
         let bindArgs = Array.prototype.slice.call(arguments);
         // 1、当作为普通函数时，this 指向 window，self 指向绑定函数，此时结果为 false，当结果为 false 的时候，this 指向绑定的 context。（content为null或undefined均指向window）
@@ -18,8 +18,8 @@ Function.prototype.fakeBind = function (context) {
         self.apply(this instanceof self ? this : context, args.concat(bindArgs));
     }
     // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承函数的原型中的值
-    result.prototype = Object.create(this.prototype);
-    return result;
+    resultFuc.prototype = Object.create(self.prototype);
+    return resultFuc;
 }
 
 
@@ -47,3 +47,18 @@ console.log(obj.habit);
 console.log(obj.friend);
 // shopping
 // kevin
+
+
+
+// 解释以下函数
+var bindf = Function.prototype.call.bind(Array.prototype.slice);
+bindf([1, 2, 3]);
+// 分析如下：
+self = Function.prototype.call
+content = Array.prototype.slice
+bindArgs = [].concat([1, 2, 3]);
+self.apply(content, [[1,2,3]]);
+// 等价于
+content.call([1,2,3])
+// 等价于
+[1,2,3].slice();

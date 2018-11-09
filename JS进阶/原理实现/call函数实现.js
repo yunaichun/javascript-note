@@ -44,3 +44,19 @@ console.log(bar.fakeCall(obj, 'kevin', 18));
 //    name: 'kevin',
 //    age: 18
 // }
+
+
+
+// 解释以下函数
+var arr = ['   ab', '   c    d'];
+arr.map(Function.prototype.call, String.prototype.trim);
+// 一、map方法第二个参数解释：相当于obj对象调用第一个函数
+var arr = ['   ab', '   c    d'];
+var obj = { 'test': 'test' }
+arr.map(function(item) { 
+    console.log(this) // obj
+}, obj);
+// 二、解释：相当于String.prototype.trim调用Function.prototype.call函数，传入当前item值
+Function.prototype.call.call(String.prototype.trim, '   ab'); // 'ab'
+// 等价于
+String.prototype.trim.call('   ab'); // 'ab'
