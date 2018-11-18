@@ -165,42 +165,53 @@ class PromiseNew {
 }
 
 
+// 测试：同步resolve
 let promise1 = new PromiseNew((resolve, reject) => {
+  resolve('hello world');
+}).then(function(res) {
+  console.log(res);
+});
+// 测试：异步resolve
+let promise2 = new PromiseNew((resolve, reject) => {
   setTimeout(function() {
     resolve('hello world');
   }, 0);
 }).then(function(res) {
   console.log(res);
 });
-
-
-/*实例new PromiseNew：
-  会执行executor函数 -> 执行内部resolve函数
-*/
-let promise1 = new PromiseNew((resolve, reject) => {
+// 测试：then返回PromiseNew
+let promise3 = new PromiseNew((resolve, reject) => {
   setTimeout(function() {
     resolve('hello world');
   }, 0);
-  // resolve('hello world');
-  // reject('you are err');
+}).then(function(res) {
+  console.log(res);
+  return new PromiseNew((resolve, reject) => {
+    resolve('hello world1');
+  });
+}).then(function(res) {
+  console.log(res);
 });
 
-/*执行promise1.then函数 ->
-  判断promise1的状态 ->
-  根据promise1的状态确定是否立即执行onResolved函数（并不是立即执行onResolved）
-*/
-let promise2 = promise1.then(function(res) {
-  debugger; // 3
-	console.log(res);
+
+
+
+// 分开执行测试
+/*实例new PromiseNew -> 会执行executor函数 -> 执行内部resolve函数*/
+let promise4 = new PromiseNew((resolve, reject) => {
+  setTimeout(function() {
+    resolve('hello world');
+  }, 0);
+});
+/*执行promise1.then函数 -> 判断promise1的状态 -> 立即执行onResolved函数 或者 收集onResolved*/
+let promise5 = promise4.then(function(res) {
+  console.log(res);
   return new PromiseNew((resolve, reject) => {
     setTimeout(function() {
       resolve('hello world1');
     }, 0);
-    // resolve('hello world');
-    // reject('you are err');
   });
 });
-
-let promise3 = promise2.then(function(res) {
+let promise6 = promise5.then(function(res) {
   console.log(res);
 });
