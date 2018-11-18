@@ -21,7 +21,11 @@ class PromiseNew {
     }
   }
 
-  /*更新status为：resolved，并且执行成功处理队列*/
+  /*内部resolve函数:
+    1、更新status为resolved
+    2、设置当前Promise的值
+    3、执行收集的回调
+  */
   resolve(value) {
     debugger; // 2
     let self = this;
@@ -35,7 +39,11 @@ class PromiseNew {
     }
   }
 
-  /*更新status为：rejected，并且执行失败处理队列*/
+  /*内部resolve函数:
+    1、更新status为rejected
+    2、设置当前Promise的值
+    3、执行收集的回调
+  */
   reject(reason) {
     let self = this;
     if (self.status === 'pending') {
@@ -47,7 +55,8 @@ class PromiseNew {
     }
   }
 
-  /*同时注册成功和失败处理函数
+  /* 1、执行 onResolved 或者 2、执行onRejected 或者 3、收集 onResolved&onRejected；返回PromiseNew对象
+    注意：
     一、then必须返回PromiseNew对象，而不是this
       promise2 = promise1.then(function foo(value) {
         return Promise.reject(3)
@@ -55,7 +64,7 @@ class PromiseNew {
       假如foo执行的话 -> 代表promise1是resolved
       如果then返回this，即promise1，那么promise2不可能再执行Promise.reject(3)将自身状态改为rejected
     
-    二、根据 promise1 的状态确定执行 onResolved 或者 onRejected
+    二、根据 promise1 的状态确定：执行 onResolved 或者 执行onRejected 或者 收集 onResolved&onRejected
       promise2 = promise1.then(function(value) {
         return 4
       }, function(reason) {
@@ -83,11 +92,13 @@ class PromiseNew {
         try {
           /*如果promise1的状态确定是resolved，则执行onResolved，onResolved执行的结果为x*/
           let x = onResolved(self.data);
-          /*如果onResolved执行的结果是一个PromiseNew对象：
-            1、x的状态未知，取决于实际返回的PromiseNew对象
-            2、x调用then方法
-          */
+          /*如果onResolved执行的结果是一个PromiseNew对象*/
           if (x instanceof PromiseNew) {
+            /*执行此PromiseNew对象的then方法
+              1、执行此PromiseNew对象的then方法，实际上是执行此PromiseNew对象的onResolved 或者 执行onRejected
+              2、执行此PromiseNew对象的then方法的onResolved，实际是执行当前返回的PromiseNew的resolve方法（即为x），则会导致后续resolve代码无效
+              3、执行此PromiseNew对象的then方法的onRejected，实际是执行当前返回的PromiseNew的reject方法，则会导致后续resolve代码无效
+            */
             x.then(resolve, reject);
           }
           /*如果onResolved执行的结果不是一个Promise对象：
@@ -104,40 +115,46 @@ class PromiseNew {
     }
 
     if (self.status === 'rejected') {
+      // 返回新的PromiseNew实例
       return promise2 = new PromiseNew(function(resolve, reject) {
         try {
           let x = onRejected(self.data);
           if (x instanceof PromiseNew) {
             x.then(resolve, reject);
           }
+          resolve(x);
         } catch (e) {
           reject(e);
         }
       });
     }
 
+    /*如果promise1的状态还处于pending状态，我们并不能确定执行onResolved还是onRejected函数
+      所以先将其存入回调数组，待状态确定的时候再确定调用哪个函数
+    */
     if (self.status === 'pending') {
       // 返回新的PromiseNew实例
       return promise2 = new PromiseNew(function(resolve, reject) {
-        /*如果promise1的状态还处于pending状态，我们并不能确定执行onResolved还是onRejected函数
-          所以先将其存入回调数组，待状态确定的时候再确定调用哪个函数
-        */
+        // 将 onResolved 存入 onResolvedCallback 数组中
         self.onResolvedCallback.push(function(value) {
           try {
             let x = onResolved(self.data);
             if (x instanceof PromiseNew) {
               x.then(resolve, reject);
             }
+            resolve(x);
           } catch (e) {
             reject(e);
           }
         });
+        // 将 onRejected 存入 onRejectedCallback 数组中
         self.onRejectedCallback.push(function(reason) {
           try {
             let x = onRejected(self.data);
             if (x instanceof PromiseNew) {
               x.then(resolve, reject);
             }
+            resolve(x);
           } catch (e) {
             reject(e);
           }
@@ -146,6 +163,16 @@ class PromiseNew {
     }
   }
 }
+
+
+let promise1 = new PromiseNew((resolve, reject) => {
+  setTimeout(function() {
+    resolve('hello world');
+  }, 0);
+}).then(function(res) {
+  console.log(res);
+});
+
 
 /*实例new PromiseNew：
   会执行executor函数 -> 执行内部resolve函数
