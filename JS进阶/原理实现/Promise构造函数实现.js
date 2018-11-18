@@ -82,8 +82,8 @@ class PromiseNew {
     let promise2;
 
     // 根据标准，如果then的参数不是function，则我们需要忽略它，此处以如下方式处理
-    onResolved = typeof onResolved === 'function' ? onResolved : function(v) {}
-    onRejected = typeof onRejected === 'function' ? onRejected : function(r) {}
+    onResolved = typeof onResolved === 'function' ? onResolved : function(value) { return value; };
+    onRejected = typeof onRejected === 'function' ? onRejected : function(reason) { throw reason; };
 
     if (self.status === 'resolved') {
       // 返回新的PromiseNew实例
