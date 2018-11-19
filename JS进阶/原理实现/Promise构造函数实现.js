@@ -27,7 +27,6 @@ class PromiseNew {
     3、执行收集的回调
   */
   resolve(value) {
-    debugger; // 2
     let self = this;
     if (self.status === 'pending') {
       self.status = 'resolved';
@@ -77,7 +76,6 @@ class PromiseNew {
       并且，如果onResolved/onRejected返回的是一个Promise，promise2将直接取这个Promise的结果。
   */
   then(onResolved, onRejected) {
-    debugger; // 1
   	let self = this;
     let promise2;
 
@@ -88,25 +86,23 @@ class PromiseNew {
     if (self.status === 'resolved') {
       // 返回新的PromiseNew实例
       return promise2 = new PromiseNew(function(resolve, reject) {
-        // 因为考虑到onResolved函数有可能throw，所以将代码放在try/catch中
+        // 因为考虑到 onResolved 函数有可能 throw ，所以将代码放在 try/catch 中
         try {
-          /*如果promise1的状态确定是resolved，则执行onResolved，onResolved执行的结果为x*/
+          /*如果 promise1 的状态确定是resolved，则执行 onResolved，onResolved 执行的结果为 x */
           let x = onResolved(self.data);
-          /*如果onResolved执行的结果是一个PromiseNew对象*/
           if (x instanceof PromiseNew) {
-            /*执行此PromiseNew对象的then方法
-              1、执行此PromiseNew对象的then方法，实际上是执行此PromiseNew对象的onResolved 或者 执行onRejected
-              2、执行此PromiseNew对象的then方法的onResolved，实际是执行当前返回的PromiseNew的resolve方法（即为x），则会导致后续resolve代码无效
-              3、执行此PromiseNew对象的then方法的onRejected，实际是执行当前返回的PromiseNew的reject方法，则会导致后续resolve代码无效
+            /*如果 onResolved 执行的结果是一个 PromiseNew 对象：给 promise2 改状态以及赋值（与x相等）
+              1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
+              2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
             */
-            x.then(resolve, reject);
-          }
-          /*如果onResolved执行的结果不是一个Promise对象：
-            1、onResolved正确时：promise2的值为x，状态为resolved
-            2、onResolved出错时：promise2的值为catch的err，状态为rejected
-          */
-          // 给promise2改状态以及赋值: self.status = 'resolved'; self.data = x;
-          resolve(x);
+            x.then(resolve, reject); // 执行 x 的 then 方法 -> 执行 x 的 onResolved  或者 onRejected -> 执行 promise2 的 resolve 或者 reject
+          } else {
+            /*如果 onResolved 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
+              1、onResolved 正确时：promise2 的值为 x ，状态为 resolved
+              2、onResolved 出错时：promise2 的值为catch的err，状态为 rejected
+            */
+            resolve(x);
+          } 
         } catch (e) {
           // 给promise2改状态以及赋值: self.status = 'rejected'; self.data = e;
           reject(e);
@@ -121,8 +117,9 @@ class PromiseNew {
           let x = onRejected(self.data);
           if (x instanceof PromiseNew) {
             x.then(resolve, reject);
+          } else {
+            resolve(x);  
           }
-          resolve(x);
         } catch (e) {
           reject(e);
         }
@@ -141,8 +138,9 @@ class PromiseNew {
             let x = onResolved(self.data);
             if (x instanceof PromiseNew) {
               x.then(resolve, reject);
+            } else {
+              resolve(x);
             }
-            resolve(x);
           } catch (e) {
             reject(e);
           }
@@ -153,8 +151,9 @@ class PromiseNew {
             let x = onRejected(self.data);
             if (x instanceof PromiseNew) {
               x.then(resolve, reject);
+            } else {
+              resolve(x);
             }
-            resolve(x);
           } catch (e) {
             reject(e);
           }
@@ -165,22 +164,19 @@ class PromiseNew {
 }
 
 
-// 测试：同步resolve
+/*连续执行测试：同步resolve*/
 let promise1 = new PromiseNew((resolve, reject) => {
   resolve('hello world');
 }).then(function(res) {
   console.log(res);
-});
-// 测试：异步resolve
-let promise2 = new PromiseNew((resolve, reject) => {
-  setTimeout(function() {
-    resolve('hello world');
-  }, 0);
+  return new PromiseNew((resolve, reject) => {
+    resolve('hello world1');
+  });
 }).then(function(res) {
   console.log(res);
 });
-// 测试：then返回PromiseNew
-let promise3 = new PromiseNew((resolve, reject) => {
+/*连续执行测试：异步resolve*/
+let promise2 = new PromiseNew((resolve, reject) => {
   setTimeout(function() {
     resolve('hello world');
   }, 0);
@@ -196,15 +192,26 @@ let promise3 = new PromiseNew((resolve, reject) => {
 
 
 
-// 分开执行测试
-/*实例new PromiseNew -> 会执行executor函数 -> 执行内部resolve函数*/
-let promise4 = new PromiseNew((resolve, reject) => {
+/*分开执行测试：同步resolve*/
+let promise3 = new PromiseNew((resolve, reject) => { // 实例new PromiseNew -> 会执行executor函数 -> 执行内部resolve函数
+  resolve('hello world');
+});
+let promise4 = promise3.then(function(res) { // 执行promise3.then函数 -> 判断promise3的状态 -> 立即执行onResolved函数 或者 收集onResolved
+  console.log(res);
+  return new PromiseNew((resolve, reject) => {
+    resolve('hello world1');
+  });
+});
+let promise5 = promise4.then(function(res) {
+  console.log(res);
+});
+/*分开执行测试：异步resolve*/
+let promise6 = new PromiseNew((resolve, reject) => { // 实例new PromiseNew -> 会执行executor函数 -> 执行内部resolve函数
   setTimeout(function() {
     resolve('hello world');
   }, 0);
 });
-/*执行promise1.then函数 -> 判断promise1的状态 -> 立即执行onResolved函数 或者 收集onResolved*/
-let promise5 = promise4.then(function(res) {
+let promise7 = promise6.then(function(res) { // 执行promise3.then函数 -> 判断promise3的状态 -> 立即执行onResolved函数 或者 收集onResolved
   console.log(res);
   return new PromiseNew((resolve, reject) => {
     setTimeout(function() {
@@ -212,6 +219,6 @@ let promise5 = promise4.then(function(res) {
     }, 0);
   });
 });
-let promise6 = promise5.then(function(res) {
+let promise8 = promise7.then(function(res) {
   console.log(res);
 });
