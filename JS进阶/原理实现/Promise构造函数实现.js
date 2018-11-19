@@ -95,7 +95,16 @@ class PromiseNew {
               1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
               2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
             */
-            x.then(resolve, reject); // 执行 x 的 then 方法 -> 执行 x 的 onResolved  或者 onRejected -> 执行 promise2 的 resolve 或者 reject
+            // x.then(resolve, reject); // 执行 x 的 then 方法 -> 执行 x 的 onResolved  或者 onRejected -> 执行 promise2 的 resolve 或者 reject
+            // 等价于
+            if (x.status === 'resolved') {
+              resolve(x.data);
+            } else if (x.status === 'rejected'){
+              reject(x.data);
+            } else {
+              promise2.status = 'pending';
+              promise2.data = undefined;
+            }
           } else {
             /*如果 onResolved 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
               1、onResolved 正确时：promise2 的值为 x ，状态为 resolved
@@ -178,14 +187,18 @@ let promise1 = new PromiseNew((resolve, reject) => {
 /*连续执行测试：异步resolve*/
 let promise2 = new PromiseNew((resolve, reject) => {
   setTimeout(function() {
+    alert(1);
     resolve('hello world');
   }, 0);
 }).then(function(res) {
+  alert(2);
   console.log(res);
   return new PromiseNew((resolve, reject) => {
+    alert(3);
     resolve('hello world1');
   });
 }).then(function(res) {
+  alert(4);
   console.log(res);
 });
 
