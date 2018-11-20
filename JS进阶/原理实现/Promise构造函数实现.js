@@ -237,10 +237,9 @@ class PromiseNew {
     });
   }
 }
-/*all方法：所有 promises 都完成的时候调用
-  1、静态方法，返回新的 PromiseNew 对象
-  2、通过 then 方法可以获取传递 promises 的执行结果数组
-  3、但凡某一个 promise 执行失败，则 PromiseNew.all 的状态都为 rejected，此取此 promise 的 reject 的值
+/*all方法：返回新的 PromiseNew 对象
+  1、所有 promises 都 resolved ，则执行此 PromiseNew 的 resolve 方法，通过 then 方法可以获取传递 promises 的执行结果数组
+  2、某个 promise  为 rejected ，则执行此 PromiseNew 的 reject  方法，此 PromiseNew 的结果即为当前 reject 的 promise 的值
 */
 PromiseNew.all = function(promises) {
   // 返回新的 PromiseNew 对象
@@ -271,7 +270,27 @@ PromiseNew.all = function(promises) {
     }
   })
 }
-
+/*race方法：返回新的 PromiseNew 对象
+  1、某个 promise 为 resolved ，则执行此 PromiseNew 的 resolve 方法，此 PromiseNew 的结果取当前 resolve 的 promise 的值
+  2、某个 promise 为 rejected ，则执行此 PromiseNew 的 reject  方法，此 PromiseNew 的结果取当前 reject  的 promise 的值
+*/
+PromiseNew.race = function(promises) {
+  return new PromiseNew(function(resolve, reject) {
+    if (Object.prototype.toString.call(promises) === '[object Array]') {
+      // 同步执行所有 promises ，但是每个 promise 内部都是异步执行的
+      // 相当于所有异步 promise 同时开始执行，看谁先完成
+      for (var i = 0; i < promises.length; i++) {
+        promises[i].then(function(value) {
+          return resolve(value);
+        }, function(reason) {
+          return reject(reason);
+        });
+      }
+    } else {
+      reject('Uncaught (in promise) TypeError: #<PromiseNew> is not iterable');
+    }
+  })
+}
 
 
 /*连续执行测试：同步resolve*/
@@ -400,7 +419,14 @@ let j = new PromiseNew(function(resolve, reject) { reject('reject: 1'); })
 
 
 /*测试 PromiseNew 的 all 静态方法方法*/
-let k = new Promise(function(resolve, reject) { setTimeout(resolve(1)); });
-let l = new Promise(function(resolve, reject) { resolve(2); });
-let m = new Promise(function(resolve, reject) { resolve(3); });
-let n = Promise.all([a, b, c]).then(function(res) { console.log(res); }) // [1, 2, 3]
+let k = new PromiseNew(function(resolve, reject) { setTimeout(function() { resolve(1); }, 2000); });
+let l = new PromiseNew(function(resolve, reject) { resolve(2); });
+let m = new PromiseNew(function(resolve, reject) { resolve(3); });
+let n = PromiseNew.all([k, l, m]).then(function(res) { console.log('同时完成：', res); }) // 同时完成：[1, 2, 3] 
+
+
+/*测试 PromiseNew 的 race 静态方法方法*/
+let o = new PromiseNew(function(resolve, reject) { setTimeout(function() { resolve(1); }, 3000); });
+let p = new PromiseNew(function(resolve, reject) { setTimeout(function() { resolve(2); }, 2000); });
+let q = new PromiseNew(function(resolve, reject) { setTimeout(function() { resolve(3); }, 1000); });
+let i = PromiseNew.race([o, p, q]).then(function(res) { console.log('率先完成：', res); }) // 率先完成：3
