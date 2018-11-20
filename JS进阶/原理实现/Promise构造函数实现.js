@@ -221,6 +221,21 @@ class PromiseNew {
   stop() {
     return new PromiseNew(function() {});
   }
+
+  /*最终方法：等价于 then 方法
+    1、then 正常调用 onResolved（默认值） 或者 onRejected（默认值）
+    2、fn 异步最后执行
+   */
+  finally(fn) {
+    // value是形参，reason也是形参
+    return this.then(function(value) {
+      setTimeout(fn);
+      return value;
+    }, function(reason) {
+      setTimeout(fn);
+      return reason;
+    });
+  }
 }
 
 
@@ -338,3 +353,14 @@ let h = new PromiseNew(function(resolve, reject) {
 .then(function() {
   alert(11111);
 });
+
+
+/*测试 PromiseNew 的 finally 方法*/
+let i = new PromiseNew(function(resolve, reject) { resolve('resolve: 1'); })
+.then()
+.finally(function(res) { console.log('resolve时会打印', res); }) // finally 的回调是异步，最后执行，所以不会打印 res 的值
+.then();
+let j = new PromiseNew(function(resolve, reject) { reject('reject: 1'); })
+.then()
+.finally(function(res) { console.log('reject 时会打印', res); }) // finally 的回调是异步，最后执行，所以不会打印 res 的值
+.then();
