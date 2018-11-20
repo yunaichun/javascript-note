@@ -203,8 +203,16 @@ class PromiseNew {
     dfd.promise = new PromiseNew(function(resolve, reject) {
       dfd.resolve = resolve;
       dfd.reject = reject;
-    })
+    });
     return dfd;
+  }
+
+  /*停止 PromiseNew 后续的链
+    场景：假如发生大的错误，让后续的链不再执行
+    原理：返回一个 PromiseNew 对象，但是其 status 为 pending， 则后续的 then 或者 catch 的回调不会执行，只会收集 
+   */
+  stop() {
+    return new PromiseNew(function() {});
   }
 }
 
@@ -276,3 +284,32 @@ console.log(b);
 b.reject('1111'); // deferred在外部直接可以改变其自身 promise 的状态
 let c = b.promise.then(null, function(res) {console.log(res); return '2222'}); // c是一个新的 PromiseNew 对象了
 console.log(c);
+
+
+/*测试 PromiseNew 的 catch 方法*/
+let c = new PromiseNew(function (resolve, reject) {
+  reject('222');
+}).catch(function(err) {
+  console.log(err);
+}); 
+
+
+/*测试 PromiseNew 的 stop 方法*/
+let d = new PromiseNew(function(resolve, reject) {
+  resolve(42);
+})
+.then(function(value) {
+  // "Big ERROR!!!"
+  return PromiseNew.stop()
+})
+.catch()
+.then(function() {
+  alert(11111);
+})
+.then(function() {
+  alert(11111);
+})
+.catch()
+.then(function() {
+  alert(11111);
+});
