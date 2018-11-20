@@ -237,7 +237,40 @@ class PromiseNew {
     });
   }
 }
-
+/*all方法：所有 promises 都完成的时候调用
+  1、静态方法，返回新的 PromiseNew 对象
+  2、通过 then 方法可以获取传递 promises 的执行结果数组
+  3、但凡某一个 promise 执行失败，则 PromiseNew.all 的状态都为 rejected，此取此 promise 的 reject 的值
+*/
+PromiseNew.all = function(promises) {
+  // 返回新的 PromiseNew 对象
+  return new PromiseNew(function(resolve, reject) {
+    if (Object.prototype.toString.call(promises) === '[object Array]') {
+      // 已经执行的 promise
+      let resolvedCounter = 0;
+      // promises 参数也是数组形式
+      let promiseNum = promises.length;
+      // 返回值是数组形式
+      let resolvedValues = new Array(promiseNum);
+      for (let i = 0; i < promiseNum; i++) {
+        promises[i].then(function(value) {
+          resolvedCounter++;
+          resolvedValues[i] = value;
+          // 已经执行的 promise 与 总得 promises 数量相等的时候
+          if (resolvedCounter == promiseNum) {
+            // 当前 PromiseNew 状态为 resolved
+            return resolve(resolvedValues);
+          }
+        }, function(reason) {
+          // 当前 PromiseNew 状态为 rejected
+          return reject(reason);
+        });
+      }
+    } else {
+      reject('Uncaught (in promise) TypeError: #<PromiseNew> is not iterable');
+    }
+  })
+}
 
 
 
@@ -364,3 +397,10 @@ let j = new PromiseNew(function(resolve, reject) { reject('reject: 1'); })
 .then()
 .finally(function(res) { console.log('reject 时会打印', res); }) // finally 的回调是异步，最后执行，所以不会打印 res 的值
 .then();
+
+
+/*测试 PromiseNew 的 all 静态方法方法*/
+let k = new Promise(function(resolve, reject) { setTimeout(resolve(1)); });
+let l = new Promise(function(resolve, reject) { resolve(2); });
+let m = new Promise(function(resolve, reject) { resolve(3); });
+let n = Promise.all([a, b, c]).then(function(res) { console.log(res); }) // [1, 2, 3]
