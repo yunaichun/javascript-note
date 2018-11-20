@@ -53,6 +53,10 @@ class PromiseNew {
       if (self.status === 'pending') {
         self.status = 'rejected';
         self.data = reason;
+        // 用 onRejectedCallback 数组的长度判断（此回调执行的时候会走 catch 代码的 reject，而这个 reject 的 PromiseNew 的 onRejectedCallback 数组为空）
+        if (self.onRejectedCallback.length === 0) {
+          console.error(reason)
+        }
         for(var i = 0; i < self.onRejectedCallback.length; i++) {
           self.onRejectedCallback[i](reason)
         }
@@ -187,8 +191,11 @@ class PromiseNew {
     }
   }
 
-  /*捕获异常
-    等价于 then 方法
+  /*捕获异常：等价于 then 方法
+    1、catch捕获 executor 中的 reject 数据
+    2、catch捕获 then 中语法错误（此报错打印字符串形式）
+
+    注意：then中语法错误也可以不用catch捕获，默认通过 onRejectedCallback 数组的长度捕获（此报错 console.error 形式）
   */
   catch(onRejected) {
     return this.then(null, onRejected);
@@ -286,16 +293,34 @@ let c = b.promise.then(null, function(res) {console.log(res); return '2222'}); /
 console.log(c);
 
 
-/*测试 PromiseNew 的 catch 方法*/
-let c = new PromiseNew(function (resolve, reject) {
+/*测试 PromiseNew 的 最后一条then链上的错误捕获*/
+let d = new PromiseNew(function (resolve, reject) {
   reject('222');
-}).catch(function(err) {
+}).catch(function(err) { // 1、catch捕获 executor 中的 reject 数据 
   console.log(err);
-}); 
+});
+let e = new PromiseNew(function(resolve) {
+  resolve(42);
+}).then(function(value) {
+  alter(value);
+}).catch(function(value) { // 2、catch捕获 then 中语法错误（此报错打印字符串形式）
+  console.log(value);
+});
+let f = new PromiseNew(function(resolve) {
+  resolve(42);
+}).then(function(value) { // 3、then 中语法错误：用 onRejectedCallback 数组的长度判断（此报错 console.error 形式）
+  alter(value);
+});
+let g = new PromiseNew(function(resolve, reject) { // 与上述 3 类似
+  reject(3);
+})// promise1
+.then() // returns promise2
+.then() // returns promise3      
+.then(); // returns promise4
 
 
 /*测试 PromiseNew 的 stop 方法*/
-let d = new PromiseNew(function(resolve, reject) {
+let h = new PromiseNew(function(resolve, reject) {
   resolve(42);
 })
 .then(function(value) {
