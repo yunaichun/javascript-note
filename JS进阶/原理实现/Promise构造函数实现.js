@@ -17,7 +17,9 @@ class PromiseNew {
       /*executor是形参 -> 实例PromiseNew的时候会执行executor的参数 -> 执行内部resolve方法*/
       executor(this.resolve.bind(this), this.reject.bind(this)) 
     } catch(e) {
-      this.reject(e)
+      // 如果 resolve 或者 reject 执行错误，直接抛出异常，不能正常实例 PromiseNew
+      throw(e);
+      // this.reject(e)
     }
   }
 
@@ -184,7 +186,29 @@ class PromiseNew {
       });
     }
   }
+
+  /*捕获异常
+    等价于 then 方法
+  */
+  catch(onRejected) {
+    return this.then(null, onRejected);
+  }
+
+  /*jQuery 的 $.Deferred() 文档：http://www.ruanyifeng.com/blog/2011/08/a_detailed_explanation_of_jquery_deferred_object.html
+    jQuery 的 $.Deferred() 对象上有与改变执行状态无关的方法（比如 done() 方法和 fail() 方法）、与改变执行状态有关的方法（比如 resolve() 方法和 reject() 方法）
+    而 $.Deferred().promise() 上只开放与改变执行状态无关的方法（比如 done() 方法和 fail() 方法）
+   */
+  deferred() {
+    let dfd = {}
+    dfd.promise = new PromiseNew(function(resolve, reject) {
+      dfd.resolve = resolve;
+      dfd.reject = reject;
+    })
+    return dfd;
+  }
 }
+
+
 
 
 /*连续执行测试：同步resolve*/
@@ -211,8 +235,6 @@ let promise2 = new PromiseNew((resolve, reject) => {
 }).then(function(res) {
   console.log(res);
 });
-
-
 
 
 /*分开执行测试：同步resolve*/
@@ -245,3 +267,12 @@ let promise7 = promise6.then(function(res) { // 执行promise3.then函数 -> 判
 let promise8 = promise7.then(function(res) {
   console.log(res);
 });
+
+
+/*测试 PromiseNew 的 deferred 方法*/
+let a = new PromiseNew(function () {});
+let b = a.deferred();
+console.log(b);
+b.reject('1111'); // deferred在外部直接可以改变其自身 promise 的状态
+let c = b.promise.then(null, function(res) {console.log(res); return '2222'}); // c是一个新的 PromiseNew 对象了
+console.log(c);
