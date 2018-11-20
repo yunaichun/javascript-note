@@ -14,12 +14,15 @@ Array.prototype.fakeReduce = function(fn, initialValue) {
   let arr = initialArr.slice();
   initialValue && arr.unshift(initialValue);
   let next;
+  // arr 只要为 1 项的时候就结束循环
   while (arr.length > 1) {
-    // 获取fn的四个参数：即为当前实例数组
     let prev = arr[0];
     let curr = arr[1];
-    let index = initialArr.length - arr.length+ 1;
+    // index 索引的更新
+    let index = initialArr.length - arr.length + 1;
+    // 执行 fn 获取的值为 next ，将其插入 arr 数组中，同时去除前两项
     next = fn.call(null, prev, curr, index, initialArr);
+    // arr 前两项的值换取一个新值 next，不断的归并
     arr.splice(0, 2, next);
   }
   return next;
