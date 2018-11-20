@@ -27,15 +27,17 @@ class PromiseNew {
     3、执行收集的回调
   */
   resolve(value) {
-    let self = this;
-    if (self.status === 'pending') {
-      self.status = 'resolved';
-      self.data = value;
-      // 这里面实际是收集了then函数中的回调
-      for(let i = 0; i < self.onResolvedCallback.length; i++) {
-        self.onResolvedCallback[i](value)
+    setTimeout(function() {
+      let self = this;
+      if (self.status === 'pending') {
+        self.status = 'resolved';
+        self.data = value;
+        // 这里面实际是收集了then函数中的回调
+        for(let i = 0; i < self.onResolvedCallback.length; i++) {
+          self.onResolvedCallback[i](value)
+        }
       }
-    }
+    }.bind(this));
   }
 
   /*内部resolve函数:
@@ -44,14 +46,16 @@ class PromiseNew {
     3、执行收集的回调
   */
   reject(reason) {
-    let self = this;
-    if (self.status === 'pending') {
-      self.status = 'rejected';
-      self.data = reason;
-      for(var i = 0; i < self.onRejectedCallback.length; i++) {
-        self.onRejectedCallback[i](reason)
+    setTimeout(function() {
+      let self = this;
+      if (self.status === 'pending') {
+        self.status = 'rejected';
+        self.data = reason;
+        for(var i = 0; i < self.onRejectedCallback.length; i++) {
+          self.onRejectedCallback[i](reason)
+        }
       }
-    }
+    }.bind(this));
   }
 
   /*返回PromiseNew对象：1、执行 onResolved 或者 2、执行onRejected 或者 3、收集 onResolved&onRejected
@@ -86,60 +90,64 @@ class PromiseNew {
     if (self.status === 'resolved') {
       // 返回新的PromiseNew实例：状态取决于 onResolved 执行结果
       return promise2 = new PromiseNew(function(resolve, reject) {
-        // 因为考虑到 onResolved 函数有可能 throw ，所以将代码放在 try/catch 中
-        try {
-          /*如果 promise1 的状态确定是resolved，则执行 onResolved，onResolved 执行的结果为 x */
-          let x = onResolved(self.data);
-          if (x instanceof PromiseNew) {
-            /*如果 onResolved 执行的结果是一个 PromiseNew 对象：给 promise2 改状态以及赋值（与x相等）
-              1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
-              2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
-            */
-            // x.then(resolve, reject); // 执行 x 的 then 方法 -> 执行 x 的 onResolved  或者 onRejected -> 执行 promise2 的 resolve 或者 reject
-            // 等价于
-            if (x.status === 'resolved') {
-              resolve(x.data);
-            } else if (x.status === 'rejected'){
-              reject(x.data);
+        setTimeout(function() {
+          // 因为考虑到 onResolved 函数有可能 throw ，所以将代码放在 try/catch 中
+          try {
+            /*如果 promise1 的状态确定是resolved，则执行 onResolved，onResolved 执行的结果为 x */
+            let x = onResolved(self.data);
+            if (x instanceof PromiseNew) {
+              /*如果 onResolved 执行的结果是一个 PromiseNew 对象：给 promise2 改状态以及赋值（与x相等）
+                1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
+                2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
+              */
+              // x.then(resolve, reject); // 执行 x 的 then 方法 -> 执行 x 的 onResolved  或者 onRejected -> 执行 promise2 的 resolve 或者 reject
+              // 等价于
+              if (x.status === 'resolved') {
+                resolve(x.data);
+              } else if (x.status === 'rejected'){
+                reject(x.data);
+              } else {
+                promise2.status = 'pending';
+                promise2.data = undefined;
+              }
             } else {
-              promise2.status = 'pending';
-              promise2.data = undefined;
-            }
-          } else {
-            /*如果 onResolved 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
-              1、onResolved 正确时：promise2 的值为 x ，状态为 resolved
-              2、onResolved 出错时：promise2 的值为catch的err，状态为 rejected
-            */
-            resolve(x);
-          } 
-        } catch (e) {
-          // 给promise2改状态以及赋值: self.status = 'rejected'; self.data = e;
-          reject(e);
-        }
+              /*如果 onResolved 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
+                1、onResolved 正确时：promise2 的值为 x ，状态为 resolved
+                2、onResolved 出错时：promise2 的值为catch的err，状态为 rejected
+              */
+              resolve(x);
+            } 
+          } catch (e) {
+            // 给promise2改状态以及赋值: self.status = 'rejected'; self.data = e;
+            reject(e);
+          }
+        }.bind(self));
       });
     }
 
     if (self.status === 'rejected') {
       // 返回新的PromiseNew实例：状态取决于 onRejected 执行结果
       return promise2 = new PromiseNew(function(resolve, reject) {
-        try {
-          let x = onRejected(self.data);
-          if (x instanceof PromiseNew) {
-            /*如果 onRejected 执行的结果是一个 PromiseNew 对象：给 promise2 改状态以及赋值（与x相等）
-              1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
-              2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
-            */
-            x.then(resolve, reject);
-          } else {
-            /*如果 onRejected 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
-              1、onRejected 正确时：promise2 的值为 x ，状态为 resolved
-              2、onRejected 出错时：promise2 的值为catch的err，状态为 rejected
-            */
-            resolve(x);  
+        setTimeout(function() {
+          try {
+            let x = onRejected(self.data);
+            if (x instanceof PromiseNew) {
+              /*如果 onRejected 执行的结果是一个 PromiseNew 对象：给 promise2 改状态以及赋值（与x相等）
+                1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
+                2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
+              */
+              x.then(resolve, reject);
+            } else {
+              /*如果 onRejected 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
+                1、onRejected 正确时：promise2 的值为 x ，状态为 resolved
+                2、onRejected 出错时：promise2 的值为catch的err，状态为 rejected
+              */
+              resolve(x);  
+            }
+          } catch (e) {
+            reject(e);
           }
-        } catch (e) {
-          reject(e);
-        }
+        }.bind(self));
       });
     }
 
