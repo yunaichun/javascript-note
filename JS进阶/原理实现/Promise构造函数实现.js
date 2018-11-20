@@ -54,7 +54,7 @@ class PromiseNew {
     }
   }
 
-  /* 1、执行 onResolved 或者 2、执行onRejected 或者 3、收集 onResolved&onRejected；返回PromiseNew对象
+  /*返回PromiseNew对象：1、执行 onResolved 或者 2、执行onRejected 或者 3、收集 onResolved&onRejected
     注意：
     一、then必须返回PromiseNew对象，而不是this
       promise2 = promise1.then(function foo(value) {
@@ -69,11 +69,11 @@ class PromiseNew {
       }, function(reason) {
         throw new Error('sth went wrong')
       })
-      如果promise1被resolve了，此时promise1状态为resolved，promise2的将被4 resolve，
-      如果promise1被reject了，此时promise1状态为rejected，promise2将被new Error('sth went wrong') reject
+      如果 promise1 被 resolve 了，此时 promise1 状态为 resolved ， promise2 将被 4 resolve
+      如果 promise1 被 reject  了，此时 promise1 状态为 rejected ， promise2 将被 new Error('sth went wrong') reject
 
-      所以，我们需要在then里面执行onResolved或者onRejected，并根据返回值来确定promise2的结果，
-      并且，如果onResolved/onRejected返回的是一个Promise，promise2将直接取这个Promise的结果。
+      所以，我们需要在 then 里面执行 onResolved 或者 onRejected ，并根据返回值 x 来确定 promise2 的结果
+      并且，如果 onResolved/onRejected 返回的是一个 Promise ，promise2 将直接取这个 Promise 的结果。
   */
   then(onResolved, onRejected) {
   	let self = this;
@@ -84,7 +84,7 @@ class PromiseNew {
     onRejected = typeof onRejected === 'function' ? onRejected : function(reason) { throw reason; };
 
     if (self.status === 'resolved') {
-      // 返回新的PromiseNew实例
+      // 返回新的PromiseNew实例：状态取决于 onResolved 执行结果
       return promise2 = new PromiseNew(function(resolve, reject) {
         // 因为考虑到 onResolved 函数有可能 throw ，所以将代码放在 try/catch 中
         try {
@@ -120,13 +120,21 @@ class PromiseNew {
     }
 
     if (self.status === 'rejected') {
-      // 返回新的PromiseNew实例
+      // 返回新的PromiseNew实例：状态取决于 onRejected 执行结果
       return promise2 = new PromiseNew(function(resolve, reject) {
         try {
           let x = onRejected(self.data);
           if (x instanceof PromiseNew) {
+            /*如果 onRejected 执行的结果是一个 PromiseNew 对象：给 promise2 改状态以及赋值（与x相等）
+              1、执行此 x 对象 then 方法上的 onResolved -> 实际是执行 promise2 的 resolve 方法 ->  resolve 的参数是 x 的值，则会将 promise2 的值设置为 x 的值（状态与x一致）
+              2、执行此 x 对象 then 方法上的 onRejected -> 实际是执行 promise2 的 reject  方法 ->  reject 的参数是 x 的值， 则会将 promise2 的值设置为 x 的值（状态与x一致）
+            */
             x.then(resolve, reject);
           } else {
+            /*如果 onRejected 执行的结果不是一个 PromiseNew 对象：给 promise2 改状态以及赋值（self.status = 'resolved'; self.data = x;）
+              1、onRejected 正确时：promise2 的值为 x ，状态为 resolved
+              2、onRejected 出错时：promise2 的值为catch的err，状态为 rejected
+            */
             resolve(x);  
           }
         } catch (e) {
@@ -135,13 +143,11 @@ class PromiseNew {
       });
     }
 
-    /*如果promise1的状态还处于pending状态，我们并不能确定执行onResolved还是onRejected函数
-      所以先将其存入回调数组，待状态确定的时候再确定调用哪个函数
-    */
+    // 状态 pending ，不明确该执行 onResolved/onRejected，所以先收集
     if (self.status === 'pending') {
-      // 返回新的PromiseNew实例
+      // 返回新的 PromiseNew 实例：状态是 pending（因为 resolve 或 reject 暂未执行）
       return promise2 = new PromiseNew(function(resolve, reject) {
-        // 将 onResolved 存入 onResolvedCallback 数组中
+        // 将 onResolved 存入 onResolvedCallback 数组中(存入的是包装后的 onResolved 函数执行结果)
         self.onResolvedCallback.push(function(value) {
           try {
             let x = onResolved(self.data);
@@ -154,7 +160,7 @@ class PromiseNew {
             reject(e);
           }
         });
-        // 将 onRejected 存入 onRejectedCallback 数组中
+        // 将 onRejected 存入 onRejectedCallback 数组中(存入的是包装后的 onRejected 函数执行结果)
         self.onRejectedCallback.push(function(reason) {
           try {
             let x = onRejected(self.data);
@@ -183,22 +189,18 @@ let promise1 = new PromiseNew((resolve, reject) => {
   });
 }).then(function(res) {
   console.log(res);
-});
+}); // promise1: { data: undefined, status: 'resolved' } // 因为then中没有return
 /*连续执行测试：异步resolve*/
 let promise2 = new PromiseNew((resolve, reject) => {
   setTimeout(function() {
-    alert(1);
     resolve('hello world');
   }, 0);
-}).then(function(res) {
-  alert(2);
+}).then(function(res) { 
   console.log(res);
   return new PromiseNew((resolve, reject) => {
-    alert(3);
     resolve('hello world1');
   });
 }).then(function(res) {
-  alert(4);
   console.log(res);
 });
 
