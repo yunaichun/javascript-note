@@ -291,6 +291,28 @@ PromiseNew.race = function(promises) {
     }
   })
 }
+/*返回一个 resolve 的 PromiseNew 对象：
+  1、参数不为 PromiseNew 对象，返回 对象 value 为此 value
+  2、参数  为 PromiseNew 对象，返回 对象 value 为此 PromiseNew 对象的 value
+ */
+PromiseNew.resolve = function(value) {
+  return new PromiseNew(function(resolve, reject) {
+    if (value instanceof PromiseNew) {
+      value.then(resolve, reject);
+    } else {
+      resolve(value);
+    }
+  })
+}
+/*返回一个 reject 的 PromiseNew 对象
+ */
+PromiseNew.reject = function(reason) {
+  return new PromiseNew(function(resolve, reject) {
+    reject(reason);
+  })
+}
+
+
 
 
 /*连续执行测试：同步resolve*/
@@ -430,3 +452,14 @@ let o = new PromiseNew(function(resolve, reject) { setTimeout(function() { resol
 let p = new PromiseNew(function(resolve, reject) { setTimeout(function() { resolve(2); }, 2000); });
 let q = new PromiseNew(function(resolve, reject) { setTimeout(function() { resolve(3); }, 1000); });
 let i = PromiseNew.race([o, p, q]).then(function(res) { console.log('率先完成：', res); }) // 率先完成：3
+
+
+/*测试 PromiseNew 的 resolve、reject 静态方法方法*/
+let j = new PromiseNew(function(resolve, reject) { resolve('resolve'); });
+let k = new PromiseNew(function(resolve, reject) { reject('reject'); });
+let l = PromiseNew.resolve(j); // value: resolve
+let m = PromiseNew.resolve(k); // value: reject
+let n = PromiseNew.resolve(2); // value: 2
+let o = PromiseNew.reject(j); // value: j
+let p = PromiseNew.reject(k); // value: k
+let q = PromiseNew.reject(2); // value: 2
