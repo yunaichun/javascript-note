@@ -131,25 +131,61 @@ r1.value(function(err, data){ // 此处 value 是一个 thunk 函数！！！！
         g.next(data);
     });
 });
-/*法二：自动执行（递归方法）
-	上面代码中，yield 命令用于将程序的执行权移出 Generator 函数，那么就需要一种方法，将执行权再交还给 Generator 函数。
-	这种方法就是 Thunk 函数，因为它可以在回调函数里，将执行权交还给 Generator 函数。
-*/
+/*法二：自动执行（递归方法）*/
 function run(genCreator) {
 	let gen = genCreator();
-	// let r1 = gen.next();
-	// if (r1.done) { return; }
-	// r1.value(function(err, data) {
-	// 	  let r2 = g.next(data);
-	// 	  if (r2.done) { return; }
-	// 	  r2.value(function() {
-	// 		  ...
-	// 	  });
-	// });
 	function next(err, data) {
 		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 		if (result.done) { return; }
-		result.value(next);
+		result.value(next); // 此处 value 是一个 thunk 函数！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+	}
+	next();
+}
+run(gen);
+
+
+
+
+/*六、Promise 对象自动管理 Generator 流程
+      原理：回调函数，将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。
+*/
+let fs = require('fs');
+let readFile = function (fileName){
+  return new Promise(function (resolve, reject){
+    fs.readFile(fileName, function(error, data){
+      if (error) reject(error);
+      resolve(data);
+    });
+  });
+};
+let gen = function* (){
+  let f1 = yield readFile('/etc/fstab');
+  let f2 = yield readFile('/etc/shells');
+  console.log(f1.toString());
+  console.log(f2.toString());
+};
+/*法一：手动执行（通过 g.next() 的 value 属性获取到内部 Promise 实例）
+	上面代码中，yield 命令用于将程序的执行权移出 Generator 函数，那么就需要一种方法，将执行权再交还给 Generator 函数。
+	这种方法就是 Promise 对象，因为它可以在 then 函数里，将执行权交还给 Generator 函数！！！！！！！！！！！！！！！！！！
+*/
+let g = gen();
+let r1 = g.next();
+// 可以发现 Generator 函数的执行过程，其实是将同一个回调函数，反复传入 next 方法的 value 属性
+r1.value.then(function(data){ // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    let r2 = g.next(data);
+    r2.value.then(function(data){
+        g.next(data);
+    });
+});
+/*法二：自动执行（递归方法）*/
+function run(genCreator) {
+	let gen = genCreator();
+	function next(data) {
+		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
+		if (result.done) { return result.value; }
+		result.value.then(function(data) { // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+			next(data);
+		});
 	}
 	next();
 }
