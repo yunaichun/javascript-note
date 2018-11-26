@@ -13,12 +13,21 @@ function spawn(genCreator) {
 	return new Promise(function(resolve, reject) {
 		let gen = genCreator();
 		function next(fuc) {
+			try {
+				let result = fuc();
+			} catch(e) {
+				reject(e);
+			}
 			let result = fuc();
 			if (result.done) { return result.value; }
 			// 将值转换成 Promise 对象
 			Promise.resolve(result.value).then(function(value) {
 				next(function() {
 					return gen.next(value);
+				});
+			}, function(reason) {
+				next(function() {
+					return gen.throw(reason);
 				});
 			});
 		}
