@@ -81,7 +81,7 @@ f(1, 2, function(res) {
 
   1、执行g.next(): 得到的是 yield 后面的值
   2、执行g.next(value): 会将上一步 yield 后面的值 设置为 value
-  3、执行g.return(value): 得到结果为 { value, done:true } // 没有finally的情况
+  3、执行g.return(value): 得到结果为 { value, done: true } // 没有finally的情况
 
   4、Generator 函数是遍历器生成函数，执行 Generator 函数会生成遍历器对象；
      将 Generator 函数赋值给某对象的 Symbol.iterator 属性，则 该对象 具有 遍历器 接口；
@@ -99,6 +99,8 @@ f(1, 2, function(res) {
 
   6、let jane = { first: 'Jane', last: 'Doe' }; // jane 对象此时不能被 for..of 遍历，因为 Symbol.iterator 的属性值不为 遍历器生成函数
      jane[Symbol.iterator] = function* () {};   // jane 对象此时可以被 for..of 遍历，因为 Symbol.iterator 的属性值不为 遍历器生成函数
+
+  7、yield*：在一个 Generator 函数执行另一个 Generator 函数，yield* 后面跟遍历器对象。
 */
 
 
