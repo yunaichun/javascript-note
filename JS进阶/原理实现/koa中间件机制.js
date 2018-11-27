@@ -68,18 +68,34 @@ class Application {
     }
     /*中间件执行机制*/
     compose (middleware) {
+        // 传入的middleware必须是一个数组
+        if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
+        // 传入的middleware的每一个元素都必须是函数
+        for (const fn of middleware) {
+            if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!')
+        }
         return function (context) {
+            // 维护一个 index 的闭包
+            let index = -1;
             // 从第一个中间件开始依次执行
             return dispatch (0);
             function dispatch (i) {
-                let fn = middleware[i];
-                if (!fn) {
-                    return Promise.resolve();
+                // 一个中间件存在多次 next 调用
+                if (i <= index) return Promise.reject(new Error('next() called multiple times'));
+                // 存下当前的索引
+                index = i;
+                let fn = middleware[i]
+                // 以下两行是处理最后一个中间件还有 next 的情况
+                if (i === middleware.length) fn = next;
+                if (!fn) return Promise.resolve();
+                try {
+                    // 中间件 fn 的参数 context 为封装的 ctx 对象, 参数 next 为下一个中间件【函数】
+                    return Promise.resolve(fn(context, function next () {
+                      return dispatch(i + 1);
+                    }))
+                } catch (err) {
+                    return Promise.reject(err);
                 }
-                // 中间件 fn 的参数 context 为封装的 ctx 对象, 参数 next 为下一个中间件【函数】
-                return Promise.resolve(fn(context, function next () {
-                    return dispatch(i + 1);
-                }));
             }
         }
     }
