@@ -3,32 +3,32 @@ const http = require('http');
 
 // 对象属性的 get 和 set 方法
 let request = {
-    get url () {
+    get url() {
         return this.req.url;
     }
 };
 let response = {
-    get body () {
+    get body() {
         return this._body;
     },
-    set body (val) {
+    set body(val) {
         this._body = val;
     }
 };
 let context = {
-    get url () {
+    get url() {
         return this.request.url;
     },
-    get body () {
+    get body() {
         return this.response.body;
     },
-    set body (val) {
+    set body(val) {
         this.response.body = val;
     }
 };
 
 class Application {
-    constructor () {
+    constructor() {
         // context 对象
         this.context = context;
         // request 对象
@@ -63,11 +63,11 @@ class Application {
         return ctx;
     }
     /*收集中间件*/
-    use (callback) {
+    use(callback) {
         this.middleware.push(callback);
     }
     /*中间件执行机制*/
-    compose (middleware) {
+    compose(middleware) {
         // 传入的middleware必须是一个数组
         if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
         // 传入的middleware的每一个元素都必须是函数
@@ -78,8 +78,8 @@ class Application {
             // 维护一个 index 的闭包
             let index = -1;
             // 从第一个中间件开始依次执行
-            return dispatch (0);
-            function dispatch (i) {
+            return dispatch(0);
+            function dispatch(i) {
                 // 一个中间件存在多次 next 调用
                 if (i <= index) return Promise.reject(new Error('next() called multiple times'));
                 // 存下当前的索引
@@ -90,7 +90,7 @@ class Application {
                 if (!fn) return Promise.resolve();
                 try {
                     // 中间件 fn 的参数 context 为封装的 ctx 对象, 参数 next 为下一个中间件【函数】
-                    return Promise.resolve(fn(context, function next () {
+                    return Promise.resolve(fn(context, function next() {
                       return dispatch(i + 1);
                     }))
                 } catch (err) {
@@ -103,22 +103,22 @@ class Application {
 
 // 测试
 const app = new Application();
-function delay () {
+function delay() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve ();
+            resolve();
         }, 2000);
     });
 }
 app.use(async (ctx, next) => {
     ctx.body = '1';
-    await next ();
+    await next();
     ctx.body += '2';
 });
 app.use(async (ctx, next) => {
     ctx.body += '3';
-    await delay ();
-    await next ();
+    await delay();
+    await next();
     ctx.body += '4';
 });
 app.use(async (ctx, next) => {
