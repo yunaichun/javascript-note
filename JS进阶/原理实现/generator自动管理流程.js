@@ -83,22 +83,21 @@ f(1, 2, function(res) {
   2、执行g.next(value): 会将上一步 yield 后面的值 设置为 value
   3、执行g.return(value): 得到结果为 { value, done: true } // 没有finally的情况
 
-  4、Generator 函数是遍历器生成函数，执行 Generator 函数会生成遍历器对象；
-     将 Generator 函数赋值给某对象的 Symbol.iterator 属性，则 该对象 具有 遍历器 接口；
-     可以被 for..of（可以自动遍历遍历器对象，且此时不再需要调用next方法）、Array.from、结构赋值、... 运算符遍历。
-     function* numbers() { yield 1; yield 2; return 3; yield 4; }
-     [...numbers()] // [1, 2]                       ->   遍历器接口：扩展运算符
-     Array.from(numbers()) // [1, 2]                ->   遍历器接口：Array.form 方法
-     let [x, y] = numbers(); // 1 2                 ->   遍历器接口：解构赋值
-     for (let n of numbers()) { console.log(n); }   ->   遍历器接口：for...of
+  4、Generator 函数是遍历器函数，执行 Generator 函数会生成遍历器对象；
+     遍历器对象具有遍历器接口如下：
+     例：function* numbers() { yield 1; yield 2; return 3; yield 4; }
+     一：[...numbers()] // [1, 2]                       ->   遍历器接口：扩展运算符
+     二：Array.from(numbers()) // [1, 2]                ->   遍历器接口：Array.form 方法
+     三：let [x, y] = numbers(); // 1 2                 ->   遍历器接口：解构赋值（可以自动遍历遍历器对象，且此时不再需要调用next方法）
+     四：for (let n of numbers()) { console.log(n); }   ->   遍历器接口：for...of（可以自动遍历遍历器对象，且此时不再需要调用next方法）
 
-  5、function* gen() {}      let g = gen();
-     // g 遍历器对象 可以被 for...of 遍历，则可知 g 的 Symbol.iterator 的属性值等于 gen 遍历器生成函数
+  5、某对象的 Symbol.iterator 属性为遍历器函数，则 该对象 变为遍历器对象，具有遍历器接口。
+     例：function* gen() {}  let g = gen(); // g 为遍历器对象
      g[Symbol.iterator] === gen
      g[Symbol.iterator]() === g
 
-  6、let jane = { first: 'Jane', last: 'Doe' }; // jane 对象此时不能被 for..of 遍历，因为 Symbol.iterator 的属性值不为 遍历器生成函数
-     jane[Symbol.iterator] = function* () {};   // jane 对象此时可以被 for..of 遍历，因为 Symbol.iterator 的属性值不为 遍历器生成函数
+  6、let jane = { first: 'Jane', last: 'Doe' }; // jane 对象此时不能被 for..of 遍历，因为 jane 对象的Symbol.iterator 的属性值不为 遍历器生成函数
+     jane[Symbol.iterator] = function* () {};   // jane 对象此时可以被 for..of 遍历，因为 jane 对象的Symbol.iterator 的属性值为 遍历器生成函数
 
   7、yield*：在一个 Generator 函数执行另一个 Generator 函数，yield* 后面跟遍历器对象。
 */
