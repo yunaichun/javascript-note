@@ -34,27 +34,24 @@ console.log(dad.reads); // reads: { paper: true, english: true }------reads: { p
 /* 深拷贝 
 对象的深拷贝以后，两个值就不相等了，bingo！他们使用的不是一个引用！
 */
+/**
+ * [extendDeep 深度拷贝（含初始值混入）]
+ * @param  {[type]} parent [父对象]
+ * @param  {[type]} child  [初始值]
+ * @return {[type]}        [description]
+ */
 function extendDeep(parent, child) {
-    child = child || {};
-    for (var i in parent) {
-        if (parent.hasOwnProperty(i)) {
-        	// 判断出来的可能是Object也可能是Array
-            if (typeof parent[i] === 'object') {
-            	// 判断是对象还是数组
-                if (Object.prototype.toString.call(parent[i]) === '[object Array]') {
-                    child[i] = [];
-                } else {
-                    child[i] = {};
-                }
-                console.log(111, child, i, parent[i]);
-                // 一、counts: [1, 2, 3]
-                // 1.1、extendDeep([1, 2, 3], []); // 其中[] = child[counts] = { counts: [] }
-                // 二、reads: { paper: true }
-                // 2.1、extendDeep({ paper: true }, {}); // 其中{} = child[reads] = { reads: {} }
-                extendDeep(parent[i], child[i]);
+    // 初始化 child : 类型与 parent 一致
+    if (!child) {
+        if (Object.prototype.toString.call(parent) === '[object Array]') child = [];
+        else child = {};
+    }
+    for (var key in parent) {
+        if (parent.hasOwnProperty(key)) {
+            if (typeof parent[key] === 'object') {
+                child[key] = extendDeep(parent[key]);
             } else {
-            	console.log(222, child, i, parent[i]);
-                child[i] = parent[i];
+                child[key] = parent[key];
             }
         }
     }
@@ -65,8 +62,28 @@ var dad = {
     counts: [1, 2, 3],
     reads: { paper: true }
 };
-var kid = extendDeep(dad);
+var kid = extendDeep(dad, { counts: [], c: 1 });
 kid.counts.push(4);
 console.log(kid.counts, dad.counts); // [1, 2, 3, 4]------[1, 2, 3]
 kid.reads.english = true;
 console.log(kid.reads, dad.reads); // reads: { paper: true, english: true }------reads: { paper: true }
+
+
+/**
+ * [myDeepCopy 深度拷贝（不含初始值）]
+ * @param  {[type]} parent [父对象]
+ * @return {[type]}        [description]
+ */
+function myDeepCopy(parent) {
+  let obj = Array.isArray(parent) ? [] : {};
+  for (let key in parent) {
+     if (parent.hasOwnProperty(key)) {
+          if (typeof parent[key] === 'object') {
+            obj[key] = deepCopy(parent[key]);
+          } else {
+            obj[key] = parent[key];
+          }
+     }
+  }
+  return obj;
+}
