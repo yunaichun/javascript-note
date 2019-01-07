@@ -106,7 +106,7 @@ f(1, 2, function(res) {
 
 
 /*五、Thunk 函数自动管理 Generator 流程
-      原理：回调函数，将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。
+      原理：回调函数，将异步操作包装成 Thunk 函数，在回调函数里面交回执行权（即在 callback 回调函数中拿到上一步执行结果，将此结果传递到下一步执行中）。
 */
 let fs = require('fs');
 let thunkify = require('thunkify');
@@ -132,15 +132,16 @@ r1.value(function(err, data){ // 此处 value 是一个 thunk 函数！！！！
         g.next(data);
     });
 });
-/*法二：自动执行（递归方法）*/
+/*法二：自动执行（递归方法）*/ 
 function run(genCreator) {
 	let gen = genCreator();
-	function next(err, data) {
+	function callback(err, data) {
 		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 		if (result.done) { return; }
-		result.value(next); // 此处 value 是一个 thunk 函数！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    // 递归执行 callback，不需要传递数据了，默认已经将此步骤执行的data传入下去了
+		result.value(callback); // 此处 value 是一个 thunk 函数！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 	}
-	next();
+	callback();
 }
 run(gen);
 
@@ -148,7 +149,7 @@ run(gen);
 
 
 /*六、Promise 对象自动管理 Generator 流程
-      原理：回调函数，将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。
+      原理：回调函数，将异步操作包装成 Thunk 函数，在回调函数里面交回执行权（即在 then 回调函数中拿到上一步执行结果，将此结果传递到下一步执行中）。
 */
 let fs = require('fs');
 let readFile = function (fileName){
@@ -181,13 +182,13 @@ r1.value.then(function(data){ // 此处 value 是一个 Promise 对象！！！�
 /*法二：自动执行（递归方法）*/
 function run(genCreator) {
 	let gen = genCreator();
-	function next(data) {
+	function thenback(data) {
 		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 		if (result.done) { return result.value; }
 		result.value.then(function(data) { // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-			next(data);
+			thenback(data);
 		});
 	}
-	next();
+	thenback();
 }
 run(gen);

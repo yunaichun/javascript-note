@@ -59,7 +59,7 @@ function co(gen) {
 	     * @api private
 	     */
 	    function next(ret) {
-			// 检查 Generator 函数是否执行到最后一步
+			  // 检查 Generator 函数是否执行到最后一步
 		    if (ret.done) return resolve(ret.value);
 		    // 确保每一步的返回值，是 Promise 对象。【Promise、Thunk、Generator、Array、Object】
 		    let value = toPromise.call(ctx, ret.value);
