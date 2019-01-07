@@ -9,23 +9,28 @@
   <div id="result"></div>
 
   <script language="javascript">
-    // 主线程实例Worker
+    /**
+     * 通过外部文件，可以实现创建外链的 worker
+     * 注意：Worker 线程无法读取本地文件，即不能打开本机的文件系统（file://），它所加载的脚本，必须来自网络
+     */
     var worker = new Worker('fibonacci.js');
     // 接收子线程消息
     worker.onmessage = function(event) {
       document.getElementById('result').textContent = event.data;
-      console.log('主线程接收到子线程的消息：' + event.data + '\n');
+      console.log('主线程接收到子线程的消息：', event.data);
     };
     // 错误捕获
     worker.onerror = function(error) {
-      console.error('Worker error: ' + error.message + '\n');
+      console.error('Worker error: ', error.message);
       throw error;
     };
     // 主线程向子线程发送消息
     worker.postMessage(10);
-
   </script>
-  <script>
+  <script language="javascript">
+    /**
+     * 通过 URL.createObjectURL() 创建URL对象，可以实现创建内嵌的 worker
+     */
     var myTask = `
         onmessage = function (e) {
             var data = e.data;
@@ -43,6 +48,21 @@
     };
     var arr = [1, 2, 3];
     myWorker.postMessage(arr);
+  </script>
+  <script language="javascript">
+    /**
+     * 进行 XMLHttpRequest 请求处理
+     */
+    var worker = new Worker('XMLHttpRequest.js');
+    // 接收子线程消息
+    worker.onmessage = function(event) {
+      console.log('data：', event.data);
+    };
+    // 错误捕获
+    worker.onerror = function(error) {
+      console.error('Worker error: ', error.message);
+      throw error;
+    };
   </script>
   </body>
 </html>
