@@ -100,6 +100,31 @@ f(1, 2, function(res) {
      jane[Symbol.iterator] = function* () {};   // jane 对象此时可以被 for..of 遍历，因为 jane 对象的Symbol.iterator 的属性值为 遍历器生成函数
 
   7、yield*：在一个 Generator 函数执行另一个 Generator 函数，yield* 后面跟遍历器对象。
+
+  8、ES6实现斐波那契数列：generator函数 + 变量结构赋值
+    function* dycFib() {
+      let prev = 1
+      let curr = 1
+      while (true) {
+        // 每次遍历返回的是yield后面的值：即prev的值
+        yield prev;
+        [prev, curr] = [curr, prev + curr];
+      }
+    }
+
+    // let generator = fibo();
+    // for (var i = 0; i < 10; i++) {
+    //   console.log(generator.next().value) //=> 1 1 2 3 5 8 13 21 34 55
+    // }
+
+    // Generator 函数是遍历器函数，执行 Generator 函数会生成遍历器对象；
+    // 遍历器对象具有遍历器接口如下：
+    // 一、for...of（可以自动遍历遍历器对象，且此时不再需要调用next方法）
+    // for (var n of fibo()) {
+    //   console.log(n) //=> 1 1 2 3 5 8 13 21 34 55
+    // }
+    // 二、解构赋值（可以自动遍历遍历器对象，且此时不再需要调用next方法）
+    let [a, b, c] = fibo();
 */
 
 
