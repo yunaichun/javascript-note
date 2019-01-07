@@ -136,7 +136,7 @@ f(1, 2, function(res) {
 let fs = require('fs');
 let thunkify = require('thunkify');
 let readFile = thunkify(fs.readFile);
-let gen = function* (){
+let genFuc = function* (){
     let f1 = yield readFile('fileA');
     let f2 = yield readFile('fileB');
     // ...
@@ -146,7 +146,7 @@ let gen = function* (){
 	上面代码中，yield 命令用于将程序的执行权移出 Generator 函数，那么就需要一种方法，将执行权再交还给 Generator 函数。
 	这种方法就是 Thunk 函数，因为它可以在回调函数里，将执行权交还给 Generator 函数！！！！！！！！！！！！！！！！！！
 */
-let g = gen();
+let g = genFuc();
 let r1 = g.next();
 // 可以发现 Generator 函数的执行过程，其实是将同一个回调函数，反复传入 next 方法的 value 属性
 r1.value(function(err, data){ // 此处 value 是一个 thunk 函数！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
@@ -158,8 +158,8 @@ r1.value(function(err, data){ // 此处 value 是一个 thunk 函数！！！！
     });
 });
 /*法二：自动执行（递归方法）*/ 
-function run(genCreator) {
-	let gen = genCreator();
+function run(genFuc) {
+	let gen = genFuc();
 	function callback(err, data) {
 		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 		if (result.done) { return; }
@@ -168,7 +168,7 @@ function run(genCreator) {
 	}
 	callback();
 }
-run(gen);
+run(genFuc);
 
 
 
@@ -185,7 +185,7 @@ let readFile = function (fileName){
     });
   });
 };
-let gen = function* (){
+let genFuc = function* (){
   let f1 = yield readFile('/etc/fstab');
   let f2 = yield readFile('/etc/shells');
   console.log(f1.toString());
@@ -195,7 +195,7 @@ let gen = function* (){
 	上面代码中，yield 命令用于将程序的执行权移出 Generator 函数，那么就需要一种方法，将执行权再交还给 Generator 函数。
 	这种方法就是 Promise 对象，因为它可以在 then 函数里，将执行权交还给 Generator 函数！！！！！！！！！！！！！！！！！！
 */
-let g = gen();
+let g = genFuc();
 let r1 = g.next();
 // 可以发现 Generator 函数的执行过程，其实是将同一个回调函数，反复传入 next 方法的 value 属性
 r1.value.then(function(data){ // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
@@ -205,8 +205,8 @@ r1.value.then(function(data){ // 此处 value 是一个 Promise 对象！！！�
     });
 });
 /*法二：自动执行（递归方法）*/
-function run(genCreator) {
-	let gen = genCreator();
+function run(genFuc) {
+	let gen = genFuc();
 	function thenback(data) {
 		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 		if (result.done) { return result.value; }
@@ -216,4 +216,4 @@ function run(genCreator) {
 	}
 	thenback();
 }
-run(gen);
+run(genFuc);
