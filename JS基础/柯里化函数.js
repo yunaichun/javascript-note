@@ -117,14 +117,15 @@ console.log(pow2(5));//console.log(make_pow(2)(3))
  * ----------------利用递归的方法
  */
 function curry(fn) {
+    // 去除 fn 之后的参数
     var out = Array.prototype.slice.call(arguments, 1);
-    // 当curry函数传给add函数的所有参数都已经打包好后，开始执行add函数
+    // 去除 fn 之后的参数的长度为 10 的话再执行 fn 函数
     if (out.length >= 10) { 
     	return fn.apply(this, out);
     } else {
+      // 返回一个函数：拼接此函数的参数，同时递归调用 curry 函数
     	return function () {
             var inner = Array.prototype.slice.call(arguments);
-            // 递归调用，将curry函数后续参数打包拼接回传给curry函数
             return curry.apply(this, [fn].concat(out).concat(inner));
         }
     }
