@@ -32,22 +32,6 @@ BST.prototype.insert=function(data){
 	}
 }
 
-//查找给定值
-BST.prototype.find=function(data){
-	var current=this.root;//默认从根节点开始循环
-	//如果节点还没有insert任何数据，则直接返回null
-	while(current!=null){
-		if(current.data==data){
-			return current;//返回节点
-		}else if(data<current.data){
-			current=current.left;
-		}else{
-			current=current.right;
-		}
-	}
-	return null;
-}
-
 //中序排序（先访问左节点，再根节点，最后右子节点）
 //inOrder(nums.root);调用的时候从根节点开始，传入根节点
 BST.prototype.inOrder=function(node){
