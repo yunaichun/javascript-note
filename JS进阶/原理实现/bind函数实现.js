@@ -33,7 +33,9 @@ function bar(name, age) {
 bar.prototype.friend = 'kevin';
 
 /*注意：假如为 this instanceof self 不是 this
-  则此时 obj1 会执行操作：foo 对象调用 bar 函数
+  则此时 obj1 会执行操作：
+  1、foo 对象调用 bar 函数
+  2、不会有任何返回
 */
 /*但是：假如为 this instanceof self 是 this
   则此时 obj2 会执行两个操作：
@@ -44,14 +46,14 @@ bar.prototype.friend = 'kevin';
 /*一、测试普通函数*/
 let bindFoo1 = bar.fakeBind(foo, 'daisy');
 let obj1 = bindFoo1('18'); // 1 + daisy + 18
-console.log(obj1.habit);// TypeError
-console.log(obj1.friend);// TypeError
+console.log(obj1.habit);   // 不会有任何返回：TypeError
+console.log(obj1.friend);  // 不会有任何返回：TypeError
 
 /*二、测试构造函数*/
 let bindFoo2 = bar.fakeBind(foo, 'daisy');
 let obj2 = new bindFoo2('18'); // undefined + daisy + 18
-console.log(obj2.habit);// shopping
-console.log(obj2.friend);// kevin
+console.log(obj2.habit);       // 返回 bar 实例：shopping
+console.log(obj2.friend);      // 返回 bar 实例：kevin
 
 
 
