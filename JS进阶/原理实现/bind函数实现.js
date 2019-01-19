@@ -31,33 +31,49 @@ function bar(name, age) {
     console.log(age);
 }
 bar.prototype.friend = 'kevin';
+
+/*注意：假如为 this instanceof self 不是 this
+  则此时 obj1 会执行操作：foo 对象调用 bar 函数
+*/
+/*但是：假如为 this instanceof self 是 this
+  则此时 obj2 会执行两个操作：
+  1、执行 new   操作：继承 bar.prototype 的属性
+  2、执行 apply 操作：bar.apply(obj2, ['daisy', '18'])，此时实例还会继承 bar 构造函数上的属性
+*/
+
 /*一、测试普通函数*/
 let bindFoo1 = bar.fakeBind(foo, 'daisy');
 let obj1 = bindFoo1('18'); // 1 + daisy + 18
 console.log(obj1.habit);// TypeError
 console.log(obj1.friend);// TypeError
+
 /*二、测试构造函数*/
 let bindFoo2 = bar.fakeBind(foo, 'daisy');
 let obj2 = new bindFoo2('18'); // undefined + daisy + 18
-/*注意：假如为 this instanceof self 时 为 self
-  则此时 obj2 会执行两个操作：
-  1、执行 new   操作：继承 bar.prototype 的属性
-  2、执行 apply 操作：bar.apply(bar, ['daisy', '18'])
-*/
-/*但是：假如为 this instanceof self 时 为 this
-  则此时 obj2 会执行两个操作：
-  1、执行 new   操作：继承 bar.prototype 的属性
-  2、执行 apply 操作：bar.apply(obj2, ['daisy', '18'])，此时实例还会继承 bar 构造函数上的属性
-*/
 console.log(obj2.habit);// shopping
 console.log(obj2.friend);// kevin
 
 
 
 
+/*三、例题一*/
+let x = 10;
+let y = function() {
+    console.log(this.x);
+};
+let obj1 = { x: 100 };
+let obj2 = { x: 2 };
+let obj3 = { x: 3 };
+func = y.fakeBind(obj1).fakeBind(obj2).fakeBind(obj3);
+func(); // 100
+// 以上相当于
+let one = function() { y.apply(obj1); }
+let two = function() { one.apply(obj2); }
+let three = function() { two.apply(obj3); }
+three();
 
-// 解释以下函数
-var bindf = Function.prototype.call.bind(Array.prototype.slice);
+/*四、例题二*/
+let bindf = Function.prototype.call.bind(Array.prototype.slice);
 bindf([1, 2, 3]);
 // 分析如下：
 self = Function.prototype.call
