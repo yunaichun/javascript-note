@@ -1,11 +1,11 @@
-/* 浅拷贝 
-代码的最后一行，你可以发现dad和kid的reads是一样的，
-也就是他们使用的是同一个引用，这也就是浅拷贝带来的问题。
+/*一、浅拷贝 - 1
+  代码的最后一行，你可以发现dad和kid的reads是一样的，
+  也就是他们使用的是同一个引用，这也就是浅拷贝带来的问题。
 */
 function extend(parent, child) {
     child = child || {};
     // for in 遍历原型和实例所有可枚举属性，屏蔽原型中不可枚举属性
-    for (var i in parent) {
+    for (let i in parent) {
     	// 获取实例对象上的属性
         if (parent.hasOwnProperty(i)) {
             child[i] = parent[i];
@@ -14,25 +14,33 @@ function extend(parent, child) {
     return child;
 }
 // 非嵌套对象
-var dad = { name: "Adam" };
-var kid = extend(dad);
+let dad = { name: "Adam" };
+let kid = extend(dad);
 kid.add = 'add';
 console.log(kid, dad); // { name: "Adam", add: 'add' }------{ name: "Adam" }
 // 嵌套对象
-var dad = {
+let dad = {
     counts: [1, 2, 3],
     reads: { paper: true }
 };
-var kid = extend(dad);
+let kid = extend(dad);
 kid.counts.push(4);
 console.log(kid.counts, dad.counts); // [1, 2, 3, 4], [1, 2, 3, 4]
 kid.reads.english = true;
 console.log(dad.reads); // reads: { paper: true, english: true }------reads: { paper: true, english: true }
 
 
+/*二、浅拷贝 - 2
+  利用 ES6 的对象扩展运算符
+*/
+const obj = { a: 1, b: 2};
+const obj2 = { ...obj }; // => { a: 1, b: 2 }
+const obj3 = [1, 2, 3];
+const obj4 = [...obj3]; // => [1, 2, 3]
 
-/* 深拷贝 
-对象的深拷贝以后，两个值就不相等了，bingo！他们使用的不是一个引用！
+
+/*三、深拷贝 - 1 
+  对象的深拷贝以后，两个值就不相等了，他们使用的不是一个引用！
 */
 /**
  * [extendDeep 深度拷贝（含初始值混入）]
@@ -46,7 +54,7 @@ function extendDeep(parent, child) {
         if (Object.prototype.toString.call(parent) === '[object Array]') child = [];
         else child = {};
     }
-    for (var key in parent) {
+    for (let key in parent) {
         if (parent.hasOwnProperty(key)) {
             if (typeof parent[key] === 'object') {
                 child[key] = extendDeep(parent[key]);
@@ -58,15 +66,25 @@ function extendDeep(parent, child) {
     return child;
 }
 // 嵌套对象
-var dad = {
+let dad = {
     counts: [1, 2, 3],
     reads: { paper: true }
 };
-var kid = extendDeep(dad, { counts: [], c: 1 });
+let kid = extendDeep(dad, { counts: [], c: 1 });
 kid.counts.push(4);
 console.log(kid.counts, dad.counts); // [1, 2, 3, 4]------[1, 2, 3]
 kid.reads.english = true;
 console.log(kid.reads, dad.reads); // reads: { paper: true, english: true }------reads: { paper: true }
+
+
+/*四、深拷贝 - 2 
+  利用JSON.stringify + JSON.parse
+*/
+let test1 = {
+  counts: [1, 2, 3],
+  reads: { paper: true }
+};
+test2 = JSON.parse(JSON.stringify(test1));
 
 
 /**
