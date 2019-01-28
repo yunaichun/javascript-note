@@ -63,5 +63,5 @@ for (let i = 0; i < 5; i++) {
   console.log(generator.next().value);
 }
 
-// 法二：通过变量结构（只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值）
-let [a, b, c] = generator();
+// 法二：通过变量解构（只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值）
+let [a, b, c] = dncFib();

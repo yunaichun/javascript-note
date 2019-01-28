@@ -112,7 +112,7 @@ f(1, 2, function(res) {
       }
     }
 
-    // let generator = fibo();
+    // let generator = dycFib();
     // for (var i = 0; i < 10; i++) {
     //   console.log(generator.next().value) //=> 1 1 2 3 5 8 13 21 34 55
     // }
@@ -120,11 +120,11 @@ f(1, 2, function(res) {
     // Generator 函数是遍历器函数，执行 Generator 函数会生成遍历器对象；
     // 遍历器对象具有遍历器接口如下：
     // 一、for...of（可以自动遍历遍历器对象，且此时不再需要调用next方法）
-    // for (var n of fibo()) {
+    // for (var n of dycFib()) {
     //   console.log(n) //=> 1 1 2 3 5 8 13 21 34 55
     // }
     // 二、解构赋值（可以自动遍历遍历器对象，且此时不再需要调用next方法）
-    let [a, b, c] = fibo();
+    let [a, b, c] = dycFib();
 */
 
 
