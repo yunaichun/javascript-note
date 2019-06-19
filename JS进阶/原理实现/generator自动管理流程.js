@@ -198,7 +198,7 @@ let genFuc = function* (){
 let g = genFuc();
 let r1 = g.next();
 // 可以发现 Generator 函数的执行过程，其实是将同一个回调函数，反复传入 next 方法的 value 属性
-r1.value.then(function(data){ // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+r1.value.then(function(data){ // 此处 data 是一个 Promise 对象，值为 result.value 的值
     let r2 = g.next(data);
     r2.value.then(function(data){
         g.next(data);
