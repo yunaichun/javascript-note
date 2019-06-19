@@ -45,8 +45,8 @@ function spawn(genFuc) {
 				let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 				if (result.done) { return result.value; }
 				/*将此处的 value 转换为 Promise，与 generator 的 Promise 管理流程是一样的，只不过那时候默认 yield 后面的值都是 Promise */
-				Promise.resolve(result.value).then(function(value) { // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-					thenback(data);
+				Promise.resolve(result.value).then(function(value) { // 此处 value 值为 result.value
+					thenback(value);
 				}, function(reason) {
 					gen.throw(reason);
 				});
