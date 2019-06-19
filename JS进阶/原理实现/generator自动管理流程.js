@@ -210,7 +210,7 @@ function run(genFuc) {
 	function thenback(data) {
 		let result = gen.next(data); // data 是设置 Generator 内部 yield 的值
 		if (result.done) { return result.value; }
-		result.value.then(function(data) { // 此处 value 是一个 Promise 对象！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+		result.value.then(function(data) { // 此处 data 是一个 Promise 对象，值为 result.value 的值
 			thenback(data);
 		});
 	}
