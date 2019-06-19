@@ -34,7 +34,14 @@ function bar(name, age) {
     }
 }
 // 测试一：传入null
-bar.fakeCall(null); // 2
+bar.fakeCall(null); // 
+console.log(bar.fakeCall(null));
+// undefined
+// Object {
+//    value: undefined,
+//    name: undefined,
+//    age: undefined
+// }
 
 // 测试二：有返回值
 console.log(bar.fakeCall(obj, 'kevin', 18));
