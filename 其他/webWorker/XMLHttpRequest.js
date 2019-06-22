@@ -6,9 +6,9 @@ for (let i = 0, len = arr.length; i < len; i++) {
     //req.setRequestHeader("client_type", "DESKTOP_WEB");
     req.onreadystatechange = () => {
       if (req.readyState == 4 && req.status == 200) {
-        postMessage(req.response);
+        self.postMessage(req.response);
       } else {
-        postMessage('请求不成功');
+        self.postMessage('请求不成功');
       }
   }
   req.send(null);

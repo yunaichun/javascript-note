@@ -17,8 +17,8 @@ Worker 线程无法读取本地文件，即不能打开本机的文件系统（f
 self.onmessage = function (e) {
     console.log(e.data);
     var res = dycFib(e.data);
-    console.log('子线程发送主线程的消息：', res);
-    postMessage(res);
+    console.log('子线程发送主线程的消息：', self, this, res);
+    self.postMessage(res);
 };
 self.onerror = function (e) {
     throw e.data;
