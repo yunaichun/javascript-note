@@ -1,5 +1,21 @@
 /*API地址参考：https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/
   参考地址：https://juejin.im/post/5a9e8ad5f265da23a40456d4
+  
+  谷歌推出的 PWA，就是具有这些了这些特点: progressive web app： 渐进式网页应用。
+  一、特点：
+  1、我们一般写 web 应用，在 pc 上是没有缓存的，打开页面的时去请求数据。
+  2、第二个也没有像 app 一样的小图标放在桌面，一点开就进入了应用，而是通过打开浏览器输入网址，
+  3、第三个就是，不能像 app 一样给用户推送消息，像微博会跟你推送说有谁评论了你的微博之类的功能。
+
+  Service Worker 用的就 cacheStorage 缓存，它提供了一个ServiceWorker类型的工作者或window范围可以访问的所有命名缓存的主目录, 
+  Service Worker 服务工作者就厉害了，它相当于浏览器和网络之间的代理服务器，可以拦截网络请求，做一些你可能需要的处理(请求资源从缓存中获取等)。
+  二、作用
+  1、它能够创建有效的离线体验，拦截网络请求，并根据网络是否可用判断是否使用缓存数据或者更新缓存数据。
+  2、它们还允许访问推送的通知和后台的API。
+
+  注意：
+  1、PWA应用需要在本地localhost:8080 
+  2、实现推送，自己服务器要有公钥和私钥的获取
 */
 
 var cacheName = 'helloWorld'
