@@ -191,3 +191,28 @@ var c2=create_counter(10);
 console.log(c2.inc());//11
 console.log(c2.inc());//12
 console.log(c2.inc());//13
+
+
+
+
+/**
+ * 含有 箭头函数 的 this 指向
+ */
+setTimeout(function() {
+    console.log(this); // window
+});
+
+setTimeout(() => {
+    console.log(this); // window
+});
+
+var o = {
+    a: {
+        b: function() {
+            setTimeout(() => {
+                console.log(this); // o.a: { b: function() {} }
+            });
+        }
+    }
+};
+o.a.b();
