@@ -13,6 +13,5 @@
 - ES6：参考[《ECMAScript 6简介》](http://es6.ruanyifeng.com)
 - 数据结构与算法JS实现： 参考《数据结构与算法JavaScript描述》
 - 设计模式： 参考《Javascript设计模式》、[汤姆大叔系列博客](http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html)
-- 其他：杂例、工具等demo
 
 未完待续。
