@@ -24,6 +24,9 @@ Function.prototype.fakeCall = function(context) {
 
 }
 
+
+
+
 let value = 2;
 let obj = { value: 1 }
 function bar(name, age) {
@@ -34,6 +37,7 @@ function bar(name, age) {
         age: age
     };
 }
+
 // == 测试一：传入null
 bar.fakeCall(null); // == undefined
 console.log(bar.fakeCall(null));

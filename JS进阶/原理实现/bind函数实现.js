@@ -32,10 +32,12 @@ Function.prototype.fakeBind = function(context) {
     return resultFuc;
 }
 
+
+
+
 let foo = {
     value: 1
 };
-
 function bar(name, age) {
     this.habit = 'shopping';
     console.log(this.value);
@@ -44,14 +46,12 @@ function bar(name, age) {
 }
 bar.prototype.friend =  'kevin';
 
-
 // == 一、测试普通函数
 let bindFoo1 = bar.fakeBind(foo, 'daisy');
 let obj1 = bindFoo1('18'); // == 1 + daisy + 18
 // == bindFoo1 为一个函数， 执行不会有任何返回
 console.log(obj1.habit); // == 不会有任何返回：TypeError
 console.log(obj1.friend); // == 不会有任何返回：TypeError
-
 
 // == 二、测试构造函数
 let bindFoo2 = bar.fakeBind(foo, 'daisy');
@@ -68,6 +68,8 @@ bindf([1, 2, 3]);
 Function.prototype.call.apply(Array.prototype.slice, [1, 2, 3])
 Array.prototype.slice.apply([1, 2, 3])
 [1, 2, 3].slice()
+
+
 
 
 // == 应用二

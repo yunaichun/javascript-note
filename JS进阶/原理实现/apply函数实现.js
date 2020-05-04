@@ -26,6 +26,9 @@ Function.prototype.fakeApply = function (context, arr) {
     return result;
 }
 
+
+
+
 let value = 2;
 let obj = { value: 1 }
 function bar(name, age) {
@@ -36,6 +39,7 @@ function bar(name, age) {
         age: age
     };
 }
+
 // == 测试一：传入null
 bar.fakeApply(null); // == undefined
 console.log(bar.fakeCall(null));

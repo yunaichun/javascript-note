@@ -24,6 +24,9 @@ Array.prototype.fakeReduce = function(fn, initialValue) {
     return next;
 };
 
+
+
+
 let arr = [1, 2, 3, 4, 5];
 let sum = arr.fakeReduce((prev, cur, index, arr) => {
     console.log(prev, cur, index, arr);
