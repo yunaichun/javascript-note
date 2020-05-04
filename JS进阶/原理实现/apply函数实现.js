@@ -1,9 +1,9 @@
 /**
-  * [fakeApply apply方法模拟实现]
-  * @param {[Object]} context [context对象]
-  * @param {[Array]} arr [数组参数]
-  * @return {[type]} [context对象调用执行此函数，返回此函数的执行结果]
-*/
+ * [fakeApply apply方法模拟实现]
+ * @param {[Object]} context [context对象]
+ * @param {[Array]} arr [数组参数]
+ * @return {[type]} [context对象调用执行此函数，返回此函数的执行结果]
+ */
 Function.prototype.fakeApply = function (context, arr) {
 
     context = context || window;

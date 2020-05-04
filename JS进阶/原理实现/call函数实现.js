@@ -1,8 +1,8 @@
 /**
-  * [fakeCall call方法模拟实现]
-  * @param {Object} context [context对象]
-  * @return {[type]} [context对象调用执行此函数，返回此函数的执行结果]
-*/
+ * [fakeCall call方法模拟实现]
+ * @param {Object} context [context对象]
+ * @return {[type]} [context对象调用执行此函数，返回此函数的执行结果]
+ */
 Function.prototype.fakeCall = function(context) {
 
     // == 传入 null 和 undefined均 指向 window

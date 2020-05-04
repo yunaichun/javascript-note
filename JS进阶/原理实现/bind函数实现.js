@@ -1,8 +1,8 @@
 /**
-* [fakeBind bind函数模拟实现]
-* @param {Object} context [context对象]
-* @return {[Function]} [返回函数]
-*/
+ * [fakeBind bind函数模拟实现]
+ * @param {Object} context [context对象]
+ * @return {[Function]} [返回函数]
+ */
 Function.prototype.fakeBind = function(context) {
     if (typeof this !== 'function') {  
         throw new Error('when use bind, it must be a function');
