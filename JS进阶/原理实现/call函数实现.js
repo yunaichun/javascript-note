@@ -1,69 +1,77 @@
 /**
- * [fakeCall call方法模拟实现]
- * @param  {Object} context            [context对象]
- * @return {[type]}                    [context对象调用执行此函数，返回此函数的执行结果]
- */
+  * [fakeCall call方法模拟实现]
+  * @param {Object} context [context对象]
+  * @return {[type]} [context对象调用执行此函数，返回此函数的执行结果]
+*/
 Function.prototype.fakeCall = function(context) {
-	// 传入null和undefined均指向window
-	context = context || window;
+
+    // == 传入 null 和 undefined均 指向 window
+    context = context || window;
     context.fn = this;
+
     let args = [];
     for (let i = 1; i < arguments.length; i++) {
-    	// args.push('arguments[' + i + ']');
-    	args.push(arguments[i]);
+        // == args.push('arguments[' + i + ']');    
+        args.push(arguments[i]);
     }
-    // eval('context.fn(' + args.toString() +')');
-    // ES6模拟
+
+    // == eval('context.fn(' + args.toString() +')');
+    // == ES6 模拟
     let result = context.fn(...args);
     delete context.fn;
+
     return result;
+
 }
-
-
 
 let value = 2;
-let obj = {
-    value: 1
-}
+let obj = { value: 1 }
 function bar(name, age) {
     console.log(this.value);
     return {
-        value: this.value,
+        value: this.value,    
         name: name,
         age: age
-    }
+    };
 }
-// 测试一：传入null
-bar.fakeCall(null); // 
+// == 测试一：传入null
+bar.fakeCall(null); // == undefined
 console.log(bar.fakeCall(null));
-// undefined
 // Object {
-//    value: undefined,
-//    name: undefined,
-//    age: undefined
+//     value: undefined,   
+//     name: undefined,   
+//     age: undefined
 // }
 
-// 测试二：有返回值
+// == 测试二：有返回值
+bar.fakeCall(obj, 'kevin', 18) // == 1
 console.log(bar.fakeCall(obj, 'kevin', 18));
-// 1
 // Object {
-//    value: 1,
-//    name: 'kevin',
-//    age: 18
+//     value: 1,
+//     name: 'kevin',
+//     age: 18   
 // }
 
 
 
-// 解释以下函数
-var arr = ['   ab', '   c    d'];
+
+// == 应用
+var arr = [' ab', ' c d'];
 arr.map(Function.prototype.call, String.prototype.trim);
-// 一、map方法第二个参数解释：相当于obj对象调用第一个函数
-var arr = ['   ab', '   c    d'];
+
+// == 一、map方法
+// == 第二个参数相当于 obj 对象调用第一个函数
+var arr = [' ab', ' c d'];
 var obj = { 'test': 'test' }
-arr.map(function(item) { 
-    console.log(this) // obj
+arr.map(function(item) {
+    // == obj
+    console.log(this) 
 }, obj);
-// 二、解释：相当于String.prototype.trim调用Function.prototype.call函数，传入当前item值
-Function.prototype.call.call(String.prototype.trim, '   ab'); // 'ab'
-// 等价于
-String.prototype.trim.call('   ab'); // 'ab'
+
+// === 二、解释：
+// == 相当于 String.prototype.trim 
+// == 调用 Function.prototype.call 函数
+// == 传入当前item值
+Function.prototype.call.call(String.prototype.trim, ' ab'); 
+// == 等价于
+String.prototype.trim.call(' ab');
