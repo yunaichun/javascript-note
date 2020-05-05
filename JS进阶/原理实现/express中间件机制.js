@@ -10,7 +10,8 @@ function express() {
         function next() {
             let task = middleware[i++];
             if (!task) return;
-            // 执行 next 会调用下一个中间件
+            // == 函数内部调用函数
+            // == next 为第一个中间件，里面传入第二个中间件
             task(req, res, next);
         }
         next();

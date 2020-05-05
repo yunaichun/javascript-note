@@ -1,17 +1,17 @@
 function* gen1(next) {
   yield 'gen1';
-  yield* next; // 开始执行下一个中间件
-  yield 'gen1-end'; // 下一个中间件执行完成再继续执行gen1中间件的逻辑
+  yield* next;
+  yield 'gen1-end';
 }
 function* gen2(next) {
   yield 'gen2';
-  yield* next; // 开始执行下一个中间件
-  yield 'gen2-end'; // 下一个中间件执行完成再继续执行gen2中间件的逻辑
+  yield* next;
+  yield 'gen2-end';
 }
 function* gen3(next) {
   yield 'gen3';
-  yield* next; // 开始执行下一个中间件
-  yield 'gen3-end'; // 下一个中间件执行完成再继续执行gen3中间件的逻辑
+  yield* next;
+  yield 'gen3-end';
 }
 
 
@@ -53,7 +53,7 @@ function compose(middleware) {
     let i = middleware.length;
 
     while(i--) {
-      // == next 为第一个 Generator 函数，里面传入第一个 Generator 函数
+      // == next 为第一个 Generator 函数，里面传入第二个 Generator 函数
       next = middleware[i].call(this, next);
     }
 
