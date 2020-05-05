@@ -17,14 +17,15 @@ function* gen3(next) {
 
 let middleware = [gen1, gen2, gen3];
 let len = middleware.length;
-// 遍历器对象：提供给最后一个中间件的参数
 let next = (function* noop() {})();
+
 while(len--) {
-  // gen3 执行的结果（遍历器对象）作为 gen2 的 next -> gen2 执行的结果（遍历器对象）作为 gen1 的 next -> gen1
+  // == next 为 gen1 函数，里面传入 gen2
   next = middleware[len].call(null, next);
 }
 
 function* run(next) {
+  // == yield* 用来在一个 Generator 函数里面执行另一个 Generator 函数
   yield* next;
 }
 let g = run(next);
@@ -48,15 +49,15 @@ g.next(); // {value: undefined, done: true}
  */
 function compose(middleware) {
   return function* (next) {
-    // 遍历器对象：提供给最后一个中间件的参数
     if (!next) next = (function* noop() {})();
     let i = middleware.length;
-    // 从后往前开始执行 middleware 中的 generator 函数
+
     while(i--) {
-      // 后一个中间件 执行的结果（遍历器对象）作为 前一个中间件的执行时的第一个参数
+      // == next 为第一个 Generator 函数，里面传入第一个 Generator 函数
       next = middleware[i].call(this, next);
     }
-    // 最终 next 是融合所有中间件的遍历器对象
+
+    // == yield* 用来在一个 Generator 函数里面执行另一个 Generator 函数
     return yield* next;
   }
 }
