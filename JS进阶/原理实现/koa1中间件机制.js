@@ -53,10 +53,12 @@ function compose(middleware) {
     let i = middleware.length;
 
     while(i--) {
+      // == 函数内部调用函数
       // == next 为第一个 Generator 函数，里面传入第二个 Generator 函数
       next = middleware[i].call(this, next);
     }
 
+    // == 从第一个中间件开始执行
     // == yield* 用来在一个 Generator 函数里面执行另一个 Generator 函数
     return yield* next;
   }

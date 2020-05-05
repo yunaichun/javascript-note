@@ -14,6 +14,8 @@ function express() {
             // == next 为第一个中间件，里面传入第二个中间件
             task(req, res, next);
         }
+
+        // == 从第一个中间件开始执行
         next();
     };
     app.use = function(callback) {
