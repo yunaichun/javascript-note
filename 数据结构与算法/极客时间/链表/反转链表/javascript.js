@@ -1,4 +1,4 @@
-/**
+/** leetcode: https://leetcode.com/problems/reverse-linked-list/
     Input: 1->2->3->4->5->NULL
     Output: 5->4->3->2->1->NULL
 
@@ -17,6 +17,7 @@ class Solution {
             // == current 移动到下一个节点
             [current.next, prev, current] = [prev, current, current.next]
         }
+        // ==  prev 始终为头节点
         return prev
     }
 }
