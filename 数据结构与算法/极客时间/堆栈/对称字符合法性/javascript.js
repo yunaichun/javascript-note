@@ -18,3 +18,17 @@ class Solution {
         return !stack.length
     }
 }
+
+class Solution2 {
+    constructor(props) {
+        super(props)
+    }
+    isValid(s) {
+        let length
+        while (length !== s.length) {
+            length = s.length
+            s = s.replace('()', '').replace('{}', '').replace('[]', '')
+        }
+        return !s.length
+    }
+}
