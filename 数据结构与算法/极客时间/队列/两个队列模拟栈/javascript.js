@@ -8,6 +8,7 @@ class MyQueue {
         // ==  堆栈 1 正常入队
         this.stack1.append(x)
         // ==  堆栈 2 值为反转堆栈 1
+        // == 不改变原数组反转数组：https://juejin.im/post/5d7658e1518825168d37dd9e
         this.stack2 = this.stack1.slice().reverse()
     }
     // == 出队
