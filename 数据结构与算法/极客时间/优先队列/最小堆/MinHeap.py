@@ -1,10 +1,9 @@
 import math
 
-class MaxHeap:
+class MinHeap:
     def __init__(self, data=[]):
         self.data = data
-        for val in data:
-            self.add(val)
+        self.shiftUp()
 
     def add(self, val):
         self.data.append(val)
@@ -15,7 +14,7 @@ class MaxHeap:
         i = len(data) - 1
         while i > 0:
             j = math.floor(i / 2)
-            if data[i] > data[j]:
+            if data[i] < data[j]:
                 temp = data[i]
                 data[i] = data[j]
                 data[j] = temp
@@ -33,7 +32,7 @@ class MaxHeap:
         data = self.data
         i = 0
         while 2 * i  < len(data):
-            if data[i] < data[2 * i + 1] or data[i] < data[2 * i + 2]:
+            if data[i] > data[2 * i + 1] or data[i] > data[2 * i + 2]:
                 if (2 * i + 2) < len(data) and data[2 * i + 1] < data[2 * i + 2]:
                     temp = data[i]
                     data[i] = data[2 * i + 2]
@@ -47,7 +46,7 @@ class MaxHeap:
             else:
                 break;
 
-heap = MaxHeap()
+heap = MinHeap()
 heap.add(1)
 heap.add(5)
 heap.add(4)

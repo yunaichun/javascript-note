@@ -1,97 +1,74 @@
-// == https://leetcode.com/problems/kth-largest-element-in-a-stream/discuss/504552/JavaScript-Min-Heap-solution
+// == Java     实现：https://segmentfault.com/a/1190000021649411
+// == JS       实现：https://blog.csdn.net/Juanmfc/article/details/77070916
+// == leetcode 实现：https://leetcode.com/problems/kth-largest-element-in-a-stream/discuss/504552/JavaScript-Min-Heap-solution
 export default class MinHeap {
     constructor(data = []) {
         this.data = data;
-        this.comparator = (a, b) => a - b;
-        this.heapify();
-    }
-  
-    // == O(nlog(n))
-    heapify() {
-        if (this.size() < 2) return;
-        for (let i = 1; i < this.size(); i++) {
-            this.bubbleUp(i);
-        }
-    }
-  
-    // == O(1)
-    peek() {
-        if (this.size() === 0) return null;
-        return this.data[0];
-    }
-  
-    // == O(log(n))
-    offer(value) {
-        this.data.push(value);
-        this.bubbleUp(this.size() - 1);
-    }
-  
-    // == O(log(n))
-    poll() {
-        if (this.size() === 0) return null;
-        const result = this.data[0];
-        const last = this.data.pop();
-        if (this.size() !== 0) {
-            this.data[0] = last;
-            this.bubbleDown(0);
-        }
-        return result;
-    }
-  
-    // == O(log(n))
-    bubbleUp(index) {
-        while (index > 0) {
-            const parentIndex = (index - 1) >> 1;
-            if (this.comparator(this.data[index], this.data[parentIndex]) < 0) {
-                this.swap(index, parentIndex);
-                index = parentIndex;
-            } else {
-                break;
-            }
-        }
-    }
-  
-    // == O(log(n))
-    bubbleDown(index) {
-      const lastIndex = this.size() - 1;
-      while (true) {
-            const leftIndex = index * 2 + 1;
-            const rightIndex = index * 2 + 2;
-            let findIndex = index;
-            if (
-                leftIndex <= lastIndex &&
-                this.comparator(this.data[leftIndex], this.data[findIndex]) < 0
-            ) {
-                findIndex = leftIndex;
-            }
-            if (
-                rightIndex <= lastIndex &&
-                this.comparator(this.data[rightIndex], this.data[findIndex]) < 0
-            ) {
-                findIndex = rightIndex;
-            }
-            if (index !== findIndex) {
-                this.swap(index, findIndex);
-                index = findIndex;
-            } else {
-                break;
-            }
-        }
-    }
-  
-    // == O(1)
-    swap(index1, index2) {
-        [this.data[index1], this.data[index2]] = [
-            this.data[index2],
-            this.data[index1]
-        ];
+        this.shiftUp();
     }
 
-    // == O(1)
-    size() {
-        return this.data.length;
+    // == 向堆中插入一个元素：插入到最后一个位置, 对插入的元素向上进行堆重构
+    add(val) {
+        this.data.push(val);
+        this.shiftUp();
+    }
+
+    // == 新元素跟父元素比较，新元素大则交换，一直到新元素比父元素小为止
+    shiftUp() {
+        let data = this.data;
+        let i = data.length - 1;
+        while(i > 0) {
+            let j = Math.floor(i / 2);
+            if(data[i] < data[j]) {
+                let temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+                i = j;
+            } else {
+                break;
+            }
+        }
+    }
+
+    // == 删除堆中的最大元素：将最后一个元素放到第一个的位置，向下进行堆重构
+    deleteMax(){
+        if(this.data.length > 1) {
+            let last = this.data.pop();
+            this.data[0] = last;
+            this.shiftDown();
+        }
+    }
+
+    // == 向下堆重构：从堆顶开始，比较当前元素和两个子元素，将若当前元素小于子元素中的一个，则将当前元素与较大的子元素交换，直到当前元素大于其子元素
+    shiftDown() {
+        let data = this.data;
+        let i = 0;
+        // == 循环条件： 有左孩子且左孩子和右孩子中至少有一个大于当前元素
+        while(2 * i  < data.length) {
+            if (data[i] > data[2 * i + 1] || data[i] > data[2 * i + 2]) {
+                let temp;
+                if(data[2 * i + 1] < data[2 * i + 2]) {
+                    // == 有右孩子且右孩子大于左孩子
+                    temp = data[i];
+                    data[i] = data[2 * i + 2];
+                    data[2 * i + 2] = temp;
+                    i = 2 * i + 2;
+                } else {
+                    // == 没有右孩子、右孩子比左孩子小
+                    temp = data[i];
+                    data[i] = data[2 * i + 1];
+                    data[2 * i + 1] = temp;
+                    i = 2 * i + 1;
+                }
+            } else {
+                break;
+            }
+        }
     }
 }
 
-
-
+let heap = new MinHeap();
+heap.add(1);
+heap.add(5);
+heap.add(4);
+heap.deleteMax();
