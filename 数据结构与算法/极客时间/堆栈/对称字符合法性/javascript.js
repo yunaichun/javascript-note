@@ -3,6 +3,7 @@ class Solution {
     constructor(props) {
         super(props)
     }
+    // o(1) * n
     isValid(s) {
         let stack = []
         const paren_map = { ')': '(', ']': '[', '}': '{' }

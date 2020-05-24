@@ -13,7 +13,7 @@ export default class MinHeap {
         this.shiftUp();
     }
 
-    // == 新元素跟父元素比较，新元素大则交换，一直到新元素比父元素小为止
+    // == o(log2 n ) 新元素跟父元素比较，新元素大则交换，一直到新元素比父元素小为止
     shiftUp() {
         let data = this.data;
         let i = data.length - 1;
@@ -39,7 +39,8 @@ export default class MinHeap {
         }
     }
 
-    // == 向下堆重构：从堆顶开始，比较当前元素和两个子元素，将若当前元素小于子元素中的一个，则将当前元素与较大的子元素交换，直到当前元素大于其子元素
+    // == 向下堆重构：从堆顶开始，比较当前元素和两个子元素，
+    // == 若当前元素小于子元素中的一个，则将当前元素与较大的子元素交换，直到当前元素大于其子元素
     shiftDown() {
         let data = this.data;
         let i = 0;
@@ -72,3 +73,4 @@ heap.add(1);
 heap.add(5);
 heap.add(4);
 heap.deleteMax();
+console.log(heap)
