@@ -6,15 +6,11 @@ class Solution:
         if root == None:
            return None
         else:
-            if root == p or root == q:
+            left = self.lowestCommonAncestor(root.left, p, q)
+            right = self.lowestCommonAncestor(root.right, p, q)
+            if left != None and right != None:
                 return root
-            else:
-                left = self.lowestCommonAncestor(root.left, p, q)
-                right = self.lowestCommonAncestor(root.right, p, q)
-                if left != None and right != None:
-                    return root
-                if left == None and right != None:
-                    return right
-                if left != null and right == null:
-                    return left
-        
+            if left == None and right != None:
+                return right
+            if left != null and right == null:
+                return left

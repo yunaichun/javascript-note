@@ -5,25 +5,20 @@ class Solution {
     }
     lowestCommonAncestor(root, p, q) {
         if (root === null) {
-           return null;
+            return null;
         } else {
-            if (root === p || root === q) {
+            // == root 即不为 q 也不为 p
+            let left = this.lowestCommonAncestor(root.left, p, q);
+            let right = this.lowestCommonAncestor(root.right, p, q);
+            if (left !== null && right !== null) {
                 return root;
-            } else {
-                // == root 即不为 q 也不为 p
-                let left = this.lowestCommonAncestor(root.left, p, q);
-                let right = this.lowestCommonAncestor(root.right, p, q);
-                if (left !== null && right !== null) {
-                    return root;
-                }
-                if (left === null && right !== null) {
-                    return right;
-                }
-                if (left !== null && right === null) {
-                    return left;
-                }
+            }
+            if (left === null && right !== null) {
+                return right;
+            }
+            if (left !== null && right === null) {
+                return left;
             }
         }
     }
 }
-
