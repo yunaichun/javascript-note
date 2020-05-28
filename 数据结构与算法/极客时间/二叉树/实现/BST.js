@@ -80,7 +80,7 @@ class BST {
 let a = new Node(1)
 let b = new Node(2)
 let c = new Node(3)
-let list = new BST(a)
+let list = new BST()
 list.insert(a)
 list.insert(b)
 list.insert(c)
