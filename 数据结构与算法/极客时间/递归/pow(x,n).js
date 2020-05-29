@@ -46,6 +46,7 @@ class Solution3 {
         // == Math.pow(2, 0) + Math.pow(2, 1) + Math.pow(2, 2)
         while (n) {
             if (n & 1) pow = pow*x;
+            // == x、x二次方、x四次方
             x = x*x;
             n >>= 1;
         }
