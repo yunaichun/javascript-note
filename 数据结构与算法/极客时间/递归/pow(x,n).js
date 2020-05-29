@@ -28,3 +28,27 @@ class Solution2 {
         return arr[n];
     }
 }
+
+// == 位运算求解
+class Solution3 {
+    constructor(props) {
+        super(props)
+    }
+    // == 动态规划 log(n)
+    myPow(x, n) {
+        if (n < 0) {
+            x = 1/ x;
+            n = -n;
+        }
+        let pow = 1;
+        // == 7 的二进制表示为 111
+        // == 7 = 1 + 2 + 4
+        // == Math.pow(2, 0) + Math.pow(2, 1) + Math.pow(2, 2)
+        while (n) {
+            if (n & 1) pow = pow*x;
+            x = x*x;
+            n >>= 1;
+        }
+        return pow;
+    }
+}
