@@ -34,10 +34,10 @@ class Solution3 {
     constructor(props) {
         super(props)
     }
-    // == 动态规划 log(n)
+    // == 位运算 log(2, n)
     myPow(x, n) {
         if (n < 0) {
-            x = 1/ x;
+            x = 1 / x;
             n = -n;
         }
         let pow = 1;
@@ -46,7 +46,7 @@ class Solution3 {
         // == Math.pow(2, 0) + Math.pow(2, 1) + Math.pow(2, 2)
         while (n) {
             if (n & 1) pow = pow*x;
-            // == x、x二次方、x四次方
+            // == x的(2的0次方)的次方、x的(2的1次方)的次方、x的(2的2次方)的次方
             x = x*x;
             n >>= 1;
         }
