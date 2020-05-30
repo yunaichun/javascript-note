@@ -1,11 +1,7 @@
 import ListNode from '../实现/链表'
-/** leetcode: https://leetcode.com/problems/swap-nodes-in-pairs/
-    Input: 1->2->3->4
-    Output: 2->1->4->3
- */
+// == leetcode: https://leetcode.com/problems/swap-nodes-in-pairs/
 class Solution {
     constructor(props) {
-        super(props)
     }
     swapPairs(head) {
         // == 从头节点开始，同时保存头节点

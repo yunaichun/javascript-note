@@ -1,13 +1,6 @@
-/** leetcode: https://leetcode.com/problems/reverse-linked-list/
-    Input: 1->2->3->4->5->NULL
-    Output: 5->4->3->2->1->NULL
-
-    一、1(prev)->2(current)->3->4->5->NULL
-    二、2(prev)->1->3(current)->4->5->NULL
- */
+// == leetcode: https://leetcode.com/problems/reverse-linked-list/
 class Solution {
     constructor(props) {
-        super(props)
     }
     reverseList(head) {
         let [prev, current] = [null, head]

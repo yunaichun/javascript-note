@@ -1,7 +1,6 @@
 // == leetcode: https://leetcode.com/problems/valid-parentheses/
 class Solution {
     constructor(props) {
-        super(props)
     }
     // o(1) * n
     isValid(s) {

@@ -1,9 +1,6 @@
 // == leetcode: https://leetcode.com/problems/powx-n/
 class Solution {
-    constructor(props) {
-        super(props)
-    }
-    // == log(2, n)
+    // == 递归: o(log(2, n))
     myPow(x, n) {
         if (n === 0) return 1;
         if (n < 0) return 1 / this.myPow(x, -n);
@@ -16,10 +13,7 @@ class Solution {
 }
 
 class Solution2 {
-    constructor(props) {
-        super(props)
-    }
-    // == 动态规划 log(n)
+    // == 动态规划: o(log(n))
     myPow(x, n) {
         let arr = [1]
         for (let i = 1; i < n + 1; i++) {
@@ -29,12 +23,10 @@ class Solution2 {
     }
 }
 
-// == 位运算求解
 class Solution3 {
     constructor(props) {
-        super(props)
     }
-    // == 位运算 log(2, n)
+    // == 位运算: o(log(2, n))
     myPow(x, n) {
         if (n < 0) {
             x = 1 / x;
