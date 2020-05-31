@@ -4,11 +4,11 @@ class Solution {
     }
     levelOrder(root) {
         if (!root) return [];
-        let result = this._bfs(root, [], 0);
+        let result = this._dfs(root, [], 0);
         return result;
     }
     // == 深度优先 o(n)
-    _dfs(root, result = [], level = []) {
+    _dfs(root, result = [], level = 0) {
         if (!root) return;
         if (!result[level]) result[level] = [];
         result[level].push(root.val);
