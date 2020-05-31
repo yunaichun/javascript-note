@@ -7,15 +7,26 @@ class Solution {
         let result = this._bfs(root, [], 0);
         return result;
     }
-    _bfs (root, result, level) {
+    // == 深度优先 o(n)
+    _dfs (root, result, level) {
+        if (!root) return;
         if (!result[level]) result[level] = [];
         result[level].push(root.val);
-        if (root.left) {
-            this._bfs(root.left, result, level + 1);
-        }
-        if (root.right) {
-            this._bfs(root.right, result, level + 1)
-        }
+        this._dfs(root.left, result, level + 1);
+        this._dfs(root.right, result, level + 1);
         return result;
+    }
+}
+
+class Solution2 {
+    constructor(props) {
+    }
+    levelOrder(root) {
+        if (!root) return [];
+        let result = this._dfs(root, [], 0);
+        return result;
+    }
+    // == 广度优先 o(n)
+    _dfs (root, result, level) {
     }
 }
