@@ -31,6 +31,28 @@ class Solution {
     }
     // == 广度优先 o(n)
     _bfs(root) {
-        
+        let min = 0;
+        let level = 0;
+        let queue = [];
+        queue.push(root);
+        while(queue.length) {
+            level++;
+            let levelSize = queue.length;
+            for (let i = 0; i < levelSize; i++) {
+                let current = queue[i];
+                if (current.left) {
+                    queue.push(current.left)
+                }
+                if (current.right) {
+                    queue.push(current.right)
+                }
+                if (!current.right && !current.right) {
+                    min = level;
+                    break;
+                }
+            }
+            queue = queue.slice(levelSize)
+        }
+        return min;
     }
 }

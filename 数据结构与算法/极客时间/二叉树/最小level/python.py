@@ -15,7 +15,6 @@ class Solution:
         right = self._dfs(root.right)
         if left == 0 or right == 0:
             return 1
-
         if left > right:
             return 1 + right
         else:
