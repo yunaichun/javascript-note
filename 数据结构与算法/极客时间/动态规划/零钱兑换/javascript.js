@@ -23,6 +23,3 @@ class Solution {
         return a[amount] > amount ? -1 : a[amount];
     }
 }
-
-var test = new Solution()
-console.log(test.coinChange([1,2,5], 11))
