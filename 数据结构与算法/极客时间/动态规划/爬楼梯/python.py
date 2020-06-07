@@ -2,7 +2,7 @@ class Solution:
     def __init__(self):
         super().__init__()
 
-    def climbStairs(self, root):
+    def climbStairs(self, n):
         a = []
         a[0] = 1
         a[1] = 2
