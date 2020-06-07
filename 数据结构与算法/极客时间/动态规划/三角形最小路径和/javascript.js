@@ -1,4 +1,4 @@
-// == leetcode: https://leetcode.com/problems/climbing-stairs/
+// == leetcode: https://leetcode.com/problems/triangle/
 class Solution {
     constructor(props) {
     }
