@@ -13,10 +13,16 @@ class Solution {
         for (let i = 0; i < m + 1; i++) {
             a[i] = [];
             for (let j = 0; j < n + 1; j++) {
-                if (i === 0 || j === 0) {
-                    a[i][j] = 0; 
+                if (i === 0) {
+                    a[i][j] = j; 
+                } else if (j === 0) {
+                    a[i][j] = i; 
                 } else {
-                    a[i][j] = Math.min(a[i -1][j], a[i][j - 1], a[i - 1][j - 1]) + 1;
+                    if (word1[i - 1] === word2[j - 1]) {
+                        a[i][j] = a[i - 1][j - 1];
+                    } else {
+                        a[i][j] = Math.min(a[i -1][j], a[i][j - 1], a[i - 1][j - 1]) + 1;
+                    }
                 }
             }
         }
