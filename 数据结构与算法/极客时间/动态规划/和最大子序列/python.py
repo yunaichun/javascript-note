@@ -4,7 +4,7 @@ class Solution:
     def __init__(self):
         super().__init__()
 
-    def coinChange(self, nums):
+    def maxSubArray(self, nums):
         a = [];
         MAX = a[0] = nums[0];
         for i in range(len(nums)):

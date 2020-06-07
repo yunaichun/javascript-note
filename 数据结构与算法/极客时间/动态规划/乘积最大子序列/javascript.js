@@ -1,4 +1,4 @@
-// == leetcode: https://leetcode.com/problems/maximum-subarray/
+// == leetcode: https://leetcode.com/problems/maximum-product-subarray/
 class Solution {
     constructor(props) {
     }

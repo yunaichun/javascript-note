@@ -4,17 +4,15 @@ class Solution:
     def __init__(self):
         super().__init__()
 
-    def maxProduct(self, nums):
-        a = [[nums[0], nums[0]]]
-        MAX = nums[0]
-        for i in range(len(nums)):
-            a[i] = []
-            if nums[i] > 0:
-                a[i][0] = a[i - 1][0] * nums[i]
-                a[i][1] = a[i - 1][1] * nums[i]
-            else:
-                a[i][0] = a[i - 1][1] * nums[i]
-                a[i][1] = a[i - 1][0] * nums[i]
-            MAX = Math.max(a[i][0], MAX)
-        return MAX
-
+    def lengthOfLIS(self, nums):
+        a = []
+        MAX = a[0] = 1
+        for i in range(1, len(nums)):
+            for j in range(0, i):
+                if a[i]:
+                    if nums[j] < nums[i]:
+                        a[i] = Math.max(a[i], a[j] + 1)
+                else:
+                    a[i] = a[j]
+            MAX = Math.max(a[i], MAX)
+        return MAX;
