@@ -13,8 +13,8 @@ class Solution {
             }
         }
         if (root.right) {
-            if (root.val < root.left.val) { 
-                return this.isValidBST(root.left);
+            if (root.val < root.right.val) { 
+                return this.isValidBST(root.right);
             } else {
                 return false;
             }
