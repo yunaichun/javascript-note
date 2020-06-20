@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/edit-distance
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == 第一步：定义状态：a[i][j] 代表 word1 前 i 个字符转换到 word2 前 j 个字符需要的最少操作步骤（insert、delete、replace）
     // == 第二步：状态转移方程：a[i][j] = Math.min(a[i -1][j], a[i][j - 1], a[i - 1][j - 1]) + 1

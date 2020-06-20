@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/binary-tree-level-order-traversal/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     levelOrder(root) {
         if (!root) return [];
@@ -19,7 +19,7 @@ class Solution {
 }
 
 class Solution2 {
-    constructor(props) {
+    constructor() {
     }
     levelOrder(root) {
         if (!root) return [];

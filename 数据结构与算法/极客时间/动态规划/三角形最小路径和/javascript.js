@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/triangle/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == 第一步：定义状态：a[i][j] 代表走到第 i 层 第 j 列所需要的最短路径（从最底部走到最顶部）
     // == 第二步：状态转移方程：a[i][j] = Math.min(a[i -1][j], a[i - 1][j + 1]) + triangle[i][j] 

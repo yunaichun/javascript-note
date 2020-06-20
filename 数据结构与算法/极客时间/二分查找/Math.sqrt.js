@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/sqrtx/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == o(log(2, x))
     mySqrt(x) {

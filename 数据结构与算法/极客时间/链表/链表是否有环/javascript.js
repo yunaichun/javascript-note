@@ -1,7 +1,7 @@
 import ListNode from '../实现/链表'
 // == leetcode: https://leetcode.com/problems/linked-list-cycle
 class Solution {
-    constructor(props) {
+    constructor() {
         super(props)
     }
     swapPairs(head) {

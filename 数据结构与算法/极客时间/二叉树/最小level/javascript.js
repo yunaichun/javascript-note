@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/minimum-depth-of-binary-tree/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     maxDepth(root) {
         if (!root) return 0;

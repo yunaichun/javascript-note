@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/reverse-linked-list/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     reverseList(head) {
         let [prev, current] = [null, head]

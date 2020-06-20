@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/valid-anagram/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // o(nlogn)
     isAnagram(s, t) {
@@ -9,7 +9,7 @@ class Solution {
 }
 
 class Solution2 {
-    constructor(props) {
+    constructor() {
         super(props)
     }
     // o(n)

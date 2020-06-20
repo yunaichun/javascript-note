@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/climbing-stairs/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == 第一步：定义状态：a[i] 代表爬到 i 层楼梯的走法的总数
     // == 第二步：状态转移方程：a[i] = a[i -1 ] + a[i - 2]

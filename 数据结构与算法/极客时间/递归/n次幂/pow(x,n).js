@@ -24,7 +24,7 @@ class Solution2 {
 }
 
 class Solution3 {
-    constructor(props) {
+    constructor() {
     }
     // == 位运算: o(log(2, n))
     myPow(x, n) {

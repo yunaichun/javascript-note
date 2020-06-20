@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/coin-change/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == 第一步：定义状态：a[i] 代表组成 i 数量的钱所需的最少硬币的数量
     // == 第二步：状态转移方程：a[i] = Math.min(a[i], a[i - coins[j] + 1])

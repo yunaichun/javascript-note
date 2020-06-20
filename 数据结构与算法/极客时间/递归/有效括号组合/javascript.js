@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/majority-element/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     generateParenthesis(n) {
         let result = this._helper(0, 0, n, "", []);

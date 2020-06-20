@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/maximum-subarray/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == 第一步：定义状态：a[i] 代表以第 i 个元素结尾且和最大的连续子数组
     // == 第二步：状态转移方程：a[i] = Math.max(a[i - 1] + nums[i], nums[i]);

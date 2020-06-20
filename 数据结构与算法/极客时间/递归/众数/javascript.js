@@ -1,7 +1,7 @@
 // == leetcode: https://leetcode.com/problems/majority-element/
 class Solution {
     // == 还有一个缺陷是未记录多个众位数
-    constructor(props) {
+    constructor() {
     }
     // == 排序 o(nlog(n))
     // == Map: { x: count(x) }  => 空间和时间复杂度 o(n)
@@ -48,7 +48,7 @@ console.log(test.majorityElement([1, 2, 3, 3, 5, 6])) // 3
 
 
 class Solution2 {
-    constructor(props) {
+    constructor() {
     }
     // == 摩尔投票法 o(n)
     majorityElement(nums) {

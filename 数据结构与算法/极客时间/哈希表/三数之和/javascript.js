@@ -1,6 +1,6 @@
 // == https://leetcode.com/problems/two-sum/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // o(n2)
     threeSum(nums) {

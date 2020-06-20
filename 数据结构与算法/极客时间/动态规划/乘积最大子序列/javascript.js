@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/maximum-product-subarray/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     // == 第一步：定义状态：a[i][0] 代表以第 i 个元素结尾且乘积最大的连续子数组、
     // ==                a[i][1] 代表以第 i 个元素结尾且乘积最小的连续子数组

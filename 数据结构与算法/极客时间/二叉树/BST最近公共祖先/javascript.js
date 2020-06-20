@@ -1,6 +1,6 @@
 // == leetcode: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     lowestCommonAncestor(root, p, q) {
         if (root === null) {
