@@ -25,9 +25,7 @@ class Solution {
     }
     // == 深度优先 o(n)  -  染色
     _dfs(grid, row, column) {
-        if (!this._is_valid(grid, row, column)) {
-            return;
-        }
+        if (!this._is_valid(grid, row, column)) return;
         this.visited.add({row, column});
         for (let i = 0; i < 4; i++) {
             let newRow = row + this.dx[i];
@@ -40,9 +38,7 @@ class Solution {
     }
     // == 广度优先 o(n)  -  染色
     _bfs(grid, row, column) { n
-        if (!this._is_valid(grid, row, column)) {
-            return;
-        }
+        if (!this._is_valid(grid, row, column)) return;
         this.visited.add({row, column});
         this.queue.push({row, column});
         while(this.queue.length) {
