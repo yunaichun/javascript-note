@@ -6,9 +6,9 @@ class Solution {
     constructor() {
     }
     // == 第一步：定义状态：DP[i][k][j] 代表第 i 天股票买卖了 k 次最大收益
-    // ==        i: 0 -> n -1
-    // ==        m: 0 -> k (代表第 i 天股票已经买卖了 k 次，如果已经买了还没卖代表 k - 1 次)
-    // ==        j: 0 -> 1 (0 不持有股票， 1 代表持有股票)
+    // ==        i: 0 -> n -1【代表第 i 天】
+    // ==        m: 0 -> k   【股票已经买卖了 m 次，如果已经买了还没卖代表 m - 1 次】
+    // ==        j: 0 -> 1   【0 不持有股票， 1 持有股票】
     // == 第二步：状态转移方程：
     // ==        // == 今天不持有股票：前一天不持有，前一天买入今天卖出
     // ==        DP[i][m][0] = Max(DP[i - 1][m][0], DP[i - 1][m - 1][1] + a[i])
@@ -17,7 +17,8 @@ class Solution {
     // == 初始状态：
     // ==        DP[i][m][0] = 0;
     // ==        DP[i][m][1] = -Math.min.apply(null, prices.slice(0, i + 1));
-    // == 求 Max(DP[n - 1][{0, k}][0])
+    // == 求：
+    // ==        Max(DP[n - 1][{0, k}][0])
     maxProfit(k, prices) {
         let n = prices.length;
         let DP = this.init(k, prices);
@@ -53,7 +54,6 @@ class Solution {
         return max;
     }
 }
-
 
 var a = new Solution()
 // console.log(a.maxProfit(2, [2, 4, 1]))
