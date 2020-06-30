@@ -3,9 +3,8 @@ class Solution {
     constructor() {
     }
     // == 第一步：定义状态：a[i] 代表以第 i 个元素结尾最长上升子序列的长度
-    // == 第二步：状态转移方程：if (nums[i] > a[i - 1]) a[i] = a[i - 1].push(nums[i])
-    // ==                    else a[i] = nums[i]
-    // == 初始状态：MAX = a[0] = nums[0]
+    // == 第二步：状态转移方程：if (nums[j] < nums[i]) a[i] = Math.max(a[i], a[j] + 1)
+    // == 初始状态：MAX = a[0] = 1
     // == 求 MAX
     lengthOfLIS(nums) {
         let a = [];
