@@ -1,6 +1,3 @@
-/**
- * 仿照express实现中间件的功能
- */
 let http = require('http');
 
 function express() {
@@ -10,8 +7,7 @@ function express() {
         function next() {
             let task = middleware[i++];
             if (!task) return;
-            // == 函数内部调用函数
-            // == next 为第一个中间件，里面传入第二个中间件
+            // == 函数内部调用自身函数: 里面传入第二个中间件
             task(req, res, next);
         }
 
@@ -25,7 +21,6 @@ function express() {
 }
 
 
-// 测试
 let app = express();
 function middlewareA(req, res, next) {
     console.log('middlewareA before next()');
@@ -37,14 +32,8 @@ function middlewareB(req, res, next) {
     next();
     console.log('middlewareB after next()');
 }
-function middlewareC(req, res, next) {
-    console.log('middlewareC before next()');
-    next();
-    console.log('middlewareC after next()');
-}
 app.use(middlewareA);
 app.use(middlewareB);
-app.use(middlewareC);
 
 http.createServer(app).listen('3000', function () {
     console.log('listening 3000....');
