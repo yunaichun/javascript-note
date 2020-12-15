@@ -76,12 +76,14 @@ class Application {
                 if (i === middleware.length) fn = next;
                 if (!fn) return Promise.resolve();
                 try {
-                    return Promise.resolve(fn(context, function next() {
-                        // == 函数内部调用函数
-                        return dispatch(i + 1);
-                    }));
+                    return Promise.resolve(
+                        // == 函数内部调用自身函数: 里面传入第二个中间件
+                        fn(context, function next() {
+                            return dispatch(i + 1);
+                        })
+                      );
                 } catch (err) {
-                        return Promise.reject(err);
+                    return Promise.reject(err);
                 }
             }
             // == 从第一个中间件开始执行
