@@ -34,3 +34,11 @@ console.log(A.prototype.__proto__ === Object.prototype);
 
 // == 判断实例是哪个构造函数实例的：
 console.log(a.constructor === A);
+
+
+// == 3、Object.create 与 new 的区别
+const a = { x: 1 };
+const b = new Object(a);
+const c = Object.create(a);
+console.log(b.__proto__ === Object.prototype);
+console.log(c.__proto__ === a);
