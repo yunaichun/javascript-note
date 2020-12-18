@@ -37,4 +37,4 @@
 - [汤姆大叔系列博客](http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html)
 
 - [数据结构与算法JavaScript描述](https://book.douban.com/subject/25945449/)
-= [极客时间](https://time.geekbang.org/course/intro/100019701)
+- [极客时间](https://time.geekbang.org/course/intro/100019701)
