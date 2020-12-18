@@ -9,6 +9,21 @@
 - 设计模式
 - 数据结构和算法
 
+## 学习笔记
+
+- this: https://www.answera.top/frontend/js/this
+- 闭包: https://www.answera.top/frontend/js/closure
+- 原型链与继承: https://www.answera.top/frontend/js/prototype
+- bind实现: https://www.answera.top/frontend/js/bind
+- 防抖与节流: https://www.answera.top/frontend/js/debounce-throttle
+- 函数柯里化: https://www.answera.top/frontend/js/curry
+- 深拷贝: https://www.answera.top/frontend/js/copy
+- new实现: https://www.answera.top/frontend/js/new
+- reduce实现: https://www.answera.top/frontend/js/reduce
+- promise原理: https://www.answera.top/frontend/js/promise
+- generator原理: https://www.answera.top/frontend/js/generator
+- async原理: https://www.answera.top/frontend/js/async
+
 ## 参考资料
 
 - [JavaScript高级程序设计](https://book.douban.com/subject/4886879/)
