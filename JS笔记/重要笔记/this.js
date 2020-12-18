@@ -85,6 +85,17 @@ console.log(a.user); // undefined
 console.log(a instanceof fn); // false
 
 
+// == 构造函数中通过 bind 函数改变 this 指向
+var name = 'name1';
+function A(name) {
+    this.name = name
+    setTimeout(function() {
+        console.log(this.name);
+    }.bind(this));
+}
+var a = new A('name2'); // name2
+
+
 // == 三、箭头函数
 // == ES6 中的箭头函数并不会创建其自身的执行上下文，所以箭头函数中的 this 取决于它的外部函数。
 var myObj = {
