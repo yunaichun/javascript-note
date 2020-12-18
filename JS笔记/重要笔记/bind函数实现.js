@@ -15,7 +15,8 @@ Function.prototype.fakeBind = function(context, ...args) {
         self.apply(current, args.concat(args2));
     }
 
-    // == 可以判断是否是 new 的操作；同时返回函数会继承 self 原型上的属性
+    // == resultFuc.prototype 的原型是 self.prototype
+    // == 即 resultFuc 原型的原型是 self.prototype
     resultFuc.prototype = Object.create(self.prototype);
     return resultFuc;
 }
@@ -29,11 +30,11 @@ function bar(name, age) {
 bar.prototype.friend = 'friend';
 // == 1、普通函数: bar.apply(foo, ['name1', 10])
 let bind1 = bar.fakeBind(foo, 'name1');
-let obj1 = bind1(10);
-// == 2、构造函数: bar.apply(bind2, ['name1', 10])
+let obj1 = bind1(10); // == undefined 【普通函数执行没有返回任何数据】
+// == 2、构造函数: bar.apply(obj2, ['name1', 10])
 let bind2 = bar.fakeBind(foo, 'daisy');
 let obj2 = new bind2('name2');
-
+console.log(obj2.__proto__.__proto__ === bar.prototype);
 
 // == bind 函数示例一
 let bindf = Function.prototype.call.bind(Array.prototype.slice);
