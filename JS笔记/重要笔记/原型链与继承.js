@@ -1,4 +1,18 @@
-// 创建对象
+// == 一、原型链
+// == 从一个实例对象往上找构造这个实例相关联的对象
+// == 关联的对象再往上找创建他的原型对象
+// == 以此类推，一直到 Object.prototype 终止
+const A = function() {}
+const a = new A();
+
+// == instanceof 的原理: a instanceof A 等价于 a.__proto__ === A.prototype
+console.log(a instanceof A);
+console.log(a.constructor === A);
+console.log(a.__proto__ === A.prototype);
+console.log(A.prototype.__proto__ === Object.prototype);
+
+
+// == 二、创建对象
 // == 1、第一种方式：字面量
 var o1 = {name: 'o1'};
 var o2 = new Object({name: 'o2'});
@@ -10,7 +24,7 @@ var p = {name: 'p'};
 var o4 = Object.create(p);
 
 
-// == 继承
+// == 三、继承
 // == 借助构造函数实现继承
 /**
 * 原理：通过call或apply改变函数运行上下文，子类构造函数中执行父类构造函数
