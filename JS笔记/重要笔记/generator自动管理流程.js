@@ -28,7 +28,10 @@ let genFuc = function* () {
 // == 4、执行流程分析
 let g = genFuc();
 let r1 = g.next();
-// == r1.value 是 yield 执行后的值: thunk 函数传入 callback 
+// == r1.value 是一个函数: Thunk 函数的最后一层
+// == Thunk(fs.readFile)('file1')(callback) 等价于 fs.readFile('file1', callback)
+// == 即 r1.value(callback) 等价于 fs.readFile('file1', callback)
+// == 通过 r2 = g.next(data) 设置 r1.value(callback) 【即第一个 yield 表达式】的值
 r1.value(function(err, data) {
     if (err) throw err;
     let r2 = g.next(data);
@@ -72,7 +75,10 @@ let genFuc = function* () {
 // == 2、执行流程分析
 let g = genFuc();
 let r1 = g.next();
-// == r1.value 是 yield 执行后的值: promise 函数执行 then 回调 
+// == r1.value 是一个 Promise
+// == readFile('file1') 等价于 Promise.resolve(fs.readFile('file1'))
+// == 则 r1.value.then(resolve) 等价于 Promise.resolve(fs.readFile('file1')).then(resolve)
+// == 通过 r2 = g.next(data) 设置 r1.value 【即第一个 yield 表达式】的值
 r1.value.then(function(data) {
     let r2 = g.next(data);
     r2.value.then(function(data) {
@@ -84,14 +90,14 @@ r1.value.then(function(data) {
 // == 3、自动执行流程
 function run(genFuc) {
 	let gen = genFuc();
-	function thenback(data) {
+	function resolve(data) {
 		let result = gen.next(data);
 		if (result.done) return result.value;
 		result.value.then(function(data) {
-			thenback(data);
+			resolve(data);
 		});
 	}
-	thenback();
+	resolve();
 }
 run(genFuc);
 
