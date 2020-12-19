@@ -4,10 +4,12 @@
 
 ## 目录结构
 
-- ES6笔记
-- JS笔记
-- 设计模式
-- 数据结构和算法
+```   
+├── JS笔记 
+├── ES6笔记 
+├── 设计模式        
+└── 数据结构和算法
+```
 
 ## 学习笔记
 
@@ -28,7 +30,6 @@
 
 - [JavaScript高级程序设计](https://book.douban.com/subject/4886879/)
 - [Javascript语言精髓](https://book.douban.com/subject/3590768/)
-- [JavaScript高级程序设计](https://book.douban.com/subject/4886879/)
 
 - [《ECMAScript 6简介》](http://es6.ruanyifeng.com)
 - [廖雪峰博客](https://www.liaoxuefeng.com/wiki/1022910821149312/1023021250770016)
@@ -37,4 +38,4 @@
 - [汤姆大叔系列博客](http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html)
 
 - [数据结构与算法JavaScript描述](https://book.douban.com/subject/25945449/)
-- [极客时间](https://time.geekbang.org/course/intro/100019701)
+- [极客时间算法课程](https://time.geekbang.org/course/intro/100019701)
