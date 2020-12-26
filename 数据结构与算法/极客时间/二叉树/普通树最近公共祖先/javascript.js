@@ -6,15 +6,14 @@ class Solution {
         if (root === null) {
             return null;
         } else {
-            // == root 即不为 q 也不为 p
-            let left = this.lowestCommonAncestor(root.left, p, q);
-            let right = this.lowestCommonAncestor(root.right, p, q);
-            if (left === null && right !== null) {
-                return right;
-            }
-            if (left !== null && right === null) {
-                return left;
-            }
+            // == root 为 q 或为 p，代表找到了
+            if(root === p || root === q) return root;
+            // == root 即不为 q 也不为 p，继续遍历
+            let left = lowestCommonAncestor(root.left, p, q);
+            let right = lowestCommonAncestor(root.right, p, q);
+            if (left === null) return right;
+            if (right === null) return left;
+            // == left 和 right 均不为 null，则 left 和 right 是 root 左右子树
             return root;
         }
     }
