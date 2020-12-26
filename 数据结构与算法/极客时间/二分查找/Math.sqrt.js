@@ -4,18 +4,23 @@ class Solution {
     }
     // == o(log(2, x))
     mySqrt(x) {
-        let min = 0;
-        let max = x;
+        let [min, max] = [0, x];
         while (true) {
-            let mid = Math.floor((min + max)/2)
-            if (mid * mid < x) {
-                min = mid;
-            } else if (mid * mid > x) {
-                max = mid;
-            } else {
+            let mid = Math.round((min + max)/2);
+            const midPow2 = mid * mid;
+            if (midPow2 === x) {
                 return mid;
+            } else if (min + 1 === max) {
+                return min;
+            } else if (midPow2 < x) {
+                min = mid;
+            } else if (midPow2 > x) {
+                max = mid;
             }
         }
     }
 }
-
+var a = new Solution()
+console.log(a.mySqrt(1))
+console.log(a.mySqrt(8))
+console.log(a.mySqrt(9))
