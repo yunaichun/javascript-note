@@ -27,7 +27,11 @@ class LRUCache {
     put(key, value) {
         if (this.cache.get(key)) this.cache.delete(key);
         this.cache.set(key, value);
-        if(this.cache.size > this.capacity) this.cache.delete(this.cache.keys().next().value);
+        if(this.cache.size > this.capacity) {
+            const keys = this.cache.keys();
+            const firstKey = keys.next().value;
+            this.cache.delete(firstKey);
+        }
     }
 }
 /** 
