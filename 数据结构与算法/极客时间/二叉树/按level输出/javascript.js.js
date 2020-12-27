@@ -33,9 +33,9 @@ class Solution2 {
         queue.push(root);
         while(queue.length) {
             let currentLevel = [];
-            let levelSize = queue.length;
+            const levelSize = queue.length;
             for (let i = 0; i < levelSize; i++) {
-                let current = queue[i];
+                const current = queue[i];
                 currentLevel.push(current.val);
                 if (current.left) {
                     queue.push(current.left)

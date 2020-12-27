@@ -12,17 +12,14 @@ class Solution {
         if (!root) return 0;
         let left = this._dfs(root.left);
         let right = this._dfs(root.right);
-        if (left === 0 || right === 0) return 1;
-        if (left > right) {
-            return 1 + right;
-        } else {
-            return 1 + left;
-        }
+        if (!root.left) return right + 1;
+        if (!root.right) return left + 1;
+        return Math.min(left, right) + 1;
     }
 }
 
 class Solution {
-    constructor(props) {
+    constructor() {
     }
     maxDepth(root) {
         if (!root) return 0;
@@ -31,28 +28,25 @@ class Solution {
     }
     // == 广度优先 o(n)
     _bfs(root) {
-        let min = 0;
         let level = 0;
         let queue = [];
         queue.push(root);
         while(queue.length) {
             level++;
-            let levelSize = queue.length;
+            const levelSize = queue.length;
             for (let i = 0; i < levelSize; i++) {
-                let current = queue[i];
+                const current = queue[i];
                 if (current.left) {
                     queue.push(current.left)
                 }
                 if (current.right) {
                     queue.push(current.right)
                 }
-                if (!current.right && !current.right) {
-                    min = level;
-                    break;
+                if (!current.left && !current.right) {
+                    return level;
                 }
             }
             queue = queue.slice(levelSize)
         }
-        return min;
     }
 }

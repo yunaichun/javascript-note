@@ -12,11 +12,7 @@ class Solution {
         if (!root) return 0;
         let left = this._dfs(root.left);
         let right = this._dfs(root.right);
-        if (left > right) {
-            return 1 + left;
-        } else {
-            return 1 + right;
-        }
+        return Math.max(left + 1, right + 1);
     }
 }
 
@@ -35,9 +31,9 @@ class Solution {
         queue.push(root);
         while(queue.length) {
             max++;
-            let levelSize = queue.length;
+            const levelSize = queue.length;
             for (let i = 0; i < levelSize; i++) {
-                let current = queue[i];
+                const current = queue[i];
                 if (current.left) {
                     queue.push(current.left)
                 }
