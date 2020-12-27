@@ -54,6 +54,7 @@ class Solution {
             this.result.push(cur_word);
         }
         let temp = board[row][col];
+        // == 避免下一次再回来
         board[row][col] = '@';
         let m = board.length;
         let n = board[0].length;
@@ -70,6 +71,7 @@ class Solution {
                 this._dfs(board, x, y, cur_word, cur_dict); 
             }
         }
+        // == 再复原
         board[row][col] = temp;
     }
 }
