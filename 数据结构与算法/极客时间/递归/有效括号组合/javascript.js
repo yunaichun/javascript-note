@@ -1,4 +1,4 @@
-// == leetcode: https://leetcode.com/problems/majority-element/
+// == leetcode: https://leetcode.com/problems/generate-parentheses
 class Solution {
     constructor() {
     }

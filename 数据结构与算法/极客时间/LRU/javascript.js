@@ -1,16 +1,11 @@
 // == leetcode: https://leetcode.com/problems/lru-cache/
 class LRUCache {
-    /**
-     * @param {number} capacity
-     */
+    // == 存储最大长度
     constructor(capacity) {
         this.cache = new Map();
         this.capacity = capacity;
     }
-    /** 
-     * @param {number} key
-     * @return {number}
-     */
+    // == 获取 key 的 value
     get(key) {
         if(!this.cache.has(key)) return -1;
         // == find key and put first
@@ -19,11 +14,7 @@ class LRUCache {
         this.cache.set(key, value);
         return value;
     }
-    /** 
-     * @param {number} key 
-     * @param {number} value
-     * @return {void}
-     */
+    // == 设置 key 和 value
     put(key, value) {
         if (this.cache.get(key)) this.cache.delete(key);
         this.cache.set(key, value);

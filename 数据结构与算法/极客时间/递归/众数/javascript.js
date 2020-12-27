@@ -59,7 +59,8 @@ class Solution2 {
                 candidate = nums[i];
                 iTimes = 1;
             } else {
-                if (nums[i] ===candidate) {
+                // == 相同则加1，不同则抵消掉1个
+                if (nums[i] === candidate) {
                     iTimes++;
                 } else {
                     iTimes--;
