@@ -1,4 +1,4 @@
-// == https://leetcode.com/problems/two-sum/
+// == https://leetcode.com/problems/three-sum/
 class Solution {
     constructor() {
     }
@@ -15,10 +15,8 @@ class Solution {
             let d = {};
             for (let j = i + 1; j < len; j++) {
                 let [m, n] = [nums[i], nums[j]];
+                // == 确定出第三个值应该是什么
                 if (!d[n]) {
-                    // == j 为 0 的时候 d[1] = 1
-                    // == j 为 1 的时候 d[0] = 1
-                    // == 避免 (-1, 0, 1)、(-1, 1, 0)
                     d[-m-n] = 1;
                 } else {
                     res.push([m, -m-n, n]);
