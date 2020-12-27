@@ -29,16 +29,20 @@ class Solution {
                         if (this.isValidChar(board, i, j, char.toString())) {
                             board[i][j] = char.toString();
                             if (this._dfs(board)) {
+                                // == i, j 位置放上 char 之后，下一步符合条件
                                 return true;
                             } else {
+                                // == i, j 位置放上 char 之后，下一步不符合条件的话要重置
                                 board[i][j] = '.';
                             }
                         }
                     }
+                    // == i, j 位置放上 char 所有可能之后都不返回 true 的话，是不合法的数独
                     return false;
                 }
             }
         }
+        // == i, j 所有位置都遍历完之后不抛出 false，代表是合法的数独
         return true;
     }
     isValidChar(board, row, col, char) {
@@ -59,7 +63,6 @@ class Solution {
         return true;
     }
 }
-
 
 let board = [
     ["5","3",".",".","7",".",".",".","."],

@@ -30,7 +30,7 @@ class Solution {
     // == 深度优先 o(n)
     _dfs(n, row, cur_solve) {
         if (row === n) {
-            // == cur_solve 是数组，要注意数组的额引用传递
+            // == cur_solve 是数组，要注意数组的引用传递
             this.result.push(JSON.parse(JSON.stringify(cur_solve)));
             return;
         }
@@ -70,7 +70,6 @@ class Solution {
         return res;
     }
 }
-
 
 var a = new Solution();
 console.log(a.totalNQueens(4));
