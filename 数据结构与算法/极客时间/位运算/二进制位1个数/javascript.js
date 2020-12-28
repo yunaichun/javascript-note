@@ -1,11 +1,8 @@
-// leetcode: https://leetcode.com/problems/counting-bits/
+// leetcode: https://leetcode.com/problems/number-of-1-bits
 class Solution {
     constructor() {
     }
-    /**
-     * @param {number} n - a positive integer
-     * @return {number}
-     */
+    // == 清除最低位1: x&(x - 1)
     hammingWeight(n) {
         let count = 0;
         while(n) {
