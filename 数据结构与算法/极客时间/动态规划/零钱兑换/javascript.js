@@ -15,6 +15,7 @@ class Solution {
                     if (a[i]) {
                         a[i] = Math.min(a[i],  a[i - coins[j]] + 1);
                     } else {
+                        // == 相当于初始化，在下一步会被对比的
                         a[i] = a[i - coins[j]] + 1
                     }
                 }

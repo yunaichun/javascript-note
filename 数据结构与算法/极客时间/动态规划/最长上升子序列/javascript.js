@@ -10,13 +10,12 @@ class Solution {
         let a = [];
         let MAX = a[0] = 1;
         for (let i = 1, len = nums.length; i < len; i++) {
-            // == 因为是不连续，所以要全部比较
+            // == 因为是不连续，所以要全部比较【类似零钱兑换】
             for (j = 0; j < i; j++) {
                 if (a[i]) {
-                    if (nums[j] < nums[i]) {
-                        a[i] = Math.max(a[i], a[j] + 1)
-                    }
+                    if (nums[j] < nums[i]) a[i] = Math.max(a[i], a[j] + 1);
                 } else {
+                    // == 相当于初始化，在下一步会被对比的
                     a[i] = a[j];
                 }
             }
