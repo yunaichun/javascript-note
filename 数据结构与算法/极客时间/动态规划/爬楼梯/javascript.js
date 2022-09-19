@@ -1,18 +1,15 @@
-// == leetcode: https://leetcode.com/problems/climbing-stairs/
-class Solution {
-    constructor() {
-    }
-    // == 第一步：定义状态：a[i] 代表爬到 i 层楼梯的走法的总数
-    // == 第二步：状态转移方程：a[i] = a[i -1 ] + a[i - 2]
-    // == 初始状态：a[0] = 1, a[1] = 2
-    // == 求 a[n-1]
-    climbStairs(n) {
-        let a = [];
-        a[0] = 1;
-        a[1] = 2;
-        for (let i = 2; i < n; i++) {
-            a[i] = a[i - 1] + a[i - 2]
-        }
-        return a[n - 1];
-    }
-}
+/** https://leetcode.com/problems/climbing-stairs/
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function (n) {
+  /** a[i]: 代表爬第 i 层楼所需要的步数 */
+  /** a[i] = a[i - 1] + a[i - 2] */
+  const a = [];
+  a[0] = 1;
+  a[1] = 2;
+  for (let i = 2; i < n; i += 1) {
+    a[i] = a[i - 1] + a[i - 2];
+  }
+  return a[n - 1];
+};

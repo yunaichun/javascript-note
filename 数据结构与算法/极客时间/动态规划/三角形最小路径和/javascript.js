@@ -1,24 +1,18 @@
-// == leetcode: https://leetcode.com/problems/triangle/
-class Solution {
-    constructor() {
+/** https://leetcode.com/problems/triangle/
+ * @param {number[][]} triangle
+ * @return {number}
+ */
+var minimumTotal = function (triangle) {
+  /** a[i][j]: 代表某个位置从底部到当前位置最小路径和 */
+  /** a[i - 1][j] = Math.min(a[i][j], a[i][j + 1]) + triangle[i - 1][j]; */
+  const a = [];
+  const len = triangle.length - 1;
+  a[len] = triangle[len];
+  for (let i = len; i > 0; i -= 1) {
+    if (!a[i - 1]) a[i - 1] = [];
+    for (j = 0, len2 = triangle[i].length; j < len2; j += 1) {
+      a[i - 1][j] = Math.min(a[i][j], a[i][j + 1]) + triangle[i - 1][j];
     }
-    // == 第一步：定义状态：a[i][j] 代表走到第 i 层 第 j 列所需要的最短路径（从最底部走到最顶部）
-    // == 第二步：状态转移方程：a[i][j] = Math.min(a[i -1][j], a[i - 1][j + 1]) + triangle[i][j] 
-    // == 初始状态：a[m - 1] = triangle[triangle.length - 1]
-    // == 求 a[0][0]
-    minimumTotal(triangle) {
-        let a = [];
-        const level = triangle.length;
-        // == 第 level 层
-        a[level - 1] = triangle[level - 1];
-        // == 根据第 level 层推导出第 level - 1 层
-        for (let i = level - 2; i > -1; i--) {
-            const currentLevel = triangle[i];
-            if(!a[i]) a[i] = [];
-            for (let j = 0, len = currentLevel.length; j < len; j++) {
-                a[i][j] = Math.min(a[i + 1][j] , a[i + 1][j + 1]) + currentLevel[j];
-            }
-        }
-        return a[0][0];
-    }
-}
+  }
+  return a[0][0];
+};
