@@ -1,52 +1,36 @@
-// == leetcode: https://leetcode.com/problems/minimum-depth-of-binary-tree/
-class Solution {
-    constructor() {
-    }
-    maxDepth(root) {
-        if (!root) return 0;
-        let result = this._dfs(root);
-        return result;
-    }
-    // == 深度优先 o(n)
-    _dfs(root) {
-        if (!root) return 0;
-        let left = this._dfs(root.left);
-        let right = this._dfs(root.right);
-        if (!root.left) return right + 1;
-        if (!root.right) return left + 1;
-        return Math.min(left, right) + 1;
-    }
+/** https://leetcode.com/problems/minimum-depth-of-binary-tree/
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var minDepth = function(root) {
+  return _bfs(root);
+};
+/** 深度优先 */
+function _dfs(root) {
+  if (!root) return 0;
+  let left = _dfs(root.left);
+  let right = _dfs(root.right);
+  /** 左节点没有，但是右节点还有，树还没断 */
+  if (!root.left) return right + 1;
+  /** 右节点没有，但是左节点还有，树还没断 */
+  if (!root.right) return left + 1;
+  return Math.min(left, right) + 1;
 }
-
-class Solution {
-    constructor() {
+/** 广度优先 */
+function _bfs(root) {
+  let level = 0;
+  const queue = [];
+  if (root) queue.push(root);
+  while(queue.length) {
+    level++;
+    const len = queue.length;
+    for (let i = 0; i < len; i += 1) {
+      const node = queue[i];
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+      if (!node.left && !node.right) return level;
     }
-    maxDepth(root) {
-        if (!root) return 0;
-        let result = this._bfs(root);
-        return result;
-    }
-    // == 广度优先 o(n)
-    _bfs(root) {
-        let level = 0;
-        let queue = [];
-        queue.push(root);
-        while(queue.length) {
-            level++;
-            const levelSize = queue.length;
-            for (let i = 0; i < levelSize; i++) {
-                const current = queue[i];
-                if (current.left) {
-                    queue.push(current.left)
-                }
-                if (current.right) {
-                    queue.push(current.right)
-                }
-                if (!current.left && !current.right) {
-                    return level;
-                }
-            }
-            queue = queue.slice(levelSize)
-        }
-    }
+    queue.splice(0, len);
+  }
+  return level;
 }

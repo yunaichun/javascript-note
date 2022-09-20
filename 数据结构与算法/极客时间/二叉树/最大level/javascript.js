@@ -1,48 +1,33 @@
-// == leetcode: https://leetcode.com/problems/maximum-depth-of-binary-tree/
-class Solution {
-    constructor() {
-    }
-    maxDepth(root) {
-        if (!root) return 0;
-        let max = this._dfs(root);
-        return max;
-    }
-    // == 深度优先 o(n)
-    _dfs(root) {
-        if (!root) return 0;
-        let left = this._dfs(root.left);
-        let right = this._dfs(root.right);
-        return Math.max(left + 1, right + 1);
-    }
+/** https://leetcode.com/problems/maximum-depth-of-binary-tree/
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+  return _dfs(root);
+};
+
+/** 深度优先 */
+function _dfs(root) {
+  if (!root) return 0;
+  let left = _dfs(root.left);
+  let right = _dfs(root.right);
+  return Math.max(left, right) + 1;
 }
 
-class Solution {
-    constructor(props) {
+/** 广度优先 */
+function _bfs(root) {
+  let level = 0;
+  const queue = [];
+  if (root) queue.push(root);
+  while(queue.length) {
+    level++;
+    const len = queue.length;
+    for (let i = 0; i < len; i += 1) {
+      const node = queue[i];
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
     }
-    maxDepth(root) {
-        if (!root) return 0;
-        let result = this._bfs(root);
-        return result;
-    }
-    // == 广度优先 o(n)
-    _bfs(root) {
-        let max = 0;
-        let queue = [];
-        queue.push(root);
-        while(queue.length) {
-            max++;
-            const levelSize = queue.length;
-            for (let i = 0; i < levelSize; i++) {
-                const current = queue[i];
-                if (current.left) {
-                    queue.push(current.left)
-                }
-                if (current.right) {
-                    queue.push(current.right)
-                }
-            }
-            queue = queue.slice(levelSize)
-        }
-        return max;
-    }
+    queue.splice(0, len);
+  }
+  return level;
 }
