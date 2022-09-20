@@ -1,24 +1,13 @@
-// == leetcode: https://leetcode.com/problems/validate-binary-search-tree/
-class Solution {
-    constructor() {
-    }
-    // == root 为 BST 实例
-    // == 方法一：左 < 根 < 右
-    isValidBST(root) {
-        if (root.left) {
-            if (root.val > root.left.val) { 
-                return this.isValidBST(root.left);
-            } else {
-                return false;
-            }
-        }
-        if (root.right) {
-            if (root.val < root.right.val) { 
-                return this.isValidBST(root.right);
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
+/** https://leetcode.com/problems/validate-binary-search-tree/
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isValidBST = function(root) {
+  return _helper(root, -Infinity, Infinity);
+};
+
+function _helper(root, lower, higher) {
+  if (!root) return true;
+  if (root.val >= higher || root.val <= lower) return false;
+  return _helper(root.left, lower, root.val) && _helper(root.right, root.val, higher);
 }
