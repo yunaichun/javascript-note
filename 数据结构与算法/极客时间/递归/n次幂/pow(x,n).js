@@ -9,7 +9,6 @@ var myPow = function(x, n) {
   if (n === 1) return x;
   const a = Math.floor(n / 2);
   const b = n % 2;
-  console.log(x, a, b)
   if (b === 0) {
     return myPow(x*x, a);
   } else {
