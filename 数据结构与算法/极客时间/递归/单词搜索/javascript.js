@@ -1,5 +1,5 @@
-/** https://leetcode.com/problems/word-search */
-/** https://leetcode.com/problems/word-search-ii */
+/** https://leetcode.cn/problems/word-search */
+/** https://leetcode.cn/problems/word-search-ii */
 
 /** 上下左右 */
 const dx = [-1, 1, 0, 0];
@@ -11,7 +11,7 @@ const dy = [0, 0, -1, 1];
  * @return {boolean}
  */
 var exist = function(board, word) {
-  const results = findWords(board, word);
+  const results = findWords(board, [word]);
   return results;
 };
 
