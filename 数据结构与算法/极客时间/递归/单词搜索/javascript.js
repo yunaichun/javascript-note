@@ -12,7 +12,7 @@ const dy = [0, 0, -1, 1];
  */
 var exist = function(board, word) {
   const results = findWords(board, [word]);
-  return results;
+  return results.length;
 };
 
 /**
