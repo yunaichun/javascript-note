@@ -37,7 +37,7 @@ function findWords(board, words) {
   return results;
 }
 
-function _helper(board, words, row, column, usedGrids, current, results) {
+function _helper(board, words, row, column, visited, current, results) {
   current += board[row][column];
 
   const more = words.filter(word => word.indexOf(current) >= 0);
@@ -52,10 +52,9 @@ function _helper(board, words, row, column, usedGrids, current, results) {
   for (let i = 0; i < 4; i += 1) {
     let x = row + dx[i];
     let y = column + dy[i];
-    const inUsedGrids = usedGrids.find(i => i.x === x && i.y === y);
-    if (inUsedGrids) continue;
+    const inVisited = visited.find(i => i.x === x && i.y === y);
     const inBoard = x >= 0 && x < m && y >= 0 && y < n;
-    if (inBoard) _helper(board, words, x, y, usedGrids.concat({ x, y }), current, results); 
+    if (!inVisited && inBoard) _helper(board, words, x, y, visited.concat({ x, y }), current, results); 
   }
 }
 
