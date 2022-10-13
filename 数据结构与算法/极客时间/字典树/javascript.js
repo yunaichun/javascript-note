@@ -1,63 +1,62 @@
-// == leetcode-208: https://leetcode.com/problems/implement-trie-prefix-tree/
-class Trie {
-    constructor() {
-        this.root = {};
-        this.end_of_word = '#';
-    }
-    /**
-     * Inserts a word into the trie. 
-     * @param {string} word
-     * @return {void}
-     */
-    insert(word) {
-        let node = this.root;
-        for (let i in word) {
-            if (!node[word[i]]) node[word[i]] = {};
-            node = node[word[i]];
-        }
-        node[this.end_of_word] = this.end_of_word;
-    }
-    /**
-     * Returns if the word is in the trie. 
-     * @param {string} word
-     * @return {boolean}
-     */
-    search(word) {
-        let node = this.root;
-        for (let i in word) {
-            if (!node[word[i]]) return false;
-            node = node[word[i]];
-        }
-        return this.end_of_word in node;
-    }
-    /**
-     * Returns if there is any word in the trie that starts with the given prefix. 
-     * @param {string} prefix
-     * @return {boolean}
-     */
-    startsWith(prefix) {
-        let node = this.root;
-        for (let i in prefix) {
-            if (!node[prefix[i]]) return false;
-            node = node[prefix[i]];
-        }
-        return true;
-    }
-}
-
-/** 
+/** https://leetcode.cn/problems/implement-trie-prefix-tree/
  * Your Trie object will be instantiated and called as such:
  * var obj = new Trie()
  * obj.insert(word)
  * var param_2 = obj.search(word)
  * var param_3 = obj.startsWith(prefix)
  */
+var Trie = function () {
+  this.root = {};
+};
 
-let trie = new Trie();
+/**
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function (word) {
+  let root = this.root;
+  for (let i = 0, len = word.length; i < len; i += 1) {
+    const cur = word[i];
+    if (!root[cur]) root[cur] = {};
+    root = root[cur];
+  }
+  root["#"] = "#";
+};
 
-trie.insert('apple');
-console.log(trie.search('apple'));  // returns true
-console.log(trie.search('app'));     // returns false
-console.log(trie.startsWith('app')); // returns true
-trie.insert('app');
-console.log(trie.search('app'));     // returns true
+/**
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function (word) {
+  let root = this.root;
+  for (let i = 0, len = word.length; i < len; i += 1) {
+    const cur = word[i];
+    if (!root[cur]) return false;
+    root = root[cur];
+  }
+  if (root["#"] === "#") return true;
+  return false;
+};
+
+/**
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function (prefix) {
+  let root = this.root;
+  for (let i = 0, len = prefix.length; i < len; i += 1) {
+    const cur = prefix[i];
+    if (!root[cur]) return false;
+    root = root[cur];
+  }
+  return true;
+};
+
+const trie = new Trie();
+trie.insert("apple");
+trie.startsWith("app"); // 返回 True
+trie.search("apple"); // 返回 True
+trie.search("app"); // 返回 False
+trie.startsWith("app"); // 返回 True
+trie.insert("app");
+trie.search("app"); // 返回 True
