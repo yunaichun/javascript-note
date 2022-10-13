@@ -2,22 +2,23 @@
  * @param {number[]} nums
  * @return {number}
  */
- var majorityElement = function(nums) {
+var majorityElement = function (nums) {
   const map = new Map();
-  for(let i = 0, len = nums.length; i < len; i += 1) {
-    const count = map.get(nums[i]);
-    if (count) map.set(nums[i], count + 1);
+  let [maxCount, maxNum] = [0, null];
+  for (let i = 0, len = nums.length; i < len; i++) {
+    if (map.has(nums[i])) map.set(nums[i], map.get(nums[i]) + 1);
     else map.set(nums[i], 1);
+    const currentCount = map.get(nums[i]);
+    if (currentCount > maxCount) {
+      maxCount = currentCount;
+      maxNum = nums[i];
+    }
   }
-  const keys = [...map.keys()];
-  const values = [...map.values()];
-  const maxCount = Math.max.apply(null, values);
-  const maxCountKey = keys.find(key => map.get(key) === maxCount);
-  return maxCountKey;
+  return maxNum;
 };
 
 /** 摩尔投票法 o(n) */
-var majorityElement2 = function(nums) {
+var majorityElement2 = function (nums) {
   let candidate = nums[0];
   let iTimes = 1;
   for (let i = 1, len = nums.length; i < len; i += 1) {
@@ -31,6 +32,6 @@ var majorityElement2 = function(nums) {
     }
   }
   return candidate;
-}
+};
 
 console.log(majorityElement2([1, 2, 1]));
