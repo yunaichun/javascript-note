@@ -1,24 +1,26 @@
-// == leetcode: https://leetcode.com/problems/kth-largest-element-in-a-stream/
+/** https://leetcode.cn/problems/kth-largest-element-in-a-stream
+ * @param {number} k
+ * @param {number[]} nums
+ */
+var KthLargest = function (k, nums) {
+  this.minHeap = nums.sort((a, b) => b - a);
+  this.k = k;
+};
 
-// == 快排求数组最大前k个数
-function qSort(list, k) {
-    if (list.length <= 1) return list;
-    let p = list[0];
-    let lesser = [];
-    let greater = [];
-    for (let i = 1, len = list.length; i < len; i++) {
-        if (list[i] < p) {
-            lesser.push(list[i]);
-        } else {
-            greater.push(list[i]);
-        }
+KthLargest.prototype.add = function (val) {
+  let pos = this.minHeap.length;
+  for (let i = 0; i < pos; i++) {
+    if (val >= this.minHeap[i]) {
+      pos = i;
+      break;
     }
-    if (greater.length === k) {
-        return greater;
-    } else if (greater.length > k) {
-        return qSort(greater, k);
-    } else {
-        return qSort(greater, k).concat(p, qSort(lesser, k));
-    }
-}
-console.log(qSort([1,2,3,4,5,6,7], 3))
+  }
+  this.minHeap.splice(pos, 0, val);
+  return this.minHeap[this.k - 1];
+};
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(val)
+ */
