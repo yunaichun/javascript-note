@@ -6,8 +6,8 @@
  * @return {number}
  */
 var maxProfit = function (k, prices) {
-  /** dp[i][j][0]: 第 i 天 买卖 j 次, 不持有股票的最大收益 */
-  /** dp[i][j][1]: 第 i 天 买卖 j 次, 持有股票的最大收益 */
+  /** dp[i][j][0]: 第 i + 1 天 买卖 j 次, 不持有股票的最大收益 */
+  /** dp[i][j][1]: 第 i + 1 天 买卖 j 次, 持有股票的最大收益 */
   const dp = [];
   for (let i = 0, len = prices.length; i < len; i += 1) {
     dp[i] = [];
