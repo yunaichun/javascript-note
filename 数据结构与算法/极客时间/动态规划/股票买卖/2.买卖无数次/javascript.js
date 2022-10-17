@@ -1,4 +1,4 @@
-/** 买卖 k 次: https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/ */
+/** 买卖无数次: https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/ */
 
 /**
  * @param {number[]} prices
