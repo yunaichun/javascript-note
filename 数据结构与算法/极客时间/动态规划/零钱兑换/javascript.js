@@ -1,20 +1,20 @@
-/** https://leetcode.com/problems/coin-change/
+/** https://leetcode.cn/problems/coin-change/ */
+
+/**
  * @param {number[]} coins
  * @param {number} amount
  * @return {number}
  */
 var coinChange = function (coins, amount) {
-  /** a[i]: 代表爬凑 i 钱所需要的最少的硬币个数 */
-  /** a[i] = Math.min(a[i], a[i - coins[j]] + 1) */
-  const a = [];
-  a[0] = 0;
-  for (let i = 1; i < amount + 1; i++) {
-    for (let j = 0; j < coins.length; j++) {
-      if (!a[i]) a[i] = Infinity;
-      if (i >= coins[j]) {
-        a[i] = Math.min(a[i], a[i - coins[j]] + 1);
+  /** a[i] 代表兑换 i 数量需要的最少的硬币个数 */
+  const dp = [0];
+  for (let i = 1; i <= amount; i += 1) {
+    if (!dp[i]) dp[i] = Infinity;
+    for (let j = 0, len = coins.length; j < len; j += 1) {
+      if (i - coins[j] >= 0) {
+        dp[i] = Math.min(dp[i - coins[j]] + 1, dp[i]);
       }
     }
   }
-  return a[amount] === Infinity ? -1 : a[amount];
+  return dp[amount] === Infinity ? -1 : dp[amount];
 };

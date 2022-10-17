@@ -1,18 +1,19 @@
-/** https://leetcode.com/problems/triangle/
+/** https://leetcode.cn/problems/triangle/  */
+
+/**
  * @param {number[][]} triangle
  * @return {number}
  */
 var minimumTotal = function (triangle) {
-  /** a[i][j]: 代表某个位置从底部到当前位置最小路径和 */
-  /** a[i - 1][j] = Math.min(a[i][j], a[i][j + 1]) + triangle[i - 1][j]; */
-  const a = [];
-  const len = triangle.length - 1;
-  a[len] = triangle[len];
-  for (let i = len; i > 0; i -= 1) {
-    if (!a[i - 1]) a[i - 1] = [];
-    for (j = 0, len2 = triangle[i].length; j < len2; j += 1) {
-      a[i - 1][j] = Math.min(a[i][j], a[i][j + 1]) + triangle[i - 1][j];
+  /** dp[i][j] 代表从底部到坐标 (i, j) 最小路径和 */
+  const dp = [];
+  dp[triangle.length - 1] = triangle[triangle.length - 1];
+  for (i = triangle.length - 2; i >= 0; i -= 1) {
+    if (!dp[i]) dp[i] = [];
+    for (let j = 0, len = triangle[i].length; j < len; j += 1) {
+      console.log(i, j);
+      dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle[i][j];
     }
   }
-  return a[0][0];
+  return dp[0][0];
 };

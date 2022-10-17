@@ -10,12 +10,12 @@ var maxProfit = function (k, prices) {
   /** dp[i][j][1]: 第 i + 1 天 买卖 j 次, 持有股票的最大收益 */
   const dp = [];
   for (let i = 0, len = prices.length; i < len; i += 1) {
-    dp[i] = [];
+    if (!dp[i]) dp[i] = [];
     for (let j = 0; j <= k; j += 1) {
       if (i === 0) {
         dp[i][j] = [0, -prices[i]];
       } else if (j === 0) {
-        dp[i][j] = [0, Math.max(dp[i - 1][0][1], dp[i - 1][0][0] - prices[i])];
+        dp[i][j] = [0, Math.max(dp[i - 1][j][1], dp[i - 1][j][0] - prices[i])];
       } else {
         dp[i][j] = [
           Math.max(dp[i - 1][j][0], dp[i - 1][j - 1][1] + prices[i]),
