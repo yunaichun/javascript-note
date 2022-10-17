@@ -11,7 +11,6 @@ var minimumTotal = function (triangle) {
   for (i = triangle.length - 2; i >= 0; i -= 1) {
     if (!dp[i]) dp[i] = [];
     for (let j = 0, len = triangle[i].length; j < len; j += 1) {
-      console.log(i, j);
       dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + triangle[i][j];
     }
   }
