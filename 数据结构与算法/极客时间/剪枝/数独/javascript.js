@@ -1,79 +1,72 @@
-// == leetcode-36: https://leetcode.com/problems/valid-sudoku/
-// == leetcode-37: https://leetcode.com/problems/sudoku-solver/
-class Solution {
-    constructor() {
-    }
-    /**
-     * @param {character[][]} board
-     * @return {boolean}
-     */
-    isValidSudoku(board) {
-        let res = this._dfs(board);
-        console.log(board);
-        return res;
-    }
-    /**
-     * @param {character[][]} board
-     * @return {void} Do not return anything, modify board in-place instead.
-     */
-    solveSudoku(board) {
-        this._dfs(board);
-        return board;
-    }
-    // == 深度优先 o(n)
-    _dfs(board) {
-        for(let i = 0, len = board.length; i < len; i++) {
-            for(let j = 0, len = board[i].length; j < len; j++) {
-                if (board[i][j] === '.') {
-                    for (let char = 1; char < 10; char++) {
-                        if (this.isValidChar(board, i, j, char.toString())) {
-                            board[i][j] = char.toString();
-                            if (this._dfs(board)) {
-                                // == i, j 位置放上 char 之后，下一步符合条件
-                                return true;
-                            } else {
-                                // == i, j 位置放上 char 之后，下一步不符合条件的话要重置
-                                board[i][j] = '.';
-                            }
-                        }
-                    }
-                    // == i, j 位置放上 char 所有可能之后都不返回 true 的话，是不合法的数独
-                    return false;
-                }
+/** https://leetcode.cn/problems/valid-sudoku */
+/** https://leetcode.cn/problems/sudoku-solver  */
+
+/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+var isValidSudoku = function (board) {
+  let res = _helper(board);
+  return res;
+};
+
+/**
+ * @param {character[][]} board
+ * @return {void} Do not return anything, modify board in-place instead.
+ */
+var solveSudoku = function (board) {
+  _helper(board);
+  return board;
+};
+
+var _helper = function (board) {
+  for (let i = 0, row = board.length; i < row; i += 1) {
+    for (let j = 0, column = board[i].length; j < column; j += 1) {
+      if (board[i][j] === ".") {
+        for (let char = 1; char < 10; char += 1) {
+          const isValid = _isVaild(board, i, j, char.toString());
+          if (isValid) {
+            board[i][j] = char.toString();
+            if (_helper(board)) {
+              return true;
+            } else {
+              board[i][j] = ".";
             }
+          }
         }
-        // == i, j 所有位置都遍历完之后不抛出 false，代表是合法的数独
-        return true;
+        return false;
+      }
     }
-    isValidChar(board, row, col, char) {
-        for (let i = 0; i < 9; i++) {
-            // == 同一列不能一样
-            if (board[i][col] === char) return false;
-            // == 同一行不能一样
-            if (board[row][i] === char) return false;
-        }
-        // == 3*3不能一样
-        let m = Math.floor(row / 3);
-        let n = Math.floor(col / 3);
-        for (let i = m * 3; i < m * 3 + 3; i++) {
-            for (let j = n * 3; j < n * 3 + 3; j++) {
-                if (board[i][j] === char) return false;
-            }
-        }
-        return true;
+  }
+  return true;
+};
+
+var _isVaild = function (board, row, column, char) {
+  // /** 行列正确 */
+  for (let i = 0; i < 9; i += 1) {
+    if (char === board[row][i]) return false;
+    if (char === board[i][column]) return false;
+  }
+  /** 3*3宫格正确 */
+  let m = Math.floor(row / 3);
+  let n = Math.floor(column / 3);
+  for (let i = m * 3; i < m * 3 + 3; i++) {
+    for (let j = n * 3; j < n * 3 + 3; j++) {
+      if (char === board[i][j]) return false;
     }
-}
+  }
+  return true;
+};
 
 let board = [
-    ["5","3",".",".","7",".",".",".","."],
-    ["6",".",".","1","9","5",".",".","."],
-    [".","9","8",".",".",".",".","6","."],
-    ["8",".",".",".","6",".",".",".","3"],
-    ["4",".",".","8",".","3",".",".","1"],
-    ["7",".",".",".","2",".",".",".","6"],
-    [".","6",".",".",".",".","2","8","."],
-    [".",".",".","4","1","9",".",".","5"],
-    [".",".",".",".","8",".",".","7","9"]
+  ["5", "3", ".", ".", "7", ".", ".", ".", "."],
+  ["6", ".", ".", "1", "9", "5", ".", ".", "."],
+  [".", "9", "8", ".", ".", ".", ".", "6", "."],
+  ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
+  ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
+  ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+  [".", "6", ".", ".", ".", ".", "2", "8", "."],
+  [".", ".", ".", "4", "1", "9", ".", ".", "5"],
+  [".", ".", ".", ".", "8", ".", ".", "7", "9"],
 ];
-var a = new Solution();
-console.log(a.isValidSudoku(board))
+console.log(isValidSudoku(board));
