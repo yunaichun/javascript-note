@@ -1,48 +1,38 @@
 /** https://leetcode.cn/problems/swap-nodes-in-pairs */
 
 /**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+
+/**
  * @param {ListNode} head
  * @return {ListNode}
  */
 var swapPairs = function (head) {
-  const dynamicHead = new ListNode(0);
-  dynamicHead.next = head;
-
-  let headPre = dynamicHead;
+  const list = [];
   while (head) {
-    let tail = headPre;
-    /** 1、判断是否包含 2 个元素 */
-    for (let i = 0; i < 2; i += 1) {
-      tail = tail.next;
-      if (!tail) return dynamicHead.next;
-    }
-
-    /** 2、交换 2 个节点 */
-    const temp = tail.next;
-    [head, tail] = reverse(head, tail);
-
-    /** 3、拼接 */
-    headPre.next = head;
-    tail.next = temp;
-
-    /** 下一个循环 */
-    headPre = tail;
-    head = temp;
+    list.push(head);
+    head = head.next;
   }
+  const n = list.length;
+  const dynamicHead = new ListNode();
+  let prev = dynamicHead;
+  for (let i = 0; i < n && i + 1 < n; i += 2) {
+    const node1 = list[i];
+    const node2 = list[i + 1];
+    if (i === 0) dynamicHead.next = node2;
+
+    prev.next = node2;
+    node2.next = node1;
+    node1.next = null;
+
+    prev = node1;
+  }
+  if (n % 2 === 1) prev.next = list[n - 1];
 
   return dynamicHead.next;
-};
-
-var reverse = function (head, tail) {
-  let prev = null;
-  let cur = head;
-  while (cur && prev !== tail) {
-    const temp = cur.next;
-
-    cur.next = prev;
-    prev = cur;
-
-    cur = temp;
-  }
-  return [tail, head];
 };

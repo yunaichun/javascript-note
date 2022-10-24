@@ -1,3 +1,5 @@
+/** https://leetcode.cn/problems/linked-list-cycle */
+
 /**
  * Definition for singly-linked list.
  * function ListNode(val) {
@@ -6,7 +8,7 @@
  * }
  */
 
-/** https://leetcode.cn/problems/linked-list-cycle
+/**
  * @param {ListNode} head
  * @return {boolean}
  */
