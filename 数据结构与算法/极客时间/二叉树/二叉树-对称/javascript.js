@@ -16,6 +16,7 @@
 var isSymmetric = function (root) {
   const queue = [];
   if (root) queue.push(root);
+  /** 包含 null 的遍历 */
   while (queue.find((i) => i)) {
     const len = queue.length;
     let current = [];

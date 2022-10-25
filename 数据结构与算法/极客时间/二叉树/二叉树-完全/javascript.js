@@ -1,4 +1,4 @@
-/** https://leetcode.cn/problems/maximum-width-of-binary-tree/ */
+/** https://leetcode.cn/problems/check-completeness-of-a-binary-tree/ */
 
 /**
  * Definition for a binary tree node.
@@ -11,27 +11,26 @@
 
 /**
  * @param {TreeNode} root
- * @return {number}
+ * @return {boolean}
  */
-var widthOfBinaryTree = function (root) {
+var isCompleteTree = function (root) {
   const queue = [];
   if (root) queue.push([root, 1]);
-  let max = -Infinity;
+  const results = [];
   /** 包含 index 的遍历 */
   while (queue.length) {
-    const len = queue.length;
-    let current = [];
+    const current = [];
+    let len = queue.length;
     for (let i = 0; i < len; i += 1) {
       const [node, index] = queue[i];
-      current.push(index);
-      /** 在JS中最大安全整数是2的53次方减1. */
+      current.push([node, index]);
       if (node.left)
-        queue.push([node.left, (index * 2) % Number.MAX_SAFE_INTEGER]);
+        queue.push([node.left, (2 * index) % Number.MAX_SAFE_INTEGER]);
       if (node.right)
-        queue.push([node.right, (index * 2 + 1) % Number.MAX_SAFE_INTEGER]);
+        queue.push([node.right, (2 * index + 1) % Number.MAX_SAFE_INTEGER]);
     }
-    max = Math.max(current[current.length - 1] - current[0] + 1, max);
+    results = results.concat(current);
     queue.splice(0, len);
   }
-  return max;
+  return results.length === results[results.length - 1][1];
 };

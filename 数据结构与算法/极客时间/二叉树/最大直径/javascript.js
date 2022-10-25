@@ -18,8 +18,8 @@ var diameterOfBinaryTree = function (root) {
     if (!node) return 0;
     let left = _helper(node.left);
     let right = _helper(node.right);
+    /** 左右子树和最大为当前节点的路径长度 */
     height = Math.max(left + right, height);
-    /** 左右子树最大深度 */
     return Math.max(left, right) + 1;
   };
   let height = 0;
