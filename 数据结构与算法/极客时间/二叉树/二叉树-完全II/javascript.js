@@ -1,4 +1,4 @@
-/** https://leetcode.cn/problems/check-completeness-of-a-binary-tree/ */
+/** https://leetcode.cn/problems/count-complete-tree-nodes/ */
 
 /**
  * Definition for a binary tree node.
@@ -11,16 +11,15 @@
 
 /**
  * @param {TreeNode} root
- * @return {boolean}
+ * @return {number}
  */
-var isCompleteTree = function (root) {
+var countNodes = function (root) {
   const queue = [];
   if (root) queue.push([root, 1]);
   let results = [];
-  /** 包含 index 的遍历 */
   while (queue.length) {
     const current = [];
-    let len = queue.length;
+    const len = queue.length;
     for (let i = 0; i < len; i += 1) {
       const [node, index] = queue[i];
       current.push(index);
@@ -32,5 +31,5 @@ var isCompleteTree = function (root) {
     results = results.concat(current);
     queue.splice(0, len);
   }
-  return results.length === results[results.length - 1];
+  return results.length;
 };
