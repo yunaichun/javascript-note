@@ -16,7 +16,6 @@ var numIslands = function (grid) {
       }
     }
   }
-  console.log(123, grid);
   return sum;
 };
 
