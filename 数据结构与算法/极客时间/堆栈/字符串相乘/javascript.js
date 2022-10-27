@@ -6,15 +6,15 @@
  * @return {string}
  */
 var multiply = function (num1, num2) {
-  const results = [];
+  if (num1 === "0" || nums === "0") return "0";
 
+  const results = [];
   for (let i = num2.length - 1, j = 0; i >= 0; i -= 1, j += 1) {
-    const currentPos = new Array(num2[i] - "0").fill(num1);
     /** num2[i] 为 0, 此时不会计算 */
-    if (!currentPos.length) continue;
+    if (num2[i] === "0") continue;
+    const currentPos = new Array(num2[i] - "0").fill(num1);
     let totalPos = currentPos.reduce((a, b) => addStrings(a, b));
-    /** 如果计算的总结果为 0, 也不会补位 */
-    if (totalPos !== "0") for (k = 0; k < j; k += 1) totalPos += "0";
+    for (k = 0; k < j; k += 1) totalPos += "0";
     results.push(totalPos);
   }
 

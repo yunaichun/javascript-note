@@ -1,21 +1,24 @@
-/** https://leetcode.com/problems/generate-parentheses
+/** https://leetcode.com/problems/generate-parentheses */
+
+/**
  * @param {number} n
  * @return {string[]}
  */
-var generateParenthesis = function(n) {
-  return _helper(0, 0, n, '', []);
+var generateParenthesis = function (n) {
+  let results = [];
+  _helper(n, 0, 0, "", results);
+  return results;
 };
 
-function _helper(leftUsed, rightUsed, n, current, result) {
+var _helper = function (n, leftUsed, rightUsed, cur, results) {
   if (leftUsed === n && rightUsed === n) {
-    result.push(current);
+    results.push(cur);
     return;
   }
   if (leftUsed < n) {
-    _helper(leftUsed + 1, rightUsed, n, current + '(', result);
+    _helper(n, leftUsed + 1, rightUsed, cur + "(", results);
   }
   if (rightUsed < n && rightUsed < leftUsed) {
-    _helper(leftUsed, rightUsed + 1, n, current + ')', result);
+    _helper(n, leftUsed, rightUsed + 1, cur + ")", results);
   }
-  return result;
-}
+};
