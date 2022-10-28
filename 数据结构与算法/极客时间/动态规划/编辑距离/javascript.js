@@ -17,6 +17,7 @@ var minDistance = function (word1, word2) {
         dp[i][j] = i;
       } else {
         if (word1[i - 1] === word2[j - 1]) {
+          /** word1 第 i 个单词和 word2 第 j 个单词一样, 编辑距离和前个序列相同 */
           dp[i][j] = dp[i - 1][j - 1];
         } else {
           /** dp[i - 1][j]: 增加 1 个单词到 word1 */
