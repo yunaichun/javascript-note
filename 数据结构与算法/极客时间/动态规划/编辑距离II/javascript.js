@@ -6,7 +6,7 @@
  * @return {number}
  */
 var longestCommonSubsequence = function (text1, text2) {
-  /** dp[i][j] 代表 text1 第 i 个单词到 text2 第 j 个单词 变换所使用的最少操作数 */
+  /** dp[i][j] 代表 截止到 text1[:i] 和 text2[:j] 的最长公共子序列的长度 */
   const dp = [];
   for (let i = 0, len1 = text1.length; i <= len1; i += 1) {
     if (!dp[i]) dp[i] = [];
@@ -29,3 +29,7 @@ var longestCommonSubsequence = function (text1, text2) {
   }
   return dp[text1.length][text2.length];
 };
+
+text1 = "01111";
+text2 = "10101";
+console.log(longestCommonSubsequence(text1, text2));
