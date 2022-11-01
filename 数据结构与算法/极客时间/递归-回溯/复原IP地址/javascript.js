@@ -5,25 +5,33 @@
  * @return {string[]}
  */
 var restoreIpAddresses = function (s) {
+  /** 1、递归树 */
+  /** 2 */
+  /** 25 */
+  /** 255 */
   let results = [];
   _helper(s, 0, [], results);
   return results;
 };
 
-var _helper = function (s, pos, path, results) {
-  if (path.length === 4) {
-    if (pos === s.length) {
-      const exist = results.find((i) => i === path.join("."));
-      if (!exist) results.push(path.join("."));
-    }
+var _helper = function (s, start, path, results) {
+  if (start > s.length) return;
+  /** 2、保存结果: 终止条件 */
+  if (path.length === 4 && start === s.length) {
+    const exist = results.find((i) => i === path.join("."));
+    if (!exist) results.push(path.join("."));
     return;
   }
   for (let i = 1; i < 4; i += 1) {
-    const char = s.slice(pos, pos + i);
+    /** 3、选择+递归+重置: 剪枝 */
+    const char = s.slice(start, start + i);
     if (char.length > 1 && char[0] === "0") break;
-    const isValid = char.length && Number(char) >= 0 && Number(char) <= 255;
-    if (isValid) {
-      _helper(s, pos + char.length, path.concat(char), results);
-    }
+    if (!char.length || Number(char) < 0 || Number(char) > 255) break;
+    path.push(char);
+    _helper(s, start + char.length, [...path], results);
+    path.pop();
   }
 };
+
+s = "101023";
+console.log(restoreIpAddresses(s));
