@@ -33,5 +33,5 @@ var _helper = function (s, start, path, results) {
   }
 };
 
-s = "101023";
+s = "25525511135";
 console.log(restoreIpAddresses(s));
