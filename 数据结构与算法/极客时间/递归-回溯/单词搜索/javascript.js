@@ -34,14 +34,14 @@ var exist = function (board, word) {
     for (let j = 0, len2 = board[i].length; j < len2; j += 1) {
       const char = board[i][j];
       if (word.indexOf(char) === 0) {
-        _helper(board, word, i, j, [char], [{ x: i, y: j }], results);
+        _helper(board, word, i, j, [{ x: i, y: j }], [char], results);
       }
     }
   }
   return results.length;
 };
 
-var _helper = function (board, word, row, column, path, visited, results) {
+var _helper = function (board, word, row, column, visited, path, results) {
   const m = board.length;
   const n = board[0].length;
   if (word.indexOf(path.join("")) !== 0) return;
@@ -60,7 +60,7 @@ var _helper = function (board, word, row, column, path, visited, results) {
     const char = board[x][y];
     path.push(char);
     visited.push({ x, y });
-    _helper(board, word, x, y, [...path], [...visited], results);
+    _helper(board, word, x, y, [...visited], [...path], results);
     path.pop();
     visited.pop();
   }
