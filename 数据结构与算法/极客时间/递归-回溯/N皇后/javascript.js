@@ -1,76 +1,73 @@
-// == leetcode-51: https://leetcode.com/problems/n-queens/
-// == leetcode-52: https://leetcode.com/problems/n-queens-ii/
-class Solution {
-    constructor() {
-        this.lie = [];
-        this.pie = [];
-        this.na = [];
-        this.result = [];
-    }
-    /**
-     * @param {number} n
-     * @return {number}
-     */
-    totalNQueens(n) {
-        this.result = [];
-        this._dfs(n, 0, []);
-        console.log(this.result);
-        return this.result.length;
-    }
-    /**
-     * @param {number} n
-     * @return {string[][]}
-     */
-    solveNQueens(n) {
-        this.result = [];
-        this._dfs(n, 0, []);
-        let res = this._generate_result(this.result, n);
-        return res;
-    }
-    // == 深度优先 o(n)
-    _dfs(n, row, cur_solve) {
-        if (row === n) {
-            // == cur_solve 是数组，要注意数组的引用传递
-            this.result.push(JSON.parse(JSON.stringify(cur_solve)));
-            return;
-        }
-        for (let col = 0; col < n; col++) {
-            if (
-                this.lie.indexOf(col) > -1 ||
-                this.pie.indexOf(row + col) > -1 ||
-                this.na.indexOf(row - col) > -1
-            ) {
-                continue;
-            }
-            cur_solve.push({row, col})
-            // == 添加剪枝：当前行列被选择后下一行受影响的正方格
-            this.lie.push(col);
-            this.pie.push(row + col);
-            this.na.push(row - col);
-            // == 下一行
-            this._dfs(n, row + 1, cur_solve);
-            // == 下一行全部列走完之后，回归到当前行的下一列的时候，要将当前行列存储的信息清空
-            this.lie.pop();
-            this.pie.pop();
-            this.na.pop();
-            cur_solve.pop();
-        }
-    }
-    _generate_result(data, n) {
-        let res = data.map(item => {
-            return item.map(item => {
-                let str = '';
-                for (let i = 0; i < n; i++) {
-                    if (i === item.col) str += 'Q';
-                    else str += '.';
-                }
-                return str;
-            })
-        });
-        return res;
-    }
-}
+/** https://leetcode.cn/problems/n-queens/ */
+/** https://leetcode.cn/problems/n-queens-ii/ */
 
-var a = new Solution();
-console.log(a.totalNQueens(4));
-console.log(a.solveNQueens(4));
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var totalNQueens = function (n) {
+  const results = [];
+  /** 1、递归树 */
+  _helper(n, [], [], results);
+  return results.length;
+};
+
+/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function (n) {
+  const results = [];
+  /** 1、递归树 */
+  _helper(n, [], [], results);
+  return results;
+};
+
+var _helper = function (n, visited, path, results) {
+  /** 2、保存结果: 终止条件 */
+  if (path.length === n) {
+    results.push(path);
+    return;
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    /** 3、选择+递归+重置: 剪枝 */
+    const row = path.length;
+    const column = i;
+    const char = _generate(n, i);
+    const isValid = _isValid(visited, row, column);
+    if (!isValid) continue;
+    path.push(char);
+    visited.push({ row, column });
+    _helper(n, [...visited], [...path], results);
+    path.pop();
+    visited.pop();
+  }
+};
+
+var _generate = function (n, pos) {
+  let char = "";
+  for (let i = 0; i < n; i += 1) {
+    if (i === pos) char += "Q";
+    else char += ".";
+  }
+  return char;
+};
+
+var _isValid = function (visited, row, column) {
+  const exist = visited.find((i) => {
+    /** 存在相同行 */
+    if (i.row === row) return true;
+    /** 存在相同列 */
+    if (i.column === column) return true;
+    /** 捺上存在 */
+    if (i.row - i.column === row - column) return true;
+    /** 撇上存在 */
+    if (i.row + i.column === row + column) return true;
+    return false;
+  });
+  if (exist) return false;
+  return true;
+};
+
+console.log(solveNQueens(4));
