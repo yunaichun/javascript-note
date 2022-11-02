@@ -23,8 +23,8 @@ var _helper = function (s, start, path, results) {
   for (let i = start; i < s.length; i += 1) {
     /** 3、选择+递归+重置: 剪枝 */
     const char = s.slice(start, i + 1);
-    if (!char || Number(char) < 0 || Number(char) > 255) break;
-    if (char.length > 1 && char[0] === "0") break;
+    if (Number(char) < 0 || Number(char) > 255) continue;
+    if (char.length > 1 && char[0] === "0") continue;
     path.push(char);
     _helper(s, start + char.length, [...path], results);
     path.pop();

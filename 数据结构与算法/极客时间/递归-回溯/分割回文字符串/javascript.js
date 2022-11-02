@@ -22,7 +22,6 @@ var _helper = function (s, start, path, results) {
   for (let i = start; i < s.length; i += 1) {
     /** 3、选择+递归+重置: 剪枝 */
     const char = s.slice(start, i + 1);
-    if (!char) break;
     if (!_isValidChar(char)) continue;
     path.push(char);
     _helper(s, start + char.length, [...path], results);
