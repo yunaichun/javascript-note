@@ -25,23 +25,15 @@ var _helper = function (grid, row, column, visited) {
   for (let i = 0; i < 4; i += 1) {
     const x = dx[i] + row;
     const y = dy[i] + column;
-    const inGrid = x >= 0 && x < m && y >= 0 && y < n;
-    const inVisited = visited.find((i) => i.x === x && i.y === y);
-    if (inGrid && !inVisited) {
-      if (grid[x][y] === "1") {
-        grid[x][y] = 0;
-        _helper(grid, x, y, visited.concat({ x, y }));
-      }
+    const isValid = x >= 0 && x < m && y >= 0 && y < n;
+    const isVisited = visited.find((i) => i.x === x && i.y === y);
+    if (!isValid || isVisited) continue;
+    if (grid[x][y] === "1") {
+      grid[x][y] = 0;
+      _helper(grid, x, y, visited.concat({ x, y }));
     }
   }
 };
-
-// grid = [
-//   ["1","1","1","1","0"],
-//   ["1","1","0","1","0"],
-//   ["1","1","0","0","0"],
-//   ["0","0","0","0","0"]
-// ];
 
 grid = [
   ["1", "1", "1"],
